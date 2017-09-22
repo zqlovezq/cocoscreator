@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src = "./public/js/jquery-3.1.1.min.js"></script>
+    <style>
+        .red{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id = "d"></div>
+    <script>
+        var cash = 0.01;
+        var msgNode = $("<span class = 'red'>"+cash+"</span>")
+        document.getElementById("d").appendChild(msgNode[0]);
+    </script>
+</body>
+</html>

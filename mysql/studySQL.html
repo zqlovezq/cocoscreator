@@ -1,0 +1,79 @@
+<!--
+在node.js里面查询
+var mysql = require("mysql");
+var connection = mysql.createConnection({
+        host:"localhost",
+        user:"root",
+        password:"1995618qing.",
+        database:"hero",
+        port:3306
+    });
+    创建数据库连接
+    创建数据库的增删改查
+     connection.query(sql,{id:4,name:"刺客",attr:12,hp:6},function(err,rows,fields){
+        if(err){
+            console.log(err);
+            return;
+        }
+        console.log("query_rows",rows);
+        fn(rows);
+    });
+    //数据库增加数据
+    mysql.query('insert into hero set?',function(result){
+        res.end(JSON.stringify(result));
+    })
+    //数据库删除数据
+    mysql.query('delete from hero where id = "1"',function(result){
+        res.end(JSON.stringify(result));
+    })
+    //数据库更新数据
+     mysql.query('update hero set password = "1995618qing." where id = "1"',function(result){
+        res.end(JSON.stringify(result));
+    })
+-->
+
+<!--
+    连接池功能
+    在服务器应用程序中通常需要多个数据库连接创建并维护一个连接池，当连接不在需要时，
+    这些连接可以缓存在连接池中，当接受到下一个客户端请求是，从连接池中取出连接并重新利用，
+    而不需要在重新建立连接
+
+    (1)//语法1：创建连接池createPool方法
+    var pool = mysql.createPoll(options);
+    (2)//options参数包含createConnection方法中可以使用的各种属性,
+    pool.getConnection(function(err,connection)).  connection 为获取到的连接对象
+    (3)当连接不在使用是，用connection对象的release方法将其归还到连接池中。connection.release();
+    (4)当一个连接不在需要使用且需要从连接池中移除时，用connection对象的destroy方法。connection.destroy();连接移除后，连接池中中的连接数减一。
+    (5)当一个连接池不在需要使用时,用连接池对象的end方法关闭连接池。pool.end();
+
+express 是node.js中管理路由响应请求的模块，根据请求的URL返回相应的HTML页面
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

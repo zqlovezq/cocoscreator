@@ -1,0 +1,129 @@
+<!--
+    什么是AJAX
+    AJAX = 异步javascript和XML
+    AJAX 是一种创建快速动态网页的技术
+    通过后台与服务器进行少量数据交换，AJAX可以使网页实现异步更新，这以为这可以在不重新加载
+    整个网页的情况下，对网页的某部分进行更新
+
+    传统的网页如果需要更新内容，必须重载整个网页
+
+    ajax不是一种编程语言
+    它只是一个用于创建更好、更交互式web应用程序的技术
+    ajax是如何工作的
+
+-->
+<!--
+    ajax实例解释
+-->
+<html>
+<body>
+    <!--<div id = "myDiv"><h3>Let AJAX change this text</h3></div>-->
+    <button type ="button" onclick="loadXMLDoc()">Change Content</button>;
+    <form action="">
+        姓氏：<input type = "text" id = "txt1" onkeyup="showHint(this.value)">
+    </form>
+    <p>建议：<span id = "txtHint"></span></p>
+</body>
+<script type = "text/javascript">
+    /**
+     *XMLHttpRequest
+     * XMLHttpRequest对象用于和服务器的交换数据
+     * 如需请求发送到服务器，我们使用XMLHttpRequest对象的open()和send()方法；
+     * xml.open("GET","test1.txt",true); 像服务器请求数据的格式及请求的文件
+     * 第一个参数是请求方式 第二个文件在服务器上的位置 第三个是否是异步请求 true是异步
+     * open(method,url,async);
+     * xml.send()请求写完之后发送到服务器
+     * send(string) string:仅用于POST请求 发送的 时候带参数
+     *
+     * 什么情况下使用POST：
+     * 无法使用缓存文件（更新服务器上的文件或数据库）；
+     * 向服务器发送大量数据（POST没有数据量限制）
+     * 发送包含未知字符的用户输入时，POST比GET更稳定可靠
+     *
+     * responseText : 获得字符串形式的响应数据。
+     * responseXML : 获得XML形式的响应数据。
+     *
+     * onreadystatechange : 每当readyState改变时，就会触发onreadystatechange事件
+     * readyState属性存有XMLHttpRequest的状态信息。
+     *
+     * 属性：
+     * onreadystatechange：每当readyState属性改变时，就会调用该函数
+     * readyState：存有XMLHttpRequest的状态。从0到4发生变化
+     * 0：请求未初始化 1：服务器连接已建立 2：请求已接受 3：请求处理中 4：请求已完成，且响应已就绪
+     * status：200 “OK” 404：未找到页面
+     */
+
+    function loadXMLDoc() {
+        var xml;
+        if(window.XMLHttpRequest){
+            //浏览器是IE7，firefox,chrome，opera,safari
+            xml = new XMLHttpRequest();
+        }else{
+            //浏览器是IE5，IE6
+            xml = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xml.onreadystatechange = function(){
+            if(xml.readyState==4&&xml.status==200){
+                document.getElementById("myDiv").innerHTML = xml.responseText;
+            }
+        };
+        xml.open("GET","study",false);
+        xml.send();
+//        var _div = document.getElementById("myDiv");
+//        var text = "already change this text thanks all";
+//        _div.innerText = text;
+    }
+//        function showHint(str){
+//            var xml;
+//            if(str.length==0){
+//                document.getElementById("txtHint").innerHTML = "";
+//                return;
+//            }
+//            if(window.XMLHttpRequest){
+//                xml = new XMLHttpRequest()
+//            }else{
+//                xml = new ActiveXObject("Microsoft.XMLHTTP");
+//            }
+//            xml.onreadystatechange = function(){
+//                if(xml.readyState==4&&xml.status == 200){
+//                    document.getElementById("txtHint").innerHTML = xml.responseText;
+//                }
+//            }
+//            xml.open("GET","hint/?q="+str,true);
+//            xml.send();
+//        }
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
