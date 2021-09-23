@@ -54,7 +54,7 @@ cc.Class({
                 firstLayer.scale = 0;
                 firstLayer.active = true;
                 cc.tween(firstLayer).to(0.5,{scale:1}).start()
-            })
+            },1)
         }
         //监听开始游戏
         // 设置界面
@@ -71,8 +71,13 @@ cc.Class({
         this.RedPoolLayer = cc.find("Canvas/RedPoolLayer")
         // 获取物品的弹窗
         this.GetGoodLayer = cc.find("Canvas/GetGood")
+        // 看视频得奖励界面
+        this.SeeVideolayer = cc.find("Canvas/SeeVideolayer")
+        // 重置关卡界面
+        this.ResumeLayer =  cc.find("Canvas/ResumeLayer")
         cc.zm.showMusic = true;
         cc.zm.showShake = true;
+        this.countDownTime = 0;
         // startBtn.on(cc.Node.EventType.TOUCH_END,this.StartGame.bind(this));
         this.BGM_ID = cc.audioEngine.play(this.BGM);
         // console.log(http.sendRequest);
@@ -149,13 +154,13 @@ cc.Class({
         })
     },
     PowerTime(){
-        let time = cc.find("Canvas/Index/Power/time").getComponent(cc.Label).string
+        let time = cc.find("Canvas/Index/Power/time").getComponent(cc.Label)
         if(cc.zm.userInfo.power<5){
             // 现在才会倒计时
             // 先获取
             this.schedule(this.PowerTimeSchedule, 1)
         }else{
-            time = "00:00";
+            time.string = "00:00";
             this.unschedule(this.PowerTimeSchedule);
         }
     },
@@ -163,22 +168,18 @@ cc.Class({
         if (cc.zm.userInfo.power_sec <= 0) {
             this.unschedule(this.PowerTimeSchedule);
             // 在获取用户信息 是否体力满 没有满接着倒计时
-            let sendData = {};
-            http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
-                cc.zm.userInfo = res.data
-                this.PowerTime()
-            })
+            this.getUserInfo();
         }else{
             // 每一秒更新倒计时
-            let time = cc.find("Canvas/Index/Power/time").getComponent(cc.Label).string;
+            let time = cc.find("Canvas/Index/Power/time").getComponent(cc.Label);
             time.string = this.changeSecond(cc.zm.userInfo.power_sec);
             cc.zm.userInfo.power_sec--
         }
     },
     // 写一个算法 将秒数传进来生成一个00:00形式的字符串
     changeSecond(s){
-        let minute = "0"+s/60;
-        let second = s%60>10?s%60:"0"+s%60
+        let minute = "0"+Math.floor(s/60);
+        let second = s%60>=10?s%60:"0"+s%60
         return minute+":"+second
     },
     guideOver() {
@@ -213,7 +214,26 @@ cc.Class({
         http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
             cc.zm.LevelInfo = res.data;
             console.log("关卡信息=", cc.zm.LevelInfo);
-            cc.director.loadScene("Game");
+            // 判断
+            if(cc.zm.userInfo.power<=0){
+                // 显示看视频获得体力界面
+                this.showSeeVideolayer();
+            }else{
+                cc.director.loadScene("Game");
+            }
+        });
+    },
+    showSeeVideolayer(){
+        this.SeeVideolayer.active = true;
+    },
+    // 看视频得奖励
+    seeVideoAward(){
+        let sendData = {
+            ad:cc.zm.ad
+        }
+        http.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then((res) => {
+            this.SeeVideolayer.active = false;
+            this.getUserInfo();
         });
     },
     // 显示签到界面
@@ -226,18 +246,19 @@ cc.Class({
             let items = res.data.items;
             for (let i = 0; i < items.length; i++) {
                 let _data = items[i];
-                if (!_data.status) {
+                if (_data.status) {
                     day = _data.day;
                     break;
                 }
             }
-            this.signDay = day;
+            this.signDay = day>0?day:1;
+            // this.signDay=0;
             this.SignLayer.active = true;
             for (let i = 1; i <= 7; i++) {
                 let dayNode = this.SignLayer.getChildByName("day_" + i);
-                if (i < day) {
+                if (i <= day) {
                     this.completeBtn(dayNode);
-                } else if (i === day) {
+                } else if (i === day+1) {
                     this.selectBtn(dayNode);
                 } else {
                     this.unSelectBtn(dayNode);
@@ -254,6 +275,13 @@ cc.Class({
         nickName.string = this.userInfo.nick_name;
         let userId = this.SetLayer.getChildByName("userid").getComponent(cc.Label);
         userId.string = `用户ID：${this.userInfo.user_id}`
+        // icon
+        let icon = this.SetLayer.getChildByName("mask").getChildByName("icon").getComponent(cc.Sprite);
+        var remoteUrl = this.userInfo.avatar_url;
+        cc.assetManager.loadRemote(remoteUrl, {ext:'.png'},function (err, texture) {
+            // Use texture to create sprite frame
+            icon.spriteFrame = new cc.SpriteFrame(texture);
+        });
     },
     // 显示主界面
     showIndexLayer() {
@@ -268,25 +296,36 @@ cc.Class({
     // 显示大转盘界面
     showTurntableLayer() {
         // 显示大转盘之前获取用户信息接口
+        this.point = this.TurntableLayer.getChildByName("Pointer");
+        this.point.angle = 360;
         let sendData = {};
             http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
                 cc.zm.userInfo = res.data
                 this.TurntableLayer.active = true;
-                if(cc.zm.userInfo.sec){
-                    // 有倒计时 开始倒计时
+                let btnCom = this.TurntableLayer.getChildByName("beginBtn").getComponent(cc.Button);
+                if(cc.zm.userInfo.sec<0){
+                    // 有倒计时 开始倒计时 todo
+                    // 此时转盘点击按钮 置灰且不可点击
+                    btnCom.enableAutoGrayEffect = true;
+                    btnCom.interactable = false;
+                    this.countDownTime = Math.abs(cc.zm.userInfo.sec);
                     this.schedule(this.TurnTableCountDown, 1)
+                }else{
+                    btnCom.interactable = true;
                 }
             })
     },
     // 大转盘的倒计时
     TurnTableCountDown(){
-        if (cc.zm.userInfo.sec <= 0) {
-            this.unschedule(this.TurnTableCountDown);
-        }else{
-            // 每一秒更新倒计时
-            let time = this.TurntableLayer.getChildByName("countLbl").getComponent(cc.Label).string;
-            time.string = this.changeSecond(cc.zm.userInfo.sec);
-            cc.zm.userInfo.sec--
+        if(this.countDownTime){
+            if (this.countDownTime < 0) {
+                this.unschedule(this.TurnTableCountDown);
+            }else{
+                // 每一秒更新倒计时
+                let time = this.TurntableLayer.getChildByName("countLbl").getComponent(cc.Label);
+                this.countDownTime--;
+                time.string = this.changeSecond(this.countDownTime);
+            }
         }
     },
     // 显示红包池界面
@@ -308,6 +347,8 @@ cc.Class({
             // 增加倒计时
             let hour = this.RedPoolLayer.getChildByName("count_1").getComponent(cc.Label);
             hour.string = poolInfo.hour;
+            let minute = this.RedPoolLayer.getChildByName("count_2").getComponent(cc.Label);
+            minute.string = poolInfo.minute<10?"0"+poolInfo.minute:poolInfo.minute;
         })
     },
     // 显示7日任务界面
@@ -316,17 +357,22 @@ cc.Class({
         let sendData = {};
         http.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then((res) => {
             // console.log("七日任务列表=", res.data);
-            // 通过数据初始化界面
+            // 通过数据初始化界面 状态 0.未领取 1.已领取
             let items = res.data.items;
             let signNumber = 0;
             let arr = [];
             for (let i = 0; i < items.length; i++) {
-                // 先获取自己的数据
-                signNumber = items[i].curr_sign_in;
-                if (signNumber + 1 === items[i].num) {
-                    arr.push(items[i]);
-                    continue;
+                // 先获取自己的数据 
+                let _status = items[i].status;
+                if(!_status){
+                    signNumber = items[i].num;
+                    break;
                 }
+            }
+            for (let i = 0; i < items.length; i++) {
+                if(signNumber===items[i].num){
+                    arr.push(items[i]);
+                }  
             }
             // 设置title
             let title = this.SevenWorkLayer.getChildByName("title").getComponent(cc.Sprite);
@@ -338,6 +384,7 @@ cc.Class({
                 let _layoutH = layout.getChildByName("layout_" + (j + 1));
                 _layoutH.active = true;
                 let btn = _layoutH.getChildByName("getMoneyBtn");
+                btn._id = _data.id;
                 let btnCom = btn.getComponent(cc.Button);
                 if (_data.status === 1) {
                     btnCom.enableAutoGrayEffect = true;
@@ -397,16 +444,26 @@ cc.Class({
             this.SevenWorkLayer.active = true;
         })
     },
+    // 显示重置关卡界面
+    showResumeLayer(){
+        this.ResumeLayer.active = true;
+    },
+    resumeLevel(){
+        http.sendRequest("pit.v1.PitSvc/Reset", "GET", {}).then((res) => {
+            this.ResumeLayer.active = false;
+            this.getUserInfo();
+        })
+    },
     sevenWorkGetMoney(e) {
         let target = e.target;
         if (!target.complete) {
             this.showTips("条件未达成");
         } else {
             // 像服务器发送提现请求
-            http.sendRequest("pit.v1.PitSvc/Exchange", "POST", {}).then((res) => {
+            http.sendRequest("pit.v1.PitSvc/PullMission", "POST", {id:target._id}).then((res) => {
                 // 像服务器发送提现请求
                 // console.log("像服务器发送提现请求", res.data);
-                this.sevenWorkGetMoney.getChildByName("getLayer").active = true;
+                this.SevenWorkLayer.getChildByName("getLayer").active = true;
             })
         }
     },
@@ -494,7 +551,7 @@ cc.Class({
         tips.y = 145;
         let lbl = tips.getComponent(cc.Label);
         lbl.string = msg;
-        cc.tween(tips).to(0.1, { opacity: 255 }).to(0.5, { y: 250 }).to(0.1, { opacity: 0 }).start()
+        cc.tween(tips).to(0.1, { opacity: 255 }).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).start()
     },
     // 关闭音乐
     stopBGM(event) {
@@ -545,9 +602,11 @@ cc.Class({
             this.unSelectBtn(this.choiceBtn);
             this.choiceBtn = null;
         }
-        if(e.target.parent===this.TurntableLayer){
-            this.unschedule(this.TurnTableCountDown);
+        if(this.TurntableLayer.active===true){
+            this.showTurntableLayer();
         }
+        // 关闭当前也进入首页 刷新界面
+        this.getUserInfo();
         // console.log("退出登陆");
     },
     // 点击签到按钮
@@ -568,6 +627,8 @@ cc.Class({
             let arr = ["三元红包","炸药x1","药水x1","500元宝","8.88元红包","时钟x1","18.88元红包"]
             let data = res.data;
             this.showPop(arr[this.signDay-1],AWARD["DAY_"+this.signDay],data.gc,data.card)
+        }).catch((res)=>{
+            this.showTips("今日奖励已领取");
         });
     },
     // 点击体现按钮
@@ -578,7 +639,11 @@ cc.Class({
     // 点击转盘开始按钮
     clickTurnTableBtn(e) {
         // 每看一次视频可获得一次抽奖机会，每次抽奖冷却时间为5分钟 冷却时间让服务器做
-
+        if(this.countDownTime>0){
+            // 抽奖倒计时 >=0 代表可以抽奖，<0 取绝对值 倒数秒数
+            // this.showTips("抽奖倒计时");
+            return;
+        }
         // 先像服务器发送请求获取物品id
         let sendData = {
             "ad": cc.zm.ad
@@ -676,11 +741,13 @@ cc.Class({
             layout2.active = false;
         }
     },
-    // 增加一个测试用的清楚缓存的功能
-    clearCache() {
-        cc.sys.localStorage.removeItem('level');
-        cc.sys.localStorage.removeItem('score');
-        cc.sys.localStorage.removeItem('guide');
+    // 退出登陆
+    ExitWxLogin(){
+        // 清掉token
+        cc.wxToken = null;
+        cc.wxLoginResultcode = null;
+        cc.sys.localStorage.removeItem("token");
+        cc.director.loadScene("Login");
     },
     // 点击加载广告
     adPlay() {

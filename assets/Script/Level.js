@@ -75,7 +75,7 @@ module.exports  =  {
     },
     "level8" : {
         "id":"八",
-        "score" : 7885,
+        "score" : 7500,
         "maxScore":2000,
         "totalScore":12000,
         "good":"b|200,g|1400,m|400",
@@ -83,7 +83,7 @@ module.exports  =  {
     },
     "level9" : {
         "id":"九",
-        "score" : 9780,
+        "score" : 9395,
         "maxScore":2000,
         "totalScore":14000,
         "good":"b|300,g|1300,d|400",
@@ -91,7 +91,7 @@ module.exports  =  {
     },
     "level10" : {
         "id":"十",
-        "score" : 11885,
+        "score" : 10500,
         "maxScore":2000,
         "totalScore":16000,
         "good":"b|400,g|1000,d|400,m|200",
@@ -100,7 +100,7 @@ module.exports  =  {
     },
     "level11" : {
         "id":"十一",
-        "score" : 14200,
+        "score" : 12000,
         "maxScore":1500,
         "totalScore":17500,
         "good":"b|300,s|50,g|750,d|400",
@@ -110,7 +110,7 @@ module.exports  =  {
     },
     "level12" : {
         "id":"十二",
-        "score" : 16725,
+        "score" : 13000,
         "maxScore":3000,
         "totalScore":20500,
         "good":"b|450,g|1150,d|1200,m|200",
@@ -119,7 +119,7 @@ module.exports  =  {
     },
     "level13" : {
         "id":"十三",
-        "score" : 19460,
+        "score" : 15700,
         "maxScore":2500,
         "totalScore":23000,
         "good":"b|375,g|1725,d|400",
@@ -128,7 +128,7 @@ module.exports  =  {
     },
     "level14" : {
         "id":"十四",
-        "score" : 22405,
+        "score" : 17500,
         "maxScore":2000,
         "totalScore":25000,
         "good":"b|200,s|100,g|900,d|800",
@@ -137,7 +137,7 @@ module.exports  =  {
     },
     "level15" : {
         "id":"十五",
-        "score" : 25560,
+        "score" : 18500,
         "maxScore":5000,
         "totalScore":30000,
         "good":"b|500,s|205,g|2650,d|1600",
@@ -146,7 +146,7 @@ module.exports  =  {
     },
     "level16" : {
         "id":"十六",
-        "score" : 28925,
+        "score" : 21000,
         "maxScore":3000,
         "totalScore":33000,
         "good":"b|300,g|1900,d|800",
@@ -154,7 +154,7 @@ module.exports  =  {
     },
     "level17" : {
         "id":"十七",
-        "score" : 32500,
+        "score" : 22500,
         "maxScore":3500,
         "totalScore":36500,
         "good":"g|1300,b|175,zs|2100,m|100",
@@ -162,7 +162,7 @@ module.exports  =  {
     },
     "level18" : {
         "id":"十八",
-        "score" : 36285,
+        "score" : 24000,
         "maxScore":10000,
         "totalScore":46500,
         "good":"g|1900,zs|2100,d|5600,m|100,s|300",
@@ -171,7 +171,7 @@ module.exports  =  {
     },
     "level19" : {
         "id":"十九",
-        "score" : 40280,
+        "score" : 30000,
         "maxScore":4000,
         "totalScore":50500,
         "good":"b|100,g|2000,zs|1400,d|400,m|100",
@@ -179,7 +179,7 @@ module.exports  =  {
     },
     "level20" : {
         "id":"二十",
-        "score" : 44485,
+        "score" : 33000,
         "maxScore":4000,
         "totalScore":54500,
         "good":"b|400,s|400,g|3200",
@@ -189,7 +189,7 @@ module.exports  =  {
     },
     "level21" : {
         "id":"二十一",
-        "score" : 48900,
+        "score" : 36500,
         "maxScore":4000,
         "totalScore":58500,
         "good":"g|500,zs|3500",
@@ -198,7 +198,7 @@ module.exports  =  {
     },
     "level22" : {
         "id":"二十二",
-        "score" : 53525,
+        "score" : 39000,
         "maxScore":4000,
         "totalScore":62500,
         "good":"d|4000",
@@ -208,7 +208,7 @@ module.exports  =  {
     },
     "level23" : {
         "id":"二十三",
-        "score" : 58360,
+        "score" : 41500,
         "maxScore":4000,
         "totalScore":66500,
         "good":"b|400,g|2200,zs|1400",
@@ -218,7 +218,7 @@ module.exports  =  {
     },
     "level24" : {
         "id":"二十四",
-        "score" : 62405,
+        "score" : 43500,
         "maxScore":4000,
         "totalScore":70500,
         "good":"b|400,g|2200,zs|1400",
@@ -227,27 +227,27 @@ module.exports  =  {
     },
     "level25" : {
         "id":"二十五",
-        "score" : 68660,
+        "score" : 46000,
         "maxScore":4200,
-        "totalScore":74500,
+        "totalScore":74700,
         "good":"zs|4200",
         "boom":3,
         "redPack":1.29
     },
     "level26" : {
         "id":"二十六",
-        "score" : 74125,
+        "score" : 49500,
         "maxScore":5000,
-        "totalScore":79500,
+        "totalScore":79700,
         "good":"s|800,zs|4200",
         "boom":1,
         "redPack":1.22
     },
     "level27" : {
         "id":"二十七",
-        "score" : 79800,
+        "score" : 52500,
         "maxScore":5000,
-        "totalScore":84500,
+        "totalScore":84700,
         "good":"b|400,zs|700,d|3600",
         "boom":1,
         "extra":"red",
@@ -255,9 +255,9 @@ module.exports  =  {
     },
     "level28" : {
         "id":"二十八",
-        "score" : 85685,
+        "score" : 55500,
         "maxScore":5000,
-        "totalScore":89500,
+        "totalScore":89700,
         "good":"b|500,g|2950,m|150,zs|1400",
         "boom":1,
         "extra":"red",
@@ -265,9 +265,9 @@ module.exports  =  {
     },
     "level29" : {
         "id":"二十九",
-        "score" : 91780,
+        "score" : 58000,
         "maxScore":5000,
-        "totalScore":94500,
+        "totalScore":94700,
         "good":"b|500,g|2950,m|150,zs|1400",
         "extra":"red",
         "boom":1,
@@ -275,9 +275,9 @@ module.exports  =  {
     },
     "level30" : {
         "id":"三十",
-        "score" : 98085,
+        "score" : 62000,
         "maxScore":5000,
-        "totalScore":99500,
+        "totalScore":99700,
         "good":"b|500,g|2950,s|150,zs|1400",
         "boom":1,
         "extra":"red",

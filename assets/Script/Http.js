@@ -50,7 +50,7 @@ cc.Class({
                 }
                 xhr.setRequestHeader("Content-Type", "application/json");
                 cc.log("requestURL=", requestURL);
-                cc.log("data=", data);
+                cc.log("data=", JSON.stringify(data));
                 xhr.onreadystatechange = function () {
                     // cc.log(xhr.readyState,"+",xhr.status)
                     if (xhr.readyState === 4 && xhr.status == 200) {
@@ -61,7 +61,7 @@ cc.Class({
                             resolve(_response)
                         }else{
                             console.log(_response.message);
-                            // reject(new Error(_response.message))
+                            reject(_response.message);
                         }
                     }
                 }

@@ -12,7 +12,6 @@ android {
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
-
         externalNativeBuild {
             ndkBuild {
                 if (!project.hasProperty("PROP_NDK_MODE") || PROP_NDK_MODE.compareTo('none') != 0) {
@@ -70,8 +69,8 @@ android {
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 signingConfig signingConfigs.release
@@ -130,13 +129,13 @@ allprojects {
     repositories {
         jcenter()      // 原有 jCenter 引用可继续保留
         mavenCentral()
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
     }
 }
-//signingConfigs {
-//    debug {
-//        storeFile file("../debug.keystore")
-//    }
-//}
+
+// dependencies
 dependencies {
     implementation fileTree(dir: '../libs', include: ['*.jar','*.aar'])
     implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
