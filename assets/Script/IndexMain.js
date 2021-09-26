@@ -202,10 +202,9 @@ cc.Class({
     },
     StartGame() {
         //关闭BGM
+        // cc.zm.userInfo.win = true;
         cc.audioEngine.stop(this.BGM_ID);
         //清空关卡数 不清空关卡
-        // cc.sys.localStorage.removeItem('level');
-        // cc.sys.localStorage.removeItem('score');
         if (this.guide) {
             cc.sys.localStorage.setItem("guide", 1);
         }
@@ -292,6 +291,13 @@ cc.Class({
         cc.find("Canvas/Index/YuanBao/lbl").getComponent(cc.Label).string = this.userInfo.gc;
         cc.find("Canvas/Index/Gold/lbl").getComponent(cc.Label).string = this.userInfo.score;
         // cc.find("Canvas/Index/Power/lbl").getComponent(cc.Label).string = this.userInfo.power
+        let btnCom = cc.find("Canvas/Index/BeginGame").getComponent(cc.Button);
+        if(cc.zm.userInfo.win){
+            btnCom.enableAutoGrayEffect = true;
+            btnCom.interactable = false;
+        }else{
+            btnCom.interactable = true;
+        }
     },
     // 显示大转盘界面
     showTurntableLayer() {
@@ -419,26 +425,32 @@ cc.Class({
                 // 额外条件
                 // 需要通关数
                 let itemLayout = _layoutH.getChildByName("layout");
+                let item0 = itemLayout.getChildByName("item_0");
+                let item1 = itemLayout.getChildByName("item_1");
+                let item2 = itemLayout.getChildByName("item_2");
                 if (_data.need_pass_stage) {
-                    let item0 = itemLayout.getChildByName("item_0");
                     item0.active = true;
                     item0.getChildByName("lbl").getComponent(cc.Label).string = `通过第${_data.need_pass_stage}关`;
                     let arrow = item0.getChildByName("icon").getChildByName("arrow");
                     arrow.active = _data.curr_pass_stage >= _data.need_pass_stage
+                }else{
+                    item0.active = false;
                 }
                 if (_data.need_sign_in) {
-                    let item1 = itemLayout.getChildByName("item_1");
                     item1.active = true;
                     item1.getChildByName("lbl").getComponent(cc.Label).string = `领取签到奖励`;
                     let arrow = item1.getChildByName("icon").getChildByName("arrow");
                     arrow.active = _data.curr_sign_in >= _data.need_sign_in
+                }else{
+                    item1.active = false;
                 }
                 if (_data.need_invite) {
-                    let item1 = itemLayout.getChildByName("item_2");
-                    item1.active = true;
-                    item1.getChildByName("lbl").getComponent(cc.Label).string = `邀请${_data.need_invite}个好友`;
+                    item2.active = true;
+                    item2.getChildByName("lbl").getComponent(cc.Label).string = `邀请${_data.need_invite}个好友`;
                     let arrow = item1.getChildByName("icon").getChildByName("arrow");
                     arrow.active = _data.curr_invite >= _data.need_invite
+                }else{
+                    item2.active = false;
                 }
             }
             this.SevenWorkLayer.active = true;
@@ -463,6 +475,9 @@ cc.Class({
             http.sendRequest("pit.v1.PitSvc/PullMission", "POST", {id:target._id}).then((res) => {
                 // 像服务器发送提现请求
                 // console.log("像服务器发送提现请求", res.data);
+                let btnCom = target.getComponent(cc.Button);
+                btnCom.enableAutoGrayEffect = true;
+                btnCom.interactable = false;
                 this.SevenWorkLayer.getChildByName("getLayer").active = true;
             })
         }

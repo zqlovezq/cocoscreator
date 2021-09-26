@@ -147,6 +147,8 @@ cc.Class({
         this.pauseGame = false;
         // 初始化矿工的精灵帧
         this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[0];
+        // 看视频得体力界面
+        this.seeVideoLayer = cc.find('Canvas/SeeVideolayer')
         //得分累计
         this.Score = cc.find('Canvas/ScoreAndTarget/Score').getComponent(cc.Label);
         //通关目标分数
@@ -417,9 +419,8 @@ cc.Class({
      * 设置关卡数
      */
     SetLevel() {
-        // this.levelInfo = Level["level" + cc.zm.LevelInfo.stage]
-        this.levelInfo = Level["level20"]
-        // this.levelInfo = Level["level25"]
+        this.levelInfo = Level["level" + cc.zm.LevelInfo.stage]
+        // this.levelInfo = Level["level15"]
         this.Score.string = cc.zm.LevelInfo.current_score;
         this.Checkpoint.string = `${cc.zm.LevelInfo.stage}`;
     },
@@ -444,11 +445,10 @@ cc.Class({
         let newItemArr = this.newCreateCalc();
         // 写一个算法 根据分数先将arr 排序 总分不能超过最大分数 如果超了 则从小开始减少 直到分数小于最大分数
         //生成相应的Prfab
-        console.log("itemArr=",newItemArr);
+        console.log("itemArr=", newItemArr);
         newItemArr.forEach(item => {
             let node = cc.instantiate(this.Prefab[item.name]);
             let XY = this.randomXY(node);
-            console.log("XY=",XY,item);
             node.parent = this.itemArea;
             if (item.score) {
                 node.score = item.score;
@@ -464,11 +464,38 @@ cc.Class({
                 boom.setPosition(cc.v2(XY.x, XY.y - 218));
                 node.boom = boom;
             }
-            if (item.name === "Mouse" || item.name === "DrillMouse") {
-                node.zIdex = 1;
-                this.moveMouse(node);
-            }
         });
+        // todo先不创建老鼠试试
+        if (this.levelInfo.mouse) {
+            let data = this.levelInfo.mouse.split(",");
+            // 普通老鼠
+            let mouseNumber = Number(data[0]);
+            if (mouseNumber > 0) {
+                for (let i = 0; i < mouseNumber; i++) {
+                    let node = cc.instantiate(this.Prefab["Mouse"]);
+                    let randX = (this.itemArea.width - 30) / 2 * ((Math.random() - 0.5) * 2);
+                    let randY = (this.itemArea.height - 30) / 2 * ((Math.random() - 0.5) * 2);
+                    let pos = cc.v2(randX, randY);
+                    node.parent = this.itemArea;
+                    node.score = 50;
+                    node.setPosition(pos);
+                    this.moveMouse(node);
+                }
+            }
+            let DrillMouseNumber = Number(data[1]);
+            if (DrillMouseNumber > 0) {
+                for (let i = 0; i < DrillMouseNumber; i++) {
+                    let node = cc.instantiate(this.Prefab["DrillMouse"]);
+                    let randX = (this.itemArea.width - 30) / 2 * ((Math.random() - 0.5) * 2);
+                    let randY = (this.itemArea.height - 30) / 2 * ((Math.random() - 0.5) * 2);
+                    let pos = cc.v2(randX, randY);
+                    node.parent = this.itemArea;
+                    node.score = 700;
+                    node.setPosition(pos);
+                    this.moveMouse(node);
+                }
+            }
+        }
     },
     // 生成的物品是可动的
     moveMouse(mouse) {
@@ -478,7 +505,7 @@ cc.Class({
         cc.tween(mouse).to(time, { x: 300 }).start()
         this.scheduleOnce(() => {
             // 现在开始 老鼠做规律运动先将老鼠反转
-            if(mouse.name!==""){
+            if (mouse.name !== "") {
                 mouse.scaleX = -1;
                 cc.tween(mouse).repeatForever(cc.tween().to(_moveTime, { x: -300 }).delay(1).call(() => {
                     mouse.scaleX = 1;
@@ -500,7 +527,8 @@ cc.Class({
                 let obj = {
                     "name": "Red",
                     // 开出的红包金额
-                    "prop": 0.1
+                    "prop": 0.1,
+                    "width": 70
                 }
                 _arr.push(obj);
                 createItemArr = [...createItemArr, ..._arr]
@@ -521,7 +549,8 @@ cc.Class({
                 let obj = {
                     "name": "Mystery",
                     // 开出的红包金额
-                    "prop": _prop
+                    "prop": _prop,
+                    "width": 71
                 }
                 _arr.push(obj);
                 createItemArr = [...createItemArr, ..._arr]
@@ -532,6 +561,7 @@ cc.Class({
                 let _arr = [];
                 let obj = {
                     "name": "Tnt",
+                    "width": 77
                 }
                 _arr.push(obj);
                 createItemArr = [...createItemArr, ..._arr]
@@ -574,8 +604,18 @@ cc.Class({
             }
         }
         createItemArr = [...createItemArr, ...newArr];
-        // console.log("createItemArr=",createItemArr);
-
+        console.log("createItemArr未按照宽度排序=", createItemArr);
+        // 将createItemArr排序按照宽度
+        createItemArr = createItemArr.sort((a, b) => {
+            if (a.width > b.width) {
+                return -1
+            }
+            if (a.width < b.width) {
+                return 1
+            }
+            return 0
+        })
+        console.log("createItemArr照宽度排序=", createItemArr);
         return createItemArr;
     },
     // 根据积分跟类型生成数量name
@@ -593,6 +633,7 @@ cc.Class({
                 for (let i = 0; i < 30; i++) {
                     let name = "Stone-"
                     let scoreCig = [20, 30, 40];
+                    let widthCig = [42, 89, 154];
                     let rdm = this.createRandm(0, 2);
                     _score += scoreCig[rdm];
                     if (_score > score) {
@@ -600,7 +641,8 @@ cc.Class({
                     }
                     let obj = {
                         "name": name + rdm,
-                        "score": scoreCig[rdm] * promote
+                        "score": scoreCig[rdm] * promote,
+                        "width": widthCig[rdm]
                     }
                     arr.push(obj);
                 }
@@ -621,7 +663,13 @@ cc.Class({
                             scoreCig.push(50 * (1 + k));
                         }
                     }
-                    // console.log("scoreCig-----",scoreCig,"-----------",__score);
+                    let width = {
+                        "50": 36,
+                        "100": 62,
+                        "150": 83,
+                        "200": 108,
+                        "300": 146
+                    }
                     let rdm = this.createRandm(0, scoreCig.length - 1);
                     _score += scoreCig[rdm];
                     if (_score > score) {
@@ -632,7 +680,8 @@ cc.Class({
                     }
                     let obj = {
                         "name": name + rdm,
-                        "score": scoreCig[rdm]
+                        "score": scoreCig[rdm],
+                        "width": width["" + scoreCig[rdm]]
                     }
                     arr.push(obj);
                 }
@@ -647,35 +696,8 @@ cc.Class({
                     }
                     let obj = {
                         "name": name,
-                        "score": 400
-                    }
-                    arr.push(obj);
-                }
-                break;
-            case "zs":
-                for (let i = 0; i < 30; i++) {
-                    let name = "DrillMouse"
-                    _score += 700;
-                    if (_score > score) {
-                        break;
-                    }
-                    let obj = {
-                        "name": name,
-                        "score": 700
-                    }
-                    arr.push(obj);
-                }
-                break;
-            case "s":
-                for (let i = 0; i < 30; i++) {
-                    let name = "Mouse"
-                    _score += 50;
-                    if (_score > score) {
-                        break;
-                    }
-                    let obj = {
-                        "name": name,
-                        "score": 50
+                        "score": 400,
+                        "width": 29
                     }
                     arr.push(obj);
                 }
@@ -698,7 +720,8 @@ cc.Class({
                     }
                     let obj = {
                         "name": name,
-                        "prop": scoreCig
+                        "prop": scoreCig,
+                        "width": 71
                     }
                     arr.push(obj);
                 }
@@ -724,13 +747,8 @@ cc.Class({
             let isPeng = false;
             for (let i = 0; i < this.itemArea.children.length; i++) {
                 let n = this.itemArea.children[i];
-                if (n.name === "Mouse" || n.name === "DrillMouse") {
-                    continue;
-                }
                 let boundingBox = n.getBoundingBox();
                 if (boundingBox.intersects(rect)) {
-                    // 两者有相交继续随机
-                    // this.randomXY(item);
                     isPeng = true;
                     break;
                 }
@@ -754,7 +772,9 @@ cc.Class({
         for (let i = this.itemArea.children.length - 1; i >= 0; i--) {
             let n = this.itemArea.children[i];
             if (n !== Tnt) {
-                let rect = Tnt.getBoundingBox();
+                // 通过Tnt的中心位置 创建一个rect区域
+                let _pos = Tnt.getPosition(cc.v2());
+                let rect = new cc.Rect(_pos.x - 125, _pos.y - 125, 250, 250);
                 let pos = n.getPosition(cc.v2());
                 if (rect.contains(pos)) {
                     n.removeFromParent();
@@ -861,7 +881,7 @@ cc.Class({
             }
         } else if (items[0].name === "Red") {
             // 随机3-8块钱 2位有效小数
-            let extraRedPack = (this.createRandm(300, 800)) / 100;
+            let extraRedPack = (Math.floor(this.createRandm(300, 800))) / 100;
             this.extarRedPack += extraRedPack;
             this.addAnim("red", extraRedPack);
             if (cc.zm.showMusic) {
@@ -969,6 +989,9 @@ cc.Class({
             })
             let awrad = Success.getChildByName("award").getComponent(cc.Label);
             awrad.string = `奖励红包+${this.redPack}`;
+            if(cc.zm.LevelInfo.ever_pass){
+                awrad.node.active = false;
+            }
             let extatAward = Success.getChildByName("layout").getChildByName("extraAward").getComponent(cc.Label);
             if (this.extarRedPack) {
                 extatAward.node.parent.active = true;
@@ -1052,12 +1075,26 @@ cc.Class({
                 this.CloseMask();
                 break;
             case 1:
-                // 成功过关记录当前的分数
-                http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
-                    cc.zm.LevelInfo = res.data;
-                    // console.log("关卡信息=", cc.zm.LevelInfo);
-                    this.Reload();
-                });
+                // 过关成功点击进入下一关之前 先获取用户信息 看用户是否有体力
+                let sendData = {};
+                http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
+                    cc.zm.userInfo = res.data;
+                    // 如果体力大于0 进入下一关
+                    if (cc.zm.userInfo.power > 0) {
+                        http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
+                            cc.zm.LevelInfo = res.data;
+                            if (cc.zm.LevelInfo.stage < 30) {
+                                this.Reload();
+                            } else {
+                                // 直接返回主界面
+                                cc.director.loadScene('Index');
+                            }
+                        });
+                    } else {
+                        // 小于0 弹出看视频获得体力的接口
+                        this.seeVideoLayer.active = true;
+                    }
+                })
                 break;
             case 2:
                 //退出游戏
@@ -1069,20 +1106,46 @@ cc.Class({
         console.log("看视频得奖励");
         let sendData = {
             "red_pack": parseInt((this.redPack + this.extarRedPack) * 100),//红包
-            "ad":cc.zm.ad
+            "ad": cc.zm.ad
         }
         http.sendRequest("pit.v1.PitSvc/PassAd", "POST", sendData).then((res) => {
             console.log("PassAd返回信息", res);
-            // let btnCom = e.target.getComponent(cc.Button);
-            // btnCom.enableAutoGrayEffect = true;
-            // btnCom.interactable = false;
-            // 直接进入下一关
-            http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
-                cc.zm.LevelInfo = res.data;
-                // console.log("关卡信息=", cc.zm.LevelInfo);
-                this.Reload();
-            });
+            let sendData = {};
+            http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
+                cc.zm.userInfo = res.data;
+                // 如果体力大于0 进入下一关
+                if (cc.zm.userInfo.power > 0) {
+                    http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
+                        cc.zm.LevelInfo = res.data;
+                        // console.log("关卡信息=", cc.zm.LevelInfo);
+                        if (cc.zm.LevelInfo.stage < 30) {
+                            this.Reload();
+                        } else {
+                            // 直接返回主界面
+                            cc.director.loadScene('Index');
+                        }
+                    });
+                } else {
+                    // 小于0 弹出看视频获得体力的接口
+                    cc.director.loadScene('Index');
+                }
+            })
         });
+    },
+    // 看视频得奖励
+    seeVideoAward(e) {
+        let target = e.target
+        let sendData = {
+            ad: cc.zm.ad
+        }
+        http.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then((res) => {
+            target.parent.active = false;
+            this.Reload();
+        });
+    },
+    closeLayer(e) {
+        let target = e.target
+        target.parent.active = false;
     },
     /**
      * 退出游戏 返回上一个场景

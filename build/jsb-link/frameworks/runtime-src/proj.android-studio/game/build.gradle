@@ -2,8 +2,8 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'com.android.feature'
 android {
     baseFeature true
-    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
-    buildToolsVersion PROP_BUILD_TOOLS_VERSION
+    compileSdkVersion = 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion PROP_MIN_SDK_VERSION
@@ -92,6 +92,10 @@ android {
                 }
             }
         }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
 }

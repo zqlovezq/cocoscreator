@@ -50,12 +50,25 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
     public void onResp(BaseResp baseResp)
     {
         System.out.println("Enter the onResp");
-        if(baseResp.errCode == BaseResp.ErrCode.ERR_OK){
-//            String code = ((SendAuth Resp) baseResp).code;
-            String code = ((SendAuth.Resp) baseResp).code;
-            System.out.println("==========code is ===========" + code);
-            AppActivity.callJsFunction(code);
-            finish();
+        String code = null;
+        switch (baseResp.errCode) {
+            case BaseResp.ErrCode.ERR_OK://用户同意,只有这种情况的时候code是有效的
+                System.out.println("==========用户同意 ===========");
+                code = ((SendAuth.Resp) baseResp).code;
+                System.out.println("==========code is ===========" + code);
+                AppActivity.callJsFunction(code);
+                break;
+            case BaseResp.ErrCode.ERR_AUTH_DENIED://用户拒绝授权
+                System.out.println("==========用户拒绝授权 ===========");
+                break;
+            case BaseResp.ErrCode.ERR_USER_CANCEL://用户取消
+                System.out.println("==========用户取消 ===========");
+                break;
+
+            default://发送返回
+
+                break;
         }
+        finish();
     }
 }

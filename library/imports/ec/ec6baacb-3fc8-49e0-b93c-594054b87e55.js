@@ -223,9 +223,8 @@ cc.Class({
     var _this2 = this;
 
     //关闭BGM
+    // cc.zm.userInfo.win = true;
     cc.audioEngine.stop(this.BGM_ID); //清空关卡数 不清空关卡
-    // cc.sys.localStorage.removeItem('level');
-    // cc.sys.localStorage.removeItem('score');
 
     if (this.guide) {
       cc.sys.localStorage.setItem("guide", 1);
@@ -325,6 +324,15 @@ cc.Class({
 
     cc.find("Canvas/Index/YuanBao/lbl").getComponent(cc.Label).string = this.userInfo.gc;
     cc.find("Canvas/Index/Gold/lbl").getComponent(cc.Label).string = this.userInfo.score; // cc.find("Canvas/Index/Power/lbl").getComponent(cc.Label).string = this.userInfo.power
+
+    var btnCom = cc.find("Canvas/Index/BeginGame").getComponent(cc.Button);
+
+    if (cc.zm.userInfo.win) {
+      btnCom.enableAutoGrayEffect = true;
+      btnCom.interactable = false;
+    } else {
+      btnCom.interactable = true;
+    }
   },
   // 显示大转盘界面
   showTurntableLayer: function showTurntableLayer() {
@@ -489,33 +497,39 @@ cc.Class({
 
         var itemLayout = _layoutH.getChildByName("layout");
 
+        var item0 = itemLayout.getChildByName("item_0");
+        var item1 = itemLayout.getChildByName("item_1");
+        var item2 = itemLayout.getChildByName("item_2");
+
         if (_data.need_pass_stage) {
-          var item0 = itemLayout.getChildByName("item_0");
           item0.active = true;
           item0.getChildByName("lbl").getComponent(cc.Label).string = "\u901A\u8FC7\u7B2C" + _data.need_pass_stage + "\u5173";
           var arrow = item0.getChildByName("icon").getChildByName("arrow");
           arrow.active = _data.curr_pass_stage >= _data.need_pass_stage;
+        } else {
+          item0.active = false;
         }
 
         if (_data.need_sign_in) {
-          var item1 = itemLayout.getChildByName("item_1");
           item1.active = true;
           item1.getChildByName("lbl").getComponent(cc.Label).string = "\u9886\u53D6\u7B7E\u5230\u5956\u52B1";
 
           var _arrow = item1.getChildByName("icon").getChildByName("arrow");
 
           _arrow.active = _data.curr_sign_in >= _data.need_sign_in;
+        } else {
+          item1.active = false;
         }
 
         if (_data.need_invite) {
-          var _item = itemLayout.getChildByName("item_2");
+          item2.active = true;
+          item2.getChildByName("lbl").getComponent(cc.Label).string = "\u9080\u8BF7" + _data.need_invite + "\u4E2A\u597D\u53CB";
 
-          _item.active = true;
-          _item.getChildByName("lbl").getComponent(cc.Label).string = "\u9080\u8BF7" + _data.need_invite + "\u4E2A\u597D\u53CB";
-
-          var _arrow2 = _item.getChildByName("icon").getChildByName("arrow");
+          var _arrow2 = item1.getChildByName("icon").getChildByName("arrow");
 
           _arrow2.active = _data.curr_invite >= _data.need_invite;
+        } else {
+          item2.active = false;
         }
       }
 
@@ -549,6 +563,9 @@ cc.Class({
       }).then(function (res) {
         // 像服务器发送提现请求
         // console.log("像服务器发送提现请求", res.data);
+        var btnCom = target.getComponent(cc.Button);
+        btnCom.enableAutoGrayEffect = true;
+        btnCom.interactable = false;
         _this9.SevenWorkLayer.getChildByName("getLayer").active = true;
       });
     }

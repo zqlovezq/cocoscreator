@@ -162,7 +162,9 @@ cc.Class({
     this.curScore = 0;
     this.pauseGame = false; // 初始化矿工的精灵帧
 
-    this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[0]; //得分累计
+    this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[0]; // 看视频得体力界面
+
+    this.seeVideoLayer = cc.find('Canvas/SeeVideolayer'); //得分累计
 
     this.Score = cc.find('Canvas/ScoreAndTarget/Score').getComponent(cc.Label); //通关目标分数
 
@@ -454,8 +456,7 @@ cc.Class({
    * 设置关卡数
    */
   SetLevel: function SetLevel() {
-    // this.levelInfo = Level["level" + cc.zm.LevelInfo.stage]
-    this.levelInfo = _Level["default"]["level20"]; // this.levelInfo = Level["level25"]
+    this.levelInfo = _Level["default"]["level" + cc.zm.LevelInfo.stage]; // this.levelInfo = Level["level15"]
 
     this.Score.string = cc.zm.LevelInfo.current_score;
     this.Checkpoint.string = "" + cc.zm.LevelInfo.stage;
@@ -489,7 +490,6 @@ cc.Class({
 
       var XY = _this5.randomXY(node);
 
-      console.log("XY=", XY, item);
       node.parent = _this5.itemArea;
 
       if (item.score) {
@@ -511,13 +511,47 @@ cc.Class({
         boom.setPosition(cc.v2(XY.x, XY.y - 218));
         node.boom = boom;
       }
+    }); // todo先不创建老鼠试试
 
-      if (item.name === "Mouse" || item.name === "DrillMouse") {
-        node.zIdex = 1;
+    if (this.levelInfo.mouse) {
+      var data = this.levelInfo.mouse.split(","); // 普通老鼠
 
-        _this5.moveMouse(node);
+      var mouseNumber = Number(data[0]);
+
+      if (mouseNumber > 0) {
+        for (var i = 0; i < mouseNumber; i++) {
+          var node = cc.instantiate(this.Prefab["Mouse"]);
+          var randX = (this.itemArea.width - 30) / 2 * ((Math.random() - 0.5) * 2);
+          var randY = (this.itemArea.height - 30) / 2 * ((Math.random() - 0.5) * 2);
+          var pos = cc.v2(randX, randY);
+          node.parent = this.itemArea;
+          node.score = 50;
+          node.setPosition(pos);
+          this.moveMouse(node);
+        }
       }
-    });
+
+      var DrillMouseNumber = Number(data[1]);
+
+      if (DrillMouseNumber > 0) {
+        for (var _i = 0; _i < DrillMouseNumber; _i++) {
+          var _node2 = cc.instantiate(this.Prefab["DrillMouse"]);
+
+          var _randX = (this.itemArea.width - 30) / 2 * ((Math.random() - 0.5) * 2);
+
+          var _randY = (this.itemArea.height - 30) / 2 * ((Math.random() - 0.5) * 2);
+
+          var _pos2 = cc.v2(_randX, _randY);
+
+          _node2.parent = this.itemArea;
+          _node2.score = 700;
+
+          _node2.setPosition(_pos2);
+
+          this.moveMouse(_node2);
+        }
+      }
+    }
   },
   // 生成的物品是可动的
   moveMouse: function moveMouse(mouse) {
@@ -557,7 +591,8 @@ cc.Class({
         var obj = {
           "name": "Red",
           // 开出的红包金额
-          "prop": 0.1
+          "prop": 0.1,
+          "width": 70
         };
 
         _arr.push(obj);
@@ -584,7 +619,8 @@ cc.Class({
         var _obj = {
           "name": "Mystery",
           // 开出的红包金额
-          "prop": _prop
+          "prop": _prop,
+          "width": 71
         };
 
         _arr2.push(_obj);
@@ -597,7 +633,8 @@ cc.Class({
       for (var i = 0; i < this.levelInfo.boom; i++) {
         var _arr4 = [];
         var _obj2 = {
-          "name": "Tnt"
+          "name": "Tnt",
+          "width": 77
         };
 
         _arr4.push(_obj2);
@@ -615,8 +652,8 @@ cc.Class({
 
     var scoreArr = [];
 
-    for (var _i = 0; _i < info.length; _i++) {
-      var _info = info[_i].split("|");
+    for (var _i2 = 0; _i2 < info.length; _i2++) {
+      var _info = info[_i2].split("|");
 
       var type = _info[0];
       var percent = Number(_info[1]);
@@ -644,18 +681,31 @@ cc.Class({
     var totalScore = this.levelInfo.maxScore;
     var _score = 0;
 
-    for (var _i2 = 0; _i2 < _scoreArr.length; _i2++) {
-      _score += _scoreArr[_i2].score;
+    for (var _i3 = 0; _i3 < _scoreArr.length; _i3++) {
+      _score += _scoreArr[_i3].score;
 
       if (_score <= totalScore) {
-        newArr.push(_scoreArr[_i2]);
+        newArr.push(_scoreArr[_i3]);
       } else {
         break;
       }
     }
 
-    createItemArr = [].concat(createItemArr, newArr); // console.log("createItemArr=",createItemArr);
+    createItemArr = [].concat(createItemArr, newArr);
+    console.log("createItemArr未按照宽度排序=", createItemArr); // 将createItemArr排序按照宽度
 
+    createItemArr = createItemArr.sort(function (a, b) {
+      if (a.width > b.width) {
+        return -1;
+      }
+
+      if (a.width < b.width) {
+        return 1;
+      }
+
+      return 0;
+    });
+    console.log("createItemArr照宽度排序=", createItemArr);
     return createItemArr;
   },
   // 根据积分跟类型生成数量name
@@ -676,6 +726,7 @@ cc.Class({
         for (var i = 0; i < 30; i++) {
           var name = "Stone-";
           var scoreCig = [20, 30, 40];
+          var widthCig = [42, 89, 154];
           var rdm = this.createRandm(0, 2);
           _score += scoreCig[rdm];
 
@@ -685,7 +736,8 @@ cc.Class({
 
           var obj = {
             "name": name + rdm,
-            "score": scoreCig[rdm] * promote
+            "score": scoreCig[rdm] * promote,
+            "width": widthCig[rdm]
           };
           arr.push(obj);
         }
@@ -694,7 +746,7 @@ cc.Class({
 
       case "g":
         // 当前是黄金
-        for (var _i3 = 0; _i3 < 30; _i3++) {
+        for (var _i4 = 0; _i4 < 30; _i4++) {
           var _name = "Gold-";
           var _scoreCig = []; // 根据当前积分的最大值动态生成数组
 
@@ -710,8 +762,15 @@ cc.Class({
             for (var k = 0; k < key; k++) {
               _scoreCig.push(50 * (1 + k));
             }
-          } // console.log("scoreCig-----",scoreCig,"-----------",__score);
+          }
 
+          var width = {
+            "50": 36,
+            "100": 62,
+            "150": 83,
+            "200": 108,
+            "300": 146
+          };
 
           var _rdm = this.createRandm(0, _scoreCig.length - 1);
 
@@ -727,7 +786,8 @@ cc.Class({
 
           var _obj3 = {
             "name": _name + _rdm,
-            "score": _scoreCig[_rdm]
+            "score": _scoreCig[_rdm],
+            "width": width["" + _scoreCig[_rdm]]
           };
           arr.push(_obj3);
         }
@@ -736,7 +796,7 @@ cc.Class({
 
       case "d":
         // 当前是钻石
-        for (var _i4 = 0; _i4 < 30; _i4++) {
+        for (var _i5 = 0; _i5 < 30; _i5++) {
           var _name2 = "Drill";
           _score += 400;
 
@@ -746,53 +806,18 @@ cc.Class({
 
           var _obj4 = {
             "name": _name2,
-            "score": 400
+            "score": 400,
+            "width": 29
           };
           arr.push(_obj4);
         }
 
         break;
 
-      case "zs":
-        for (var _i5 = 0; _i5 < 30; _i5++) {
-          var _name3 = "DrillMouse";
-          _score += 700;
-
-          if (_score > score) {
-            break;
-          }
-
-          var _obj5 = {
-            "name": _name3,
-            "score": 700
-          };
-          arr.push(_obj5);
-        }
-
-        break;
-
-      case "s":
-        for (var _i6 = 0; _i6 < 30; _i6++) {
-          var _name4 = "Mouse";
-          _score += 50;
-
-          if (_score > score) {
-            break;
-          }
-
-          var _obj6 = {
-            "name": _name4,
-            "score": 50
-          };
-          arr.push(_obj6);
-        }
-
-        break;
-
       case "m":
         // 当前是神秘物品
-        for (var _i7 = 0; _i7 < 30; _i7++) {
-          var _name5 = "Mystery";
+        for (var _i6 = 0; _i6 < 30; _i6++) {
+          var _name3 = "Mystery";
           var _scoreCig2 = null;
 
           if (score - _score > 200) {
@@ -809,11 +834,12 @@ cc.Class({
             break;
           }
 
-          var _obj7 = {
-            "name": _name5,
-            "prop": _scoreCig2
+          var _obj5 = {
+            "name": _name3,
+            "prop": _scoreCig2,
+            "width": 71
           };
-          arr.push(_obj7);
+          arr.push(_obj5);
         }
 
         break;
@@ -842,16 +868,9 @@ cc.Class({
 
       for (var i = 0; i < this.itemArea.children.length; i++) {
         var n = this.itemArea.children[i];
-
-        if (n.name === "Mouse" || n.name === "DrillMouse") {
-          continue;
-        }
-
         var boundingBox = n.getBoundingBox();
 
         if (boundingBox.intersects(rect)) {
-          // 两者有相交继续随机
-          // this.randomXY(item);
           isPeng = true;
           break;
         }
@@ -878,7 +897,10 @@ cc.Class({
       var n = this.itemArea.children[i];
 
       if (n !== Tnt) {
-        var rect = Tnt.getBoundingBox();
+        // 通过Tnt的中心位置 创建一个rect区域
+        var _pos = Tnt.getPosition(cc.v2());
+
+        var rect = new cc.Rect(_pos.x - 125, _pos.y - 125, 250, 250);
         var pos = n.getPosition(cc.v2());
 
         if (rect.contains(pos)) {
@@ -998,7 +1020,7 @@ cc.Class({
       }
     } else if (items[0].name === "Red") {
       // 随机3-8块钱 2位有效小数
-      var extraRedPack = this.createRandm(300, 800) / 100;
+      var extraRedPack = Math.floor(this.createRandm(300, 800)) / 100;
       this.extarRedPack += extraRedPack;
       this.addAnim("red", extraRedPack);
 
@@ -1224,11 +1246,26 @@ cc.Class({
         break;
 
       case 1:
-        // 成功过关记录当前的分数
-        http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
-          cc.zm.LevelInfo = res.data; // console.log("关卡信息=", cc.zm.LevelInfo);
+        // 过关成功点击进入下一关之前 先获取用户信息 看用户是否有体力
+        var sendData = {};
+        http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
+          cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
 
-          _this7.Reload();
+          if (cc.zm.userInfo.power > 0) {
+            http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
+              cc.zm.LevelInfo = res.data;
+
+              if (cc.zm.LevelInfo.stage < 30) {
+                _this7.Reload();
+              } else {
+                // 直接返回主界面
+                cc.director.loadScene('Index');
+              }
+            });
+          } else {
+            // 小于0 弹出看视频获得体力的接口
+            _this7.seeVideoLayer.active = true;
+          }
         });
         break;
 
@@ -1250,17 +1287,46 @@ cc.Class({
       "ad": cc.zm.ad
     };
     http.sendRequest("pit.v1.PitSvc/PassAd", "POST", sendData).then(function (res) {
-      console.log("PassAd返回信息", res); // let btnCom = e.target.getComponent(cc.Button);
-      // btnCom.enableAutoGrayEffect = true;
-      // btnCom.interactable = false;
-      // 直接进入下一关
+      console.log("PassAd返回信息", res);
+      var sendData = {};
+      http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
+        cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
 
-      http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
-        cc.zm.LevelInfo = res.data; // console.log("关卡信息=", cc.zm.LevelInfo);
+        if (cc.zm.userInfo.power > 0) {
+          http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
+            cc.zm.LevelInfo = res.data; // console.log("关卡信息=", cc.zm.LevelInfo);
 
-        _this8.Reload();
+            if (cc.zm.LevelInfo.stage < 30) {
+              _this8.Reload();
+            } else {
+              // 直接返回主界面
+              cc.director.loadScene('Index');
+            }
+          });
+        } else {
+          // 小于0 弹出看视频获得体力的接口
+          cc.director.loadScene('Index');
+        }
       });
     });
+  },
+  // 看视频得奖励
+  seeVideoAward: function seeVideoAward(e) {
+    var _this9 = this;
+
+    var target = e.target;
+    var sendData = {
+      ad: cc.zm.ad
+    };
+    http.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then(function (res) {
+      target.parent.active = false;
+
+      _this9.Reload();
+    });
+  },
+  closeLayer: function closeLayer(e) {
+    var target = e.target;
+    target.parent.active = false;
   },
 
   /**
