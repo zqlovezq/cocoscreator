@@ -1150,6 +1150,11 @@ cc.Class({
       });
       var awrad = Success.getChildByName("award").getComponent(cc.Label);
       awrad.string = "\u5956\u52B1\u7EA2\u5305+" + this.redPack;
+
+      if (cc.zm.LevelInfo.ever_pass) {
+        awrad.node.active = false;
+      }
+
       var extatAward = Success.getChildByName("layout").getChildByName("extraAward").getComponent(cc.Label);
 
       if (this.extarRedPack) {
@@ -1281,8 +1286,9 @@ cc.Class({
     var _this8 = this;
 
     console.log("看视频得奖励");
+    var pack = cc.zm.LevelInfo.ever_pass ? 0 : this.redPack;
     var sendData = {
-      "red_pack": parseInt((this.redPack + this.extarRedPack) * 100),
+      "red_pack": parseInt((pack + this.extarRedPack) * 100),
       //红包
       "ad": cc.zm.ad
     };

@@ -81,6 +81,24 @@ cc.Class({
                 })
             }
         }
+    },
+    // 显示用户协议
+    showUserProtocol(){
+        let protocol = this.node.getChildByName("user_protocol");
+        protocol.active = true;
+    },
+    hideUserProtocol(){
+        let protocol = this.node.getChildByName("user_protocol");
+        protocol.active = false;
+    },
+    // 显示隐私政策
+    showUserPrivacy(){
+        let privacy = this.node.getChildByName("user_privacy");
+        privacy.active = true;
+    },
+    hideUserPrivacy(){
+        let privacy = this.node.getChildByName("user_privacy");
+        privacy.active = false;
     }
 });
 

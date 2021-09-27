@@ -267,32 +267,23 @@ cc.Class({
     // 先获取签到列表
     var sendData = {};
     http.sendRequest("pit.v1.PitSvc/SignInList", "GET", sendData).then(function (res) {
-      // console.log("签到列表", res);
-      var day = 0;
       var items = res.data.items;
-
-      for (var i = 0; i < items.length; i++) {
-        var _data = items[i];
-
-        if (_data.status) {
-          day = _data.day;
-          break;
-        }
-      }
-
-      _this4.signDay = day > 0 ? day : 1; // this.signDay=0;
-
+      _this4.signDay = res.data.day;
       _this4.SignLayer.active = true;
 
-      for (var _i = 1; _i <= 7; _i++) {
-        var dayNode = _this4.SignLayer.getChildByName("day_" + _i);
+      for (var i = 1; i <= 7; i++) {
+        var dayNode = _this4.SignLayer.getChildByName("day_" + i);
 
-        if (_i <= day) {
+        var _data = items[i - 1];
+
+        if (_data.status) {
           _this4.completeBtn(dayNode);
-        } else if (_i === day + 1) {
-          _this4.selectBtn(dayNode);
         } else {
-          _this4.unSelectBtn(dayNode);
+          if (i === _this4.signDay) {
+            _this4.selectBtn(dayNode);
+          } else {
+            _this4.unSelectBtn(dayNode);
+          }
         }
       }
     });
@@ -417,6 +408,7 @@ cc.Class({
       // console.log("七日任务列表=", res.data);
       // 通过数据初始化界面 状态 0.未领取 1.已领取
       var items = res.data.items;
+      var serverDay = res.data.day;
       var signNumber = 0;
       var arr = [];
 
@@ -430,9 +422,13 @@ cc.Class({
         }
       }
 
-      for (var _i2 = 0; _i2 < items.length; _i2++) {
-        if (signNumber === items[_i2].num) {
-          arr.push(items[_i2]);
+      if (signNumber > serverDay) {
+        signNumber = serverDay;
+      }
+
+      for (var _i = 0; _i < items.length; _i++) {
+        if (signNumber === items[_i].num) {
+          arr.push(items[_i]);
         }
       } // 设置title
 
@@ -901,6 +897,25 @@ cc.Class({
   // 点击加载广告
   adPlay: function adPlay() {
     jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "loadJiLiVideo", "()V");
+  },
+  // 显示用户协议
+  showUserProtocol: function showUserProtocol() {
+    var protocol = this.SetLayer.getChildByName("user_protocol");
+    protocol.active = true;
+  },
+  hideUserProtocol: function hideUserProtocol() {
+    var protocol = this.SetLayer.getChildByName("user_protocol");
+    protocol.active = false;
+  },
+  // 显示隐私政策
+  showUserPrivacy: function showUserPrivacy() {
+    var protocol = this.SetLayer.getChildByName("user_privacy"); // 设置用户协议
+
+    protocol.active = true;
+  },
+  hideUserPrivacy: function hideUserPrivacy() {
+    var protocol = this.SetLayer.getChildByName("user_privacy");
+    protocol.active = false;
   }
 });
 

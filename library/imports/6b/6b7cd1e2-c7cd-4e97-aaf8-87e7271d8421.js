@@ -87,6 +87,24 @@ cc.Class({
         });
       }
     }
+  },
+  // 显示用户协议
+  showUserProtocol: function showUserProtocol() {
+    var protocol = this.node.getChildByName("user_protocol");
+    protocol.active = true;
+  },
+  hideUserProtocol: function hideUserProtocol() {
+    var protocol = this.node.getChildByName("user_protocol");
+    protocol.active = false;
+  },
+  // 显示隐私政策
+  showUserPrivacy: function showUserPrivacy() {
+    var privacy = this.node.getChildByName("user_privacy");
+    privacy.active = true;
+  },
+  hideUserPrivacy: function hideUserPrivacy() {
+    var privacy = this.node.getChildByName("user_privacy");
+    privacy.active = false;
   }
 });
 

@@ -1104,8 +1104,9 @@ cc.Class({
     },
     AwardVideo(e) {
         console.log("看视频得奖励");
+        let pack = cc.zm.LevelInfo.ever_pass?0:this.redPack;
         let sendData = {
-            "red_pack": parseInt((this.redPack + this.extarRedPack) * 100),//红包
+            "red_pack": parseInt((pack + this.extarRedPack) * 100),//红包
             "ad": cc.zm.ad
         }
         http.sendRequest("pit.v1.PitSvc/PassAd", "POST", sendData).then((res) => {
