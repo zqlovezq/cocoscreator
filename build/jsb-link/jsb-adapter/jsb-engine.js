@@ -1,4 +1,215 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+module.exports={
+  "O_RDONLY": 0,
+  "O_WRONLY": 1,
+  "O_RDWR": 2,
+  "S_IFMT": 61440,
+  "S_IFREG": 32768,
+  "S_IFDIR": 16384,
+  "S_IFCHR": 8192,
+  "S_IFBLK": 24576,
+  "S_IFIFO": 4096,
+  "S_IFLNK": 40960,
+  "S_IFSOCK": 49152,
+  "O_CREAT": 512,
+  "O_EXCL": 2048,
+  "O_NOCTTY": 131072,
+  "O_TRUNC": 1024,
+  "O_APPEND": 8,
+  "O_DIRECTORY": 1048576,
+  "O_NOFOLLOW": 256,
+  "O_SYNC": 128,
+  "O_SYMLINK": 2097152,
+  "O_NONBLOCK": 4,
+  "S_IRWXU": 448,
+  "S_IRUSR": 256,
+  "S_IWUSR": 128,
+  "S_IXUSR": 64,
+  "S_IRWXG": 56,
+  "S_IRGRP": 32,
+  "S_IWGRP": 16,
+  "S_IXGRP": 8,
+  "S_IRWXO": 7,
+  "S_IROTH": 4,
+  "S_IWOTH": 2,
+  "S_IXOTH": 1,
+  "E2BIG": 7,
+  "EACCES": 13,
+  "EADDRINUSE": 48,
+  "EADDRNOTAVAIL": 49,
+  "EAFNOSUPPORT": 47,
+  "EAGAIN": 35,
+  "EALREADY": 37,
+  "EBADF": 9,
+  "EBADMSG": 94,
+  "EBUSY": 16,
+  "ECANCELED": 89,
+  "ECHILD": 10,
+  "ECONNABORTED": 53,
+  "ECONNREFUSED": 61,
+  "ECONNRESET": 54,
+  "EDEADLK": 11,
+  "EDESTADDRREQ": 39,
+  "EDOM": 33,
+  "EDQUOT": 69,
+  "EEXIST": 17,
+  "EFAULT": 14,
+  "EFBIG": 27,
+  "EHOSTUNREACH": 65,
+  "EIDRM": 90,
+  "EILSEQ": 92,
+  "EINPROGRESS": 36,
+  "EINTR": 4,
+  "EINVAL": 22,
+  "EIO": 5,
+  "EISCONN": 56,
+  "EISDIR": 21,
+  "ELOOP": 62,
+  "EMFILE": 24,
+  "EMLINK": 31,
+  "EMSGSIZE": 40,
+  "EMULTIHOP": 95,
+  "ENAMETOOLONG": 63,
+  "ENETDOWN": 50,
+  "ENETRESET": 52,
+  "ENETUNREACH": 51,
+  "ENFILE": 23,
+  "ENOBUFS": 55,
+  "ENODATA": 96,
+  "ENODEV": 19,
+  "ENOENT": 2,
+  "ENOEXEC": 8,
+  "ENOLCK": 77,
+  "ENOLINK": 97,
+  "ENOMEM": 12,
+  "ENOMSG": 91,
+  "ENOPROTOOPT": 42,
+  "ENOSPC": 28,
+  "ENOSR": 98,
+  "ENOSTR": 99,
+  "ENOSYS": 78,
+  "ENOTCONN": 57,
+  "ENOTDIR": 20,
+  "ENOTEMPTY": 66,
+  "ENOTSOCK": 38,
+  "ENOTSUP": 45,
+  "ENOTTY": 25,
+  "ENXIO": 6,
+  "EOPNOTSUPP": 102,
+  "EOVERFLOW": 84,
+  "EPERM": 1,
+  "EPIPE": 32,
+  "EPROTO": 100,
+  "EPROTONOSUPPORT": 43,
+  "EPROTOTYPE": 41,
+  "ERANGE": 34,
+  "EROFS": 30,
+  "ESPIPE": 29,
+  "ESRCH": 3,
+  "ESTALE": 70,
+  "ETIME": 101,
+  "ETIMEDOUT": 60,
+  "ETXTBSY": 26,
+  "EWOULDBLOCK": 35,
+  "EXDEV": 18,
+  "SIGHUP": 1,
+  "SIGINT": 2,
+  "SIGQUIT": 3,
+  "SIGILL": 4,
+  "SIGTRAP": 5,
+  "SIGABRT": 6,
+  "SIGIOT": 6,
+  "SIGBUS": 10,
+  "SIGFPE": 8,
+  "SIGKILL": 9,
+  "SIGUSR1": 30,
+  "SIGSEGV": 11,
+  "SIGUSR2": 31,
+  "SIGPIPE": 13,
+  "SIGALRM": 14,
+  "SIGTERM": 15,
+  "SIGCHLD": 20,
+  "SIGCONT": 19,
+  "SIGSTOP": 17,
+  "SIGTSTP": 18,
+  "SIGTTIN": 21,
+  "SIGTTOU": 22,
+  "SIGURG": 16,
+  "SIGXCPU": 24,
+  "SIGXFSZ": 25,
+  "SIGVTALRM": 26,
+  "SIGPROF": 27,
+  "SIGWINCH": 28,
+  "SIGIO": 23,
+  "SIGSYS": 12,
+  "SSL_OP_ALL": 2147486719,
+  "SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION": 262144,
+  "SSL_OP_CIPHER_SERVER_PREFERENCE": 4194304,
+  "SSL_OP_CISCO_ANYCONNECT": 32768,
+  "SSL_OP_COOKIE_EXCHANGE": 8192,
+  "SSL_OP_CRYPTOPRO_TLSEXT_BUG": 2147483648,
+  "SSL_OP_DONT_INSERT_EMPTY_FRAGMENTS": 2048,
+  "SSL_OP_EPHEMERAL_RSA": 0,
+  "SSL_OP_LEGACY_SERVER_CONNECT": 4,
+  "SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER": 32,
+  "SSL_OP_MICROSOFT_SESS_ID_BUG": 1,
+  "SSL_OP_MSIE_SSLV2_RSA_PADDING": 0,
+  "SSL_OP_NETSCAPE_CA_DN_BUG": 536870912,
+  "SSL_OP_NETSCAPE_CHALLENGE_BUG": 2,
+  "SSL_OP_NETSCAPE_DEMO_CIPHER_CHANGE_BUG": 1073741824,
+  "SSL_OP_NETSCAPE_REUSE_CIPHER_CHANGE_BUG": 8,
+  "SSL_OP_NO_COMPRESSION": 131072,
+  "SSL_OP_NO_QUERY_MTU": 4096,
+  "SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION": 65536,
+  "SSL_OP_NO_SSLv2": 16777216,
+  "SSL_OP_NO_SSLv3": 33554432,
+  "SSL_OP_NO_TICKET": 16384,
+  "SSL_OP_NO_TLSv1": 67108864,
+  "SSL_OP_NO_TLSv1_1": 268435456,
+  "SSL_OP_NO_TLSv1_2": 134217728,
+  "SSL_OP_PKCS1_CHECK_1": 0,
+  "SSL_OP_PKCS1_CHECK_2": 0,
+  "SSL_OP_SINGLE_DH_USE": 1048576,
+  "SSL_OP_SINGLE_ECDH_USE": 524288,
+  "SSL_OP_SSLEAY_080_CLIENT_DH_BUG": 128,
+  "SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG": 0,
+  "SSL_OP_TLS_BLOCK_PADDING_BUG": 512,
+  "SSL_OP_TLS_D5_BUG": 256,
+  "SSL_OP_TLS_ROLLBACK_BUG": 8388608,
+  "ENGINE_METHOD_DSA": 2,
+  "ENGINE_METHOD_DH": 4,
+  "ENGINE_METHOD_RAND": 8,
+  "ENGINE_METHOD_ECDH": 16,
+  "ENGINE_METHOD_ECDSA": 32,
+  "ENGINE_METHOD_CIPHERS": 64,
+  "ENGINE_METHOD_DIGESTS": 128,
+  "ENGINE_METHOD_STORE": 256,
+  "ENGINE_METHOD_PKEY_METHS": 512,
+  "ENGINE_METHOD_PKEY_ASN1_METHS": 1024,
+  "ENGINE_METHOD_ALL": 65535,
+  "ENGINE_METHOD_NONE": 0,
+  "DH_CHECK_P_NOT_SAFE_PRIME": 2,
+  "DH_CHECK_P_NOT_PRIME": 1,
+  "DH_UNABLE_TO_CHECK_GENERATOR": 4,
+  "DH_NOT_SUITABLE_GENERATOR": 8,
+  "NPN_ENABLED": 1,
+  "RSA_PKCS1_PADDING": 1,
+  "RSA_SSLV23_PADDING": 2,
+  "RSA_NO_PADDING": 3,
+  "RSA_PKCS1_OAEP_PADDING": 4,
+  "RSA_X931_PADDING": 5,
+  "RSA_PKCS1_PSS_PADDING": 6,
+  "POINT_CONVERSION_COMPRESSED": 2,
+  "POINT_CONVERSION_UNCOMPRESSED": 4,
+  "POINT_CONVERSION_HYBRID": 6,
+  "F_OK": 0,
+  "R_OK": 4,
+  "W_OK": 2,
+  "X_OK": 1,
+  "UV_UDP_REUSEADDR": 4
+}
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 cc.Assembler2D.prototype.updateWorldVerts = function (comp) {
@@ -35,7 +246,7 @@ cc.Assembler2D.prototype.updateColor = function (comp, color) {
   _updateColor.call(this, comp, color);
 };
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -72,7 +283,7 @@ cc.Assembler2D.prototype.updateColor = function (comp, color) {
   };
 })();
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -173,7 +384,7 @@ Object.setPrototypeOf(cc.Assembler.prototype, renderer.Assembler.prototype);
 cc.js.mixin(cc.Assembler.prototype, Assembler);
 module.exports = Assembler;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 var proto = cc.Graphics.__assembler__.prototype;
@@ -223,7 +434,7 @@ proto.updateIADatas = function (iaIndex, meshIndex) {
   this._buffer.indiceStart = 0;
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -264,7 +475,7 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
   }
 });
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -285,7 +496,7 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
   });
 })();
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -306,7 +517,7 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
   });
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -317,7 +528,7 @@ Object.assign(cc.Label.__assembler__.Bmfont.prototype, {
   });
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -352,7 +563,7 @@ require('./3d/ttf.js');
 
 require('./3d/letter.js');
 
-},{"./2d/bmfont.js":5,"./3d/bmfont.js":6,"./3d/letter.js":7,"./3d/ttf.js":8}],10:[function(require,module,exports){
+},{"./2d/bmfont.js":6,"./3d/bmfont.js":7,"./3d/letter.js":8,"./3d/ttf.js":9}],11:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -451,7 +662,7 @@ cc.js.mixin(cc.Mask.prototype, {
   }
 });
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -495,7 +706,7 @@ cc.js.mixin(cc.Mask.prototype, {
   }, renderer.MeshAssembler.prototype);
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 var proto = cc.MotionStreak.__assembler__.prototype;
@@ -530,7 +741,7 @@ cc.js.mixin(proto, {
   }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -599,7 +810,7 @@ cc.js.mixin(proto, {
   }, renderer.Particle3DAssembler.prototype);
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -639,7 +850,7 @@ Object.assign(cc.Sprite.__assembler__.Mesh.prototype, {
   }
 });
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -679,7 +890,7 @@ Object.assign(cc.Sprite.__assembler__.RadialFilled.prototype, {
   }
 });
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -722,7 +933,7 @@ proto.initLocal = function () {
   nativeProto.setLocalData.call(this, this._local);
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -765,7 +976,7 @@ proto.initLocal = function () {
   nativeProto.setLocalData.call(this, this._local);
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -833,7 +1044,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   }
 });
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -844,7 +1055,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -867,7 +1078,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -888,7 +1099,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -900,7 +1111,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -912,7 +1123,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -963,7 +1174,7 @@ Object.assign(cc.Sprite.__assembler__.Tiled.prototype, {
   });
 })();
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1012,7 +1223,7 @@ require('./3d/bar-filled.js');
 
 require('./3d/radial-filled.js');
 
-},{"./2d/mesh.js":14,"./2d/radial-filled.js":15,"./2d/simple.js":16,"./2d/sliced.js":17,"./2d/tiled.js":18,"./3d/bar-filled.js":19,"./3d/mesh.js":20,"./3d/radial-filled.js":21,"./3d/simple.js":22,"./3d/sliced.js":23,"./3d/tiled.js":24}],26:[function(require,module,exports){
+},{"./2d/mesh.js":15,"./2d/radial-filled.js":16,"./2d/simple.js":17,"./2d/sliced.js":18,"./2d/tiled.js":19,"./3d/bar-filled.js":20,"./3d/mesh.js":21,"./3d/radial-filled.js":22,"./3d/simple.js":23,"./3d/sliced.js":24,"./3d/tiled.js":25}],27:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1114,7 +1325,7 @@ if (CC_NATIVERENDERER) {
   });
 }
 
-},{"./assemblers/assembler-2d.js":1,"./assemblers/assembler-3d.js":2,"./assemblers/assembler.js":3,"./assemblers/graphics-assembler.js":4,"./assemblers/label/index.js":9,"./assemblers/mask-assembler.js":10,"./assemblers/mesh-renderer.js":11,"./assemblers/motion-streak.js":12,"./assemblers/particle-3d-assembler.js":13,"./assemblers/sprite/index.js":25,"./jsb-assets-manager.js":27,"./jsb-audio.js":28,"./jsb-dragonbones.js":undefined,"./jsb-editbox.js":undefined,"./jsb-effect-variant.js":30,"./jsb-effect.js":31,"./jsb-game.js":33,"./jsb-loader.js":34,"./jsb-particle.js":35,"./jsb-reflection.js":36,"./jsb-safearea.js":37,"./jsb-skin-mesh.js":38,"./jsb-spine-skeleton.js":undefined,"./jsb-sys.js":39,"./jsb-tiledmap.js":40,"./jsb-videoplayer.js":undefined,"./jsb-webview.js":41,"./scene/camera.js":42,"./scene/light.js":43,"./scene/mesh-buffer.js":44,"./scene/node-proxy.js":45,"./scene/node.js":46,"./scene/quad-buffer.js":47,"./scene/render-data.js":48,"./scene/render-flow.js":49}],27:[function(require,module,exports){
+},{"./assemblers/assembler-2d.js":2,"./assemblers/assembler-3d.js":3,"./assemblers/assembler.js":4,"./assemblers/graphics-assembler.js":5,"./assemblers/label/index.js":10,"./assemblers/mask-assembler.js":11,"./assemblers/mesh-renderer.js":12,"./assemblers/motion-streak.js":13,"./assemblers/particle-3d-assembler.js":14,"./assemblers/sprite/index.js":26,"./jsb-assets-manager.js":28,"./jsb-audio.js":29,"./jsb-dragonbones.js":31,"./jsb-editbox.js":32,"./jsb-effect-variant.js":33,"./jsb-effect.js":34,"./jsb-game.js":36,"./jsb-loader.js":37,"./jsb-particle.js":38,"./jsb-reflection.js":39,"./jsb-safearea.js":40,"./jsb-skin-mesh.js":41,"./jsb-spine-skeleton.js":42,"./jsb-sys.js":43,"./jsb-tiledmap.js":44,"./jsb-videoplayer.js":45,"./jsb-webview.js":46,"./scene/camera.js":47,"./scene/light.js":48,"./scene/mesh-buffer.js":49,"./scene/node-proxy.js":50,"./scene/node.js":51,"./scene/quad-buffer.js":52,"./scene/render-data.js":53,"./scene/render-flow.js":54}],28:[function(require,module,exports){
 "use strict";
 
 /*
@@ -1174,7 +1385,7 @@ if (jsb.AssetsManager) {
   jsb.EventAssetsManager.ERROR_DECOMPRESS = 10;
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1445,7 +1656,7 @@ var handleVolume = function handleVolume(volume) {
   };
 })(Audio.prototype, jsb.AudioEngine);
 
-},{"./jsb-cache-manager":29}],29:[function(require,module,exports){
+},{"./jsb-cache-manager":30}],30:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -1633,7 +1844,1005 @@ var cacheManager = {
 };
 cc.assetManager.cacheManager = module.exports = cacheManager;
 
-},{"./jsb-fs-utils":32}],30:[function(require,module,exports){
+},{"./jsb-fs-utils":35}],31:[function(require,module,exports){
+"use strict";
+
+var _constants = require("constants");
+
+/****************************************************************************
+ Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+
+ http://www.cocos.com
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+var cacheManager = require('./jsb-cache-manager');
+
+(function () {
+  if (window.dragonBones === undefined || window.middleware === undefined) return;
+  if (dragonBones.DragonBonesAtlasAsset === undefined) return; // dragonbones global time scale.
+
+  Object.defineProperty(dragonBones, 'timeScale', {
+    get: function get() {
+      return this._timeScale;
+    },
+    set: function set(value) {
+      this._timeScale = value;
+      var factory = this.CCFactory.getInstance();
+      factory.setTimeScale(value);
+    },
+    configurable: true
+  });
+  jsb.generateGetSet(dragonBones);
+
+  var _slotColor = cc.color(0, 0, 255, 255);
+
+  var _boneColor = cc.color(255, 0, 0, 255);
+
+  var _originColor = cc.color(0, 255, 0, 255); ////////////////////////////////////////////////////////////
+  // override dragonBones library by native dragonBones
+  ////////////////////////////////////////////////////////////
+  //--------------------
+  // adapt event name
+  //--------------------
+
+
+  dragonBones.EventObject.START = "start";
+  dragonBones.EventObject.LOOP_COMPLETE = "loopComplete";
+  dragonBones.EventObject.COMPLETE = "complete";
+  dragonBones.EventObject.FADE_IN = "fadeIn";
+  dragonBones.EventObject.FADE_IN_COMPLETE = "fadeInComplete";
+  dragonBones.EventObject.FADE_OUT = "fadeOut";
+  dragonBones.EventObject.FADE_OUT_COMPLETE = "fadeOutComplete";
+  dragonBones.EventObject.FRAME_EVENT = "frameEvent";
+  dragonBones.EventObject.SOUND_EVENT = "soundEvent";
+  dragonBones.DragonBones = {
+    ANGLE_TO_RADIAN: Math.PI / 180,
+    RADIAN_TO_ANGLE: 180 / Math.PI
+  }; //-------------------
+  // native factory
+  //-------------------
+
+  var factoryProto = dragonBones.CCFactory.prototype;
+
+  factoryProto.createArmatureNode = function (comp, armatureName, node) {
+    node = node || new cc.Node();
+    var display = node.getComponent(dragonBones.ArmatureDisplay);
+
+    if (!display) {
+      display = node.addComponent(dragonBones.ArmatureDisplay);
+    }
+
+    node.name = armatureName;
+    display._armatureName = armatureName;
+    display._N$dragonAsset = comp.dragonAsset;
+    display._N$dragonAtlasAsset = comp.dragonAtlasAsset;
+
+    display._init();
+
+    return display;
+  };
+
+  var _replaceSkin = factoryProto.replaceSkin;
+
+  factoryProto.replaceSkin = function (armatrue, skinData, isOverride, exclude) {
+    if (isOverride == undefined) isOverride = false;
+    exclude = exclude || [];
+
+    _replaceSkin.call(this, armatrue, skinData, isOverride, exclude);
+  };
+
+  var _changeSkin = factoryProto.changeSkin;
+
+  factoryProto.changeSkin = function (armatrue, skinData, exclude) {
+    _changeSkin.call(this, armatrue, skinData, exclude);
+  }; //-------------------
+  // native animation state
+  //-------------------
+
+
+  var animationStateProto = dragonBones.AnimationState.prototype;
+  var _isPlaying = animationStateProto.isPlaying;
+  Object.defineProperty(animationStateProto, 'isPlaying', {
+    get: function get() {
+      return _isPlaying.call(this);
+    }
+  }); //-------------------
+  // native armature
+  //-------------------
+
+  var armatureProto = dragonBones.Armature.prototype;
+
+  armatureProto.addEventListener = function (eventType, listener, target) {
+    if (!this.__persistentDisplay__) {
+      this.__persistentDisplay__ = this.getDisplay();
+    }
+
+    this.__persistentDisplay__.on(eventType, listener, target);
+  };
+
+  armatureProto.removeEventListener = function (eventType, listener, target) {
+    if (!this.__persistentDisplay__) {
+      this.__persistentDisplay__ = this.getDisplay();
+    }
+
+    this.__persistentDisplay__.off(eventType, listener, target);
+  }; //--------------------------
+  // native CCArmatureDisplay
+  //--------------------------
+
+
+  var nativeArmatureDisplayProto = dragonBones.CCArmatureDisplay.prototype;
+  Object.defineProperty(nativeArmatureDisplayProto, "node", {
+    get: function get() {
+      return this;
+    }
+  });
+
+  nativeArmatureDisplayProto.getRootNode = function () {
+    var rootDisplay = this.getRootDisplay();
+    return rootDisplay && rootDisplay._ccNode;
+  };
+
+  nativeArmatureDisplayProto.convertToWorldSpace = function (point) {
+    var newPos = this.convertToRootSpace(point);
+    newPos = cc.v2(newPos.x, newPos.y);
+    var ccNode = this.getRootNode();
+    if (!ccNode) return newPos;
+    var finalPos = ccNode.convertToWorldSpaceAR(newPos);
+    return finalPos;
+  };
+
+  nativeArmatureDisplayProto.initEvent = function () {
+    if (this._eventTarget) {
+      return;
+    }
+
+    this._eventTarget = new cc.EventTarget();
+    this.setDBEventCallback(function (eventObject) {
+      this._eventTarget.emit(eventObject.type, eventObject);
+    });
+  };
+
+  nativeArmatureDisplayProto.on = function (type, listener, target) {
+    this.initEvent();
+
+    this._eventTarget.on(type, listener, target);
+
+    this.addDBEventListener(type, listener);
+  };
+
+  nativeArmatureDisplayProto.off = function (type, listener, target) {
+    this.initEvent();
+
+    this._eventTarget.off(type, listener, target);
+
+    this.removeDBEventListener(type, listener);
+  };
+
+  nativeArmatureDisplayProto.once = function (type, listener, target) {
+    this.initEvent();
+
+    this._eventTarget.once(type, listener, target);
+
+    this.addDBEventListener(type, listener);
+  }; ////////////////////////////////////////////////////////////
+  // override DragonBonesAtlasAsset
+  ////////////////////////////////////////////////////////////
+
+
+  var dbAtlas = dragonBones.DragonBonesAtlasAsset.prototype;
+  var _gTextureIdx = 1;
+  var _textureKeyMap = {};
+
+  var _textureMap = new WeakMap();
+
+  var _textureIdx2Name = {};
+
+  dbAtlas.removeRecordTexture = function (texture) {
+    if (!texture) return;
+    delete _textureIdx2Name[texture.url];
+    var index = texture.__textureIndex__;
+
+    if (index) {
+      var texKey = _textureKeyMap[index];
+
+      if (texKey && _textureMap.has(texKey)) {
+        _textureMap["delete"](texKey);
+
+        delete _textureKeyMap[index];
+      }
+    }
+  };
+
+  dbAtlas.recordTexture = function () {
+    if (this._texture && this._oldTexture !== this._texture) {
+      this.removeRecordTexture(this._oldTexture);
+      var texKey = _textureKeyMap[_gTextureIdx] = {
+        key: _gTextureIdx
+      };
+
+      _textureMap.set(texKey, this._texture);
+
+      this._oldTexture = this._texture;
+      this._texture.__textureIndex__ = _gTextureIdx;
+      _gTextureIdx++;
+    }
+  };
+
+  dbAtlas.getTextureByIndex = function (textureIdx) {
+    var texKey = _textureKeyMap[textureIdx];
+    if (!texKey) return;
+    return _textureMap.get(texKey);
+  };
+
+  dbAtlas.updateTextureAtlasData = function (factory) {
+    var url = this._texture.url;
+    var preAtlasInfo = _textureIdx2Name[url];
+    var index; // If the texture has store the atlas info before,then get native atlas object,and 
+    // update script texture map.
+
+    if (preAtlasInfo) {
+      index = preAtlasInfo.index;
+      this._textureAtlasData = factory.getTextureAtlasDataByIndex(preAtlasInfo.name, index);
+      var texKey = _textureKeyMap[preAtlasInfo.index];
+
+      _textureMap.set(texKey, this._texture);
+
+      this._texture.__textureIndex__ = index; // If script has store the atlas info,but native has no atlas object,then
+      // still new native texture2d object,but no call recordTexture to increase
+      // textureIndex.
+
+      if (this._textureAtlasData) {
+        return;
+      }
+    } else {
+      this.recordTexture();
+    }
+
+    index = this._texture.__textureIndex__;
+    this.jsbTexture = new middleware.Texture2D();
+    this.jsbTexture.setRealTextureIndex(index);
+    this.jsbTexture.setPixelsWide(this._texture.width);
+    this.jsbTexture.setPixelsHigh(this._texture.height);
+    this._textureAtlasData = factory.parseTextureAtlasData(this.atlasJson, this.jsbTexture, this._uuid);
+    this.jsbTexture.setNativeTexture(this._texture.getImpl());
+    _textureIdx2Name[url] = {
+      name: this._textureAtlasData.name,
+      index: index
+    };
+  };
+
+  dbAtlas.init = function (factory) {
+    this._factory = factory; // If create by manual, uuid is empty.
+
+    if (!this._uuid) {
+      var atlasJsonObj = JSON.parse(this.atlasJson);
+      this._uuid = atlasJsonObj.name;
+    }
+
+    if (this._textureAtlasData) {
+      factory.addTextureAtlasData(this._textureAtlasData, this._uuid);
+    } else {
+      this.updateTextureAtlasData(factory);
+    }
+  };
+
+  dbAtlas._clear = function (dontRecordTexture) {
+    if (this._factory) {
+      this._factory.removeTextureAtlasData(this._uuid, true);
+
+      this._factory.removeDragonBonesDataByUUID(this._uuid, true);
+    }
+
+    this._textureAtlasData = null;
+
+    if (!dontRecordTexture) {
+      this.recordTexture();
+    }
+  };
+
+  dbAtlas.destroy = function () {
+    this.removeRecordTexture(this._texture);
+
+    this._clear(true);
+
+    cc.Asset.prototype.destroy.call(this);
+  }; ////////////////////////////////////////////////////////////
+  // override DragonBonesAsset
+  ////////////////////////////////////////////////////////////
+
+
+  var dbAsset = dragonBones.DragonBonesAsset.prototype;
+
+  dbAsset.init = function (factory, atlasUUID) {
+    this._factory = factory; // If create by manual, uuid is empty.
+    // Only support json format, if remote load dbbin, must set uuid by manual.
+
+    if (!this._uuid && this.dragonBonesJson) {
+      var rawData = JSON.parse(this.dragonBonesJson);
+      this._uuid = rawData.name;
+    }
+
+    var armatureKey = this._uuid + "#" + atlasUUID;
+
+    var dragonBonesData = this._factory.getDragonBonesData(armatureKey);
+
+    if (dragonBonesData) return armatureKey;
+    var filePath = null;
+
+    if (this.dragonBonesJson) {
+      filePath = this.dragonBonesJson;
+    } else {
+      filePath = cacheManager.getCache(this.nativeUrl) || this.nativeUrl;
+    }
+
+    this._factory.parseDragonBonesDataByPath(filePath, armatureKey);
+
+    return armatureKey;
+  };
+
+  var armatureCacheMgr = dragonBones.ArmatureCacheMgr.getInstance();
+  dragonBones.armatureCacheMgr = armatureCacheMgr;
+
+  dbAsset._clear = function () {
+    if (this._factory) {
+      this._factory.removeDragonBonesDataByUUID(this._uuid, true);
+    }
+
+    armatureCacheMgr.removeArmatureCache(this._uuid);
+  }; ////////////////////////////////////////////////////////////
+  // adapt attach util
+  ////////////////////////////////////////////////////////////
+
+
+  var attachUtilProto = dragonBones.AttachUtil.prototype;
+  var _attachUtilInit = attachUtilProto.init;
+
+  attachUtilProto.init = function (armatureDisplay) {
+    _attachUtilInit.call(this, armatureDisplay);
+
+    this._nativeDisplay = armatureDisplay._nativeDisplay;
+    this._attachUtilNative = null;
+  };
+
+  var _generateAllAttachedNodes = attachUtilProto.generateAllAttachedNodes;
+
+  attachUtilProto.generateAllAttachedNodes = function () {
+    var res = _generateAllAttachedNodes.call(this);
+
+    this._associateAttachedNode();
+
+    return res;
+  };
+
+  var _generateAttachedNodes = attachUtilProto.generateAttachedNodes;
+
+  attachUtilProto.generateAttachedNodes = function (boneName) {
+    var res = _generateAttachedNodes.call(this, boneName);
+
+    this._associateAttachedNode();
+
+    return res;
+  };
+
+  var _associateAttachedNode = attachUtilProto._associateAttachedNode;
+
+  attachUtilProto._associateAttachedNode = function () {
+    if (!this._inited) return;
+
+    var rootNode = this._armatureNode.getChildByName('ATTACHED_NODE_TREE');
+
+    if (!rootNode || !rootNode.isValid) return; // associate js
+
+    _associateAttachedNode.call(this); // associate native
+
+
+    if (!this._attachUtilNative) {
+      if (this._armatureDisplay.isAnimationCached()) {
+        this._attachUtilNative = new dragonBones.CacheModeAttachUtil();
+      } else {
+        this._attachUtilNative = new dragonBones.RealTimeAttachUtil();
+      }
+
+      this._nativeDisplay.setAttachUtil(this._attachUtilNative);
+    }
+
+    this._attachUtilNative.associateAttachedNode(this._armature, this._armatureNode._proxy);
+  }; ////////////////////////////////////////////////////////////
+  // override ArmatureDisplay
+  ////////////////////////////////////////////////////////////
+
+
+  dragonBones.ArmatureDisplay._assembler = null;
+  var armatureDisplayProto = dragonBones.ArmatureDisplay.prototype;
+  var renderCompProto = cc.RenderComponent.prototype;
+  var AnimationCacheMode = dragonBones.ArmatureDisplay.AnimationCacheMode;
+  Object.defineProperty(armatureDisplayProto, 'armatureName', {
+    get: function get() {
+      return this._armatureName;
+    },
+    set: function set(value) {
+      this._armatureName = value;
+      var animNames = this.getAnimationNames(this._armatureName);
+
+      if (!this.animationName || animNames.indexOf(this.animationName) < 0) {
+        this.animationName = '';
+      }
+
+      var oldArmature = this._armature;
+
+      if (this._armature) {
+        if (!this.isAnimationCached()) {
+          this._factory.remove(this._armature);
+        }
+
+        this._armature = null;
+      }
+
+      this._nativeDisplay = null;
+
+      this._refresh();
+
+      if (oldArmature && oldArmature != this._armature) {
+        oldArmature.dispose();
+      }
+
+      if (this._armature && !this.isAnimationCached()) {
+        this._factory.add(this._armature);
+      }
+    },
+    visible: false
+  });
+  Object.defineProperty(armatureDisplayProto, "premultipliedAlpha", {
+    get: function get() {
+      if (this._premultipliedAlpha === undefined) {
+        return false;
+      }
+
+      return this._premultipliedAlpha;
+    },
+    set: function set(value) {
+      this._premultipliedAlpha = value;
+
+      if (this._nativeDisplay) {
+        this._nativeDisplay.setOpacityModifyRGB(this._premultipliedAlpha);
+      }
+    }
+  });
+  var _initDebugDraw = armatureDisplayProto._initDebugDraw;
+
+  armatureDisplayProto._initDebugDraw = function () {
+    _initDebugDraw.call(this);
+
+    if (this._armature && !this.isAnimationCached()) {
+      this._nativeDisplay.setDebugBonesEnabled(this.debugBones);
+    }
+  };
+
+  var _updateBatch = armatureDisplayProto._updateBatch;
+
+  armatureDisplayProto._updateBatch = function () {
+    _updateBatch.call(this);
+
+    if (this._nativeDisplay) {
+      this._nativeDisplay.setBatchEnabled(this.enableBatch);
+    }
+
+    this._assembler && this._assembler.clearEffect();
+  };
+
+  armatureDisplayProto._clearRenderData = function () {
+    this._nativeDisplay = null;
+  };
+
+  armatureDisplayProto._resetAssembler = function () {
+    this._assembler = new renderer.CustomAssembler();
+
+    this.node._proxy.setAssembler(this._assembler);
+  };
+
+  var _updateMaterial = armatureDisplayProto._updateMaterial;
+  var _materialHash2IDMap = {};
+  var _materialId = 1;
+
+  armatureDisplayProto._updateMaterial = function () {
+    _updateMaterial.call(this);
+
+    this._assembler && this._assembler.clearEffect();
+    var baseMaterial = this.getMaterial(0);
+
+    if (this._nativeDisplay && baseMaterial) {
+      var originHash = baseMaterial.effect.getHash();
+      var id = _materialHash2IDMap[originHash] || _materialId++;
+      _materialHash2IDMap[originHash] = id;
+      baseMaterial.effect.updateHash(id);
+      var nativeEffect = baseMaterial.effect._nativeObj;
+
+      this._nativeDisplay.setEffect(nativeEffect);
+    }
+  };
+
+  armatureDisplayProto._buildArmature = function () {
+    if (!this.dragonAsset || !this.dragonAtlasAsset || !this.armatureName) {
+      this._clearRenderData();
+
+      return;
+    }
+
+    if (this._nativeDisplay) {
+      this._nativeDisplay.dispose();
+
+      this._nativeDisplay._comp = null;
+      this._nativeDisplay = null;
+    }
+
+    var atlasUUID = this.dragonAtlasAsset._uuid;
+    this._armatureKey = this.dragonAsset.init(this._factory, atlasUUID);
+
+    if (this.isAnimationCached()) {
+      this._nativeDisplay = new dragonBones.CCArmatureCacheDisplay(this.armatureName, this._armatureKey, atlasUUID, this._cacheMode == AnimationCacheMode.SHARED_CACHE);
+      this._armature = this._nativeDisplay.armature();
+    } else {
+      this._nativeDisplay = this._factory.buildArmatureDisplay(this.armatureName, this._armatureKey, "", atlasUUID);
+
+      if (!this._nativeDisplay) {
+        this._clearRenderData();
+
+        return;
+      }
+
+      this._nativeDisplay.setDebugBonesEnabled(this.debugBones);
+
+      this._armature = this._nativeDisplay.armature();
+      this._armature.animation.timeScale = this.timeScale;
+
+      this._factory.add(this._armature);
+    } // add all event into native display
+
+
+    var callbackTable = this._eventTarget._callbackTable; // just use to adapt to native api
+
+    var emptyHandle = function emptyHandle() {};
+
+    for (var key in callbackTable) {
+      var list = callbackTable[key];
+      if (!list || !list.callbackInfos || !list.callbackInfos.length) continue;
+
+      if (this.isAnimationCached()) {
+        this._nativeDisplay.addDBEventListener(key);
+      } else {
+        this._nativeDisplay.addDBEventListener(key, emptyHandle);
+      }
+    }
+
+    this._preCacheMode = this._cacheMode;
+    this._nativeDisplay._ccNode = this.node;
+    this._nativeDisplay._comp = this;
+    this._nativeDisplay._eventTarget = this._eventTarget;
+
+    this._nativeDisplay.bindNodeProxy(this.node._proxy);
+
+    this._nativeDisplay.setOpacityModifyRGB(this.premultipliedAlpha);
+
+    this._nativeDisplay.setBatchEnabled(this.enableBatch);
+
+    this._nativeDisplay.setColor(this.node.color);
+
+    this._nativeDisplay.setDBEventCallback(function (eventObject) {
+      this._eventTarget.emit(eventObject.type, eventObject);
+    });
+
+    this.attachUtil.init(this);
+
+    this.attachUtil._associateAttachedNode();
+
+    if (this.animationName) {
+      this.playAnimation(this.animationName, this.playTimes);
+    }
+
+    this._updateMaterial();
+
+    this.markForRender(true);
+  };
+
+  armatureDisplayProto._updateColor = function () {
+    if (this._nativeDisplay) {
+      this._nativeDisplay.setColor(this.node.color);
+    }
+  };
+
+  armatureDisplayProto.playAnimation = function (animName, playTimes) {
+    this.playTimes = playTimes === undefined ? -1 : playTimes;
+    this.animationName = animName;
+
+    if (this._nativeDisplay) {
+      if (this.isAnimationCached()) {
+        return this._nativeDisplay.playAnimation(animName, this.playTimes);
+      } else {
+        if (this._armature) {
+          return this._armature.animation.play(animName, this.playTimes);
+        }
+      }
+    }
+
+    return null;
+  };
+
+  armatureDisplayProto.updateAnimationCache = function (animName) {
+    if (!this.isAnimationCached()) return;
+
+    if (this._nativeDisplay) {
+      if (animName) {
+        this._nativeDisplay.updateAnimationCache(animName);
+      } else {
+        this._nativeDisplay.updateAllAnimationCache();
+      }
+    }
+  };
+
+  armatureDisplayProto.invalidAnimationCache = function () {
+    if (!this.isAnimationCached()) return;
+
+    if (this._nativeDisplay) {
+      this._nativeDisplay.updateAllAnimationCache();
+    }
+  };
+
+  armatureDisplayProto.onEnable = function () {
+    renderCompProto.onEnable.call(this);
+
+    if (this._armature && !this.isAnimationCached()) {
+      this._factory.add(this._armature);
+    }
+  };
+
+  armatureDisplayProto.onDisable = function () {
+    renderCompProto.onDisable.call(this);
+
+    if (this._armature && !this.isAnimationCached()) {
+      this._factory.remove(this._armature);
+    }
+  };
+
+  var _onLoad = armatureDisplayProto.onLoad;
+
+  armatureDisplayProto.onLoad = function () {
+    if (_onLoad) {
+      _onLoad.call(this);
+    }
+  };
+
+  armatureDisplayProto.once = function (eventType, listener, target) {
+    if (this._nativeDisplay) {
+      if (this.isAnimationCached()) {
+        this._nativeDisplay.addDBEventListener(eventType);
+      } else {
+        this._nativeDisplay.addDBEventListener(eventType, listener);
+      }
+    }
+
+    this._eventTarget.once(eventType, listener, target);
+  };
+
+  armatureDisplayProto.addEventListener = function (eventType, listener, target) {
+    if (this._nativeDisplay) {
+      if (this.isAnimationCached()) {
+        this._nativeDisplay.addDBEventListener(eventType);
+      } else {
+        this._nativeDisplay.addDBEventListener(eventType, listener);
+      }
+    }
+
+    this._eventTarget.on(eventType, listener, target);
+  };
+
+  armatureDisplayProto.removeEventListener = function (eventType, listener, target) {
+    if (this._nativeDisplay) {
+      if (this.isAnimationCached()) {
+        this._nativeDisplay.removeDBEventListener(eventType);
+      } else {
+        this._nativeDisplay.removeDBEventListener(eventType, listener);
+      }
+    }
+
+    this._eventTarget.off(eventType, listener, target);
+  };
+
+  var _onDestroy = armatureDisplayProto.onDestroy;
+
+  armatureDisplayProto.onDestroy = function () {
+    _onDestroy.call(this);
+
+    if (this._nativeDisplay) {
+      this._nativeDisplay.dispose();
+
+      this._nativeDisplay._comp = null;
+      this._nativeDisplay = null;
+    }
+
+    this._materialCache = null;
+  };
+
+  armatureDisplayProto.update = function () {
+    var nativeDisplay = this._nativeDisplay;
+    if (!nativeDisplay) return;
+    var node = this.node;
+    if (!node) return;
+
+    if (!this.isAnimationCached() && this._debugDraw && this.debugBones) {
+      var _nativeDisplay = this._nativeDisplay;
+      this._debugData = this._debugData || _nativeDisplay.getDebugData();
+      if (!this._debugData) return;
+      var graphics = this._debugDraw;
+      graphics.clear();
+      var debugData = this._debugData;
+      var debugIdx = 0;
+      graphics.lineWidth = 5;
+      graphics.strokeColor = _boneColor;
+      graphics.fillColor = _slotColor; // Root bone color is same as slot color.
+
+      var debugBonesLen = debugData[debugIdx++];
+
+      for (var i = 0; i < debugBonesLen; i += 4) {
+        var bx = debugData[debugIdx++];
+        var by = debugData[debugIdx++];
+        var x = debugData[debugIdx++];
+        var y = debugData[debugIdx++]; // Bone lengths.
+
+        graphics.moveTo(bx, by);
+        graphics.lineTo(x, y);
+        graphics.stroke(); // Bone origins.
+
+        graphics.circle(bx, by, Math.PI * 2);
+        graphics.fill();
+
+        if (i === 0) {
+          graphics.fillColor = _originColor;
+        }
+      }
+    }
+  };
+})();
+
+},{"./jsb-cache-manager":30,"constants":1}],32:[function(require,module,exports){
+"use strict";
+
+/****************************************************************************
+ Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+
+ http://www.cocos.com
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+(function () {
+  if (!(cc && cc.EditBox)) {
+    return;
+  }
+
+  var EditBox = cc.EditBox;
+  var js = cc.js;
+  var KeyboardReturnType = EditBox.KeyboardReturnType;
+  var InputMode = EditBox.InputMode;
+  var InputFlag = EditBox.InputFlag;
+  var MAX_VALUE = 65535;
+  var worldMat = new cc.Mat4(),
+      cameraMat = new cc.Mat4();
+
+  function getInputType(type) {
+    switch (type) {
+      case InputMode.EMAIL_ADDR:
+        return 'email';
+
+      case InputMode.NUMERIC:
+      case InputMode.DECIMAL:
+        return 'number';
+
+      case InputMode.PHONE_NUMBER:
+        return 'phone';
+
+      case InputMode.URL:
+        return 'url';
+
+      case InputMode.SINGLE_LINE:
+      case InputMode.ANY:
+      default:
+        return 'text';
+    }
+  }
+
+  function getKeyboardReturnType(type) {
+    switch (type) {
+      case KeyboardReturnType.DEFAULT:
+      case KeyboardReturnType.DONE:
+        return 'done';
+
+      case KeyboardReturnType.SEND:
+        return 'send';
+
+      case KeyboardReturnType.SEARCH:
+        return 'search';
+
+      case KeyboardReturnType.GO:
+        return 'go';
+
+      case KeyboardReturnType.NEXT:
+        return 'next';
+    }
+
+    return 'done';
+  }
+
+  var BaseClass = EditBox._ImplClass;
+
+  function JsbEditBoxImpl() {
+    BaseClass.call(this);
+  }
+
+  js.extend(JsbEditBoxImpl, BaseClass);
+  EditBox._ImplClass = JsbEditBoxImpl;
+  Object.assign(JsbEditBoxImpl.prototype, {
+    init: function init(delegate) {
+      if (!delegate) {
+        cc.error('EditBox init failed');
+        return;
+      }
+
+      this._delegate = delegate;
+    },
+    _onResize: function _onResize() {
+      var _this$_getRect = this._getRect(),
+          x = _this$_getRect.x,
+          y = _this$_getRect.y,
+          width = _this$_getRect.width,
+          height = _this$_getRect.height;
+
+      jsb.inputBox.updateRect(x, y, width, height);
+    },
+    beginEditing: function beginEditing() {
+      var self = this;
+      var delegate = this._delegate;
+      var multiline = delegate.inputMode === InputMode.ANY;
+
+      var rect = this._getRect();
+
+      var maxLength = delegate.maxLength < 0 ? MAX_VALUE : delegate.maxLength;
+      var inputTypeString = getInputType(delegate.inputMode);
+
+      if (delegate.inputFlag === InputFlag.PASSWORD) {
+        inputTypeString = 'password';
+      }
+
+      function onConfirm(res) {
+        delegate.editBoxEditingReturn();
+      }
+
+      function onInput(res) {
+        if (delegate._string !== res.value) {
+          delegate.editBoxTextChanged(res.value);
+        }
+      }
+
+      function onComplete(res) {
+        self.endEditing();
+      }
+
+      jsb.inputBox.onInput(onInput);
+      jsb.inputBox.onConfirm(onConfirm);
+      jsb.inputBox.onComplete(onComplete);
+
+      if (!cc.sys.isMobile) {
+        this._delegate._hideLabels();
+      }
+
+      jsb.inputBox.show({
+        defaultValue: delegate._string,
+        maxLength: maxLength,
+        multiple: multiline,
+        confirmHold: false,
+        confirmType: getKeyboardReturnType(delegate.returnType),
+        inputType: inputTypeString,
+        originX: rect.x,
+        originY: rect.y,
+        width: rect.width,
+        height: rect.height
+      });
+      this._editing = true;
+      delegate.editBoxEditingDidBegan();
+
+      if (!cc.sys.isMobile) {
+        cc.view.on('canvas-resize', this._onResize, this);
+      }
+    },
+    endEditing: function endEditing() {
+      jsb.inputBox.offConfirm();
+      jsb.inputBox.offInput();
+      jsb.inputBox.offComplete();
+      this._editing = false;
+
+      if (!cc.sys.isMobile) {
+        this._delegate._showLabels();
+      }
+
+      jsb.inputBox.hide();
+
+      this._delegate.editBoxEditingDidEnded();
+
+      if (!cc.sys.isMobile) {
+        cc.view.off('canvas-resize', this._onResize, this);
+      }
+    },
+    _getRect: function _getRect() {
+      var node = this._delegate.node,
+          viewScaleX = cc.view._scaleX,
+          viewScaleY = cc.view._scaleY;
+      var dpr = cc.view._devicePixelRatio;
+      node.getWorldMatrix(worldMat);
+      var camera = cc.Camera.findCamera(node);
+
+      if (!camera) {
+        return new cc.Rect();
+      }
+
+      camera.getWorldToScreenMatrix2D(cameraMat);
+      cc.Mat4.multiply(cameraMat, cameraMat, worldMat);
+      var contentSize = node._contentSize;
+      var vec3 = cc.v3();
+      vec3.x = -node._anchorPoint.x * contentSize.width;
+      vec3.y = -node._anchorPoint.y * contentSize.height;
+      cc.Mat4.translate(cameraMat, cameraMat, vec3);
+      viewScaleX /= dpr;
+      viewScaleY /= dpr;
+      var finalScaleX = cameraMat.m[0] * viewScaleX;
+      var finaleScaleY = cameraMat.m[5] * viewScaleY;
+      var viewportRect = cc.view._viewportRect;
+      var offsetX = viewportRect.x / dpr,
+          offsetY = viewportRect.y / dpr;
+      return {
+        x: cameraMat.m[12] * viewScaleX + offsetX,
+        y: cameraMat.m[13] * viewScaleY + offsetY,
+        width: contentSize.width * finalScaleX,
+        height: contentSize.height * finaleScaleY
+      };
+    }
+  });
+})();
+
+},{}],33:[function(require,module,exports){
 "use strict";
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -1658,7 +2867,7 @@ cc.assetManager.cacheManager = module.exports = cacheManager;
   });
 })();
 
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -1773,7 +2982,7 @@ Object.assign(EffectBase.prototype, {
   }
 });
 
-},{}],32:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2011,7 +3220,7 @@ var fsUtils = {
 };
 window.fsUtils = module.exports = fsUtils;
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2068,7 +3277,7 @@ jsb.onResize = function (size) {
   window.resize(size.width, size.height);
 };
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -2458,7 +3667,7 @@ cc.assetManager.init = function (options) {
   cacheManager.init();
 };
 
-},{"./jsb-cache-manager":29,"./jsb-fs-utils":32}],35:[function(require,module,exports){
+},{"./jsb-cache-manager":30,"./jsb-fs-utils":35}],38:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2735,7 +3944,7 @@ cc.assetManager.init = function (options) {
   };
 })();
 
-},{}],36:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -2770,7 +3979,7 @@ if (window.JavascriptJavaBridge && cc.sys.os == cc.sys.OS_ANDROID) {
   jsb.reflection = new JavaScriptObjCBridge();
 }
 
-},{}],37:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 "use strict";
 
 var SafeArea = cc.SafeArea;
@@ -2805,7 +4014,7 @@ if (SafeArea) {
   });
 }
 
-},{}],38:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -2819,7 +4028,898 @@ if (SafeArea) {
   });
 })();
 
-},{}],39:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
+"use strict";
+
+/****************************************************************************
+ Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+
+ http://www.cocos.com
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+var cacheManager = require('./jsb-cache-manager');
+
+(function () {
+  if (window.sp === undefined || window.spine === undefined || window.middleware === undefined) return;
+  sp.VertexEffectDelegate = spine.VertexEffectDelegate;
+  jsb.generateGetSet(spine); // spine global time scale
+
+  Object.defineProperty(sp, 'timeScale', {
+    get: function get() {
+      return this._timeScale;
+    },
+    set: function set(value) {
+      this._timeScale = value;
+      spine.SkeletonAnimation.setGlobalTimeScale(value);
+    },
+    configurable: true
+  });
+
+  var _slotColor = cc.color(0, 0, 255, 255);
+
+  var _boneColor = cc.color(255, 0, 0, 255);
+
+  var _meshColor = cc.color(255, 255, 0, 255);
+
+  var _originColor = cc.color(0, 255, 0, 255);
+
+  var skeletonDataProto = sp.SkeletonData.prototype;
+  var _gTextureIdx = 1;
+  var _textureKeyMap = {};
+
+  var _textureMap = new WeakMap();
+
+  var skeletonDataMgr = spine.SkeletonDataMgr.getInstance();
+  spine.skeletonDataMgr = skeletonDataMgr;
+  skeletonDataMgr.setDestroyCallback(function (textureIndex) {
+    if (!textureIndex) return;
+    var texKey = _textureKeyMap[textureIndex];
+
+    if (texKey && _textureMap.has(texKey)) {
+      _textureMap["delete"](texKey);
+
+      delete _textureKeyMap[textureIndex];
+    }
+  });
+  var skeletonCacheMgr = spine.SkeletonCacheMgr.getInstance();
+  spine.skeletonCacheMgr = skeletonCacheMgr;
+
+  skeletonDataProto.destroy = function () {
+    this.reset();
+    skeletonCacheMgr.removeSkeletonCache(this._uuid);
+    cc.Asset.prototype.destroy.call(this);
+  };
+
+  skeletonDataProto.reset = function () {
+    if (this._skeletonCache) {
+      spine.disposeSkeletonData(this._uuid);
+      this._jsbTextures = null;
+      this._skeletonCache = null;
+    }
+
+    this._atlasCache = null;
+  };
+
+  skeletonDataProto.getRuntimeData = function () {
+    if (!this._skeletonCache) {
+      this.init();
+    }
+
+    return this._skeletonCache;
+  };
+
+  skeletonDataProto.init = function () {
+    if (this._skeletonCache) return;
+    var uuid = this._uuid;
+
+    if (!uuid) {
+      cc.errorID(7504);
+      return;
+    }
+
+    var skeletonCache = spine.retainSkeletonData(uuid);
+
+    if (skeletonCache) {
+      this._skeletonCache = skeletonCache;
+      this.width = this._skeletonCache.getWidth();
+      this.height = this._skeletonCache.getHeight();
+      return;
+    }
+
+    var atlasText = this.atlasText;
+
+    if (!atlasText) {
+      cc.errorID(7508, this.name);
+      return;
+    }
+
+    var textures = this.textures;
+    var textureNames = this.textureNames;
+
+    if (!(textures && textures.length > 0 && textureNames && textureNames.length > 0)) {
+      cc.errorID(7507, this.name);
+      return;
+    }
+
+    var jsbTextures = {};
+
+    for (var i = 0; i < textures.length; ++i) {
+      var texture = textures[i];
+      var textureIdx = this.recordTexture(texture);
+      var spTex = new middleware.Texture2D();
+      spTex.setRealTextureIndex(textureIdx);
+      spTex.setPixelsWide(texture.width);
+      spTex.setPixelsHigh(texture.height);
+      spTex.setTexParamCallback(function (texIdx, minFilter, magFilter, wrapS, warpT) {
+        var tex = this.getTextureByIndex(texIdx);
+        tex.setFilters(minFilter, magFilter);
+        tex.setWrapMode(wrapS, warpT);
+      }.bind(this));
+      spTex.setNativeTexture(texture.getImpl());
+      jsbTextures[textureNames[i]] = spTex;
+    }
+
+    this._jsbTextures = jsbTextures;
+    var filePath = null;
+
+    if (this.skeletonJsonStr) {
+      filePath = this.skeletonJsonStr;
+    } else {
+      filePath = cacheManager.getCache(this.nativeUrl) || this.nativeUrl;
+    }
+
+    this._skeletonCache = spine.initSkeletonData(uuid, filePath, atlasText, jsbTextures, this.scale);
+
+    if (this._skeletonCache) {
+      this.width = this._skeletonCache.getWidth();
+      this.height = this._skeletonCache.getHeight();
+    }
+  };
+
+  skeletonDataProto.recordTexture = function (texture) {
+    var index = _gTextureIdx;
+    var texKey = _textureKeyMap[index] = {
+      key: index
+    };
+
+    _textureMap.set(texKey, texture);
+
+    _gTextureIdx++;
+    return index;
+  };
+
+  skeletonDataProto.getTextureByIndex = function (textureIdx) {
+    var texKey = _textureKeyMap[textureIdx];
+    if (!texKey) return;
+    return _textureMap.get(texKey);
+  };
+
+  var renderCompProto = cc.RenderComponent.prototype;
+  var animation = spine.SkeletonAnimation.prototype; // The methods are added to be compatibility with old versions.
+
+  animation.setCompleteListener = function (listener) {
+    this._compeleteListener = listener;
+    this.setCompleteListenerNative(function (trackEntry) {
+      var loopCount = Math.floor(trackEntry.trackTime / trackEntry.animationEnd);
+      this._compeleteListener && this._compeleteListener(trackEntry, loopCount);
+    });
+  }; // The methods are added to be compatibility with old versions.
+
+
+  animation.setTrackCompleteListener = function (trackEntry, listener) {
+    this._trackCompeleteListener = listener;
+    this.setTrackCompleteListenerNative(trackEntry, function (trackEntryNative) {
+      var loopCount = Math.floor(trackEntryNative.trackTime / trackEntryNative.animationEnd);
+      this._trackCompeleteListener && this._trackCompeleteListener(trackEntryNative, loopCount);
+    });
+  }; // Temporary solution before upgrade the Spine API
+
+
+  animation.setAnimationListener = function (target, callback) {
+    this._target = target;
+    this._callback = callback;
+    this.setStartListener(function (trackEntry) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.START, null, 0);
+      }
+    });
+    this.setInterruptListener(function (trackEntry) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.INTERRUPT, null, 0);
+      }
+    });
+    this.setEndListener(function (trackEntry) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.END, null, 0);
+      }
+    });
+    this.setDisposeListener(function (trackEntry) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.DISPOSE, null, 0);
+      }
+    });
+    this.setCompleteListener(function (trackEntry, loopCount) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.COMPLETE, null, loopCount);
+      }
+    });
+    this.setEventListener(function (trackEntry, event) {
+      if (this._target && this._callback) {
+        this._callback.call(this._target, this, trackEntry, sp.AnimationEventType.EVENT, event, 0);
+      }
+    });
+  };
+
+  sp.Skeleton._assembler = null;
+  var skeleton = sp.Skeleton.prototype;
+  var AnimationCacheMode = sp.Skeleton.AnimationCacheMode;
+  Object.defineProperty(skeleton, 'paused', {
+    get: function get() {
+      return this._paused || false;
+    },
+    set: function set(value) {
+      this._paused = value;
+
+      if (this._nativeSkeleton) {
+        this._nativeSkeleton.paused(value);
+      }
+    }
+  });
+  Object.defineProperty(skeleton, "premultipliedAlpha", {
+    get: function get() {
+      if (this._premultipliedAlpha === undefined) {
+        return true;
+      }
+
+      return this._premultipliedAlpha;
+    },
+    set: function set(value) {
+      this._premultipliedAlpha = value;
+
+      if (this._nativeSkeleton) {
+        this._nativeSkeleton.setOpacityModifyRGB(this._premultipliedAlpha);
+      }
+    }
+  });
+  Object.defineProperty(skeleton, "timeScale", {
+    get: function get() {
+      if (this._timeScale === undefined) return 1.0;
+      return this._timeScale;
+    },
+    set: function set(value) {
+      this._timeScale = value;
+
+      if (this._nativeSkeleton) {
+        this._nativeSkeleton.setTimeScale(this._timeScale);
+      }
+    }
+  });
+  var _updateDebugDraw = skeleton._updateDebugDraw;
+
+  skeleton._updateDebugDraw = function () {
+    _updateDebugDraw.call(this);
+
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setDebugMeshEnabled(this.debugMesh);
+
+      this._nativeSkeleton.setDebugSlotsEnabled(this.debugSlots);
+
+      this._nativeSkeleton.setDebugBonesEnabled(this.debugBones);
+    }
+  };
+
+  var _updateUseTint = skeleton._updateUseTint;
+
+  skeleton._updateUseTint = function () {
+    _updateUseTint.call(this);
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setUseTint(this.useTint);
+    }
+
+    this._assembler && this._assembler.clearEffect();
+  };
+
+  var _updateBatch = skeleton._updateBatch;
+
+  skeleton._updateBatch = function () {
+    _updateBatch.call(this);
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setBatchEnabled(this.enableBatch);
+    }
+
+    this._assembler && this._assembler.clearEffect();
+  };
+
+  var _onLoad = skeleton.onLoad;
+
+  skeleton.onLoad = function () {
+    if (_onLoad) {
+      _onLoad.call(this);
+    }
+  };
+
+  skeleton._resetAssembler = function () {
+    this._assembler = new renderer.CustomAssembler();
+
+    this.node._proxy.setAssembler(this._assembler);
+  };
+
+  var _updateMaterial = skeleton._updateMaterial;
+  var _materialHashMap = {};
+  var _materialId = 1;
+
+  skeleton._updateMaterial = function () {
+    _updateMaterial.call(this);
+
+    this._assembler && this._assembler.clearEffect();
+    var baseMaterial = this.getMaterial(0);
+
+    if (this._nativeSkeleton && baseMaterial) {
+      var originHash = baseMaterial.effect.getHash();
+      var id = _materialHashMap[originHash] || _materialId++;
+      _materialHashMap[originHash] = id;
+      baseMaterial.effect.updateHash(id);
+      var nativeEffect = baseMaterial.effect._nativeObj;
+
+      this._nativeSkeleton.setEffect(nativeEffect);
+    }
+  };
+
+  skeleton.setSkeletonData = function (skeletonData) {
+    null != skeletonData.width && null != skeletonData.height && this.node.setContentSize(skeletonData.width, skeletonData.height);
+    var uuid = skeletonData._uuid;
+
+    if (!uuid) {
+      cc.errorID(7504);
+      return;
+    }
+
+    var texValues = skeletonData.textures;
+    var texKeys = skeletonData.textureNames;
+
+    if (!(texValues && texValues.length > 0 && texKeys && texKeys.length > 0)) {
+      cc.errorID(7507, skeletonData.name);
+      return;
+    }
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.stopSchedule();
+
+      this._nativeSkeleton._comp = null;
+      this._nativeSkeleton = null;
+    }
+
+    var nativeSkeleton = null;
+
+    if (this.isAnimationCached()) {
+      nativeSkeleton = new spine.SkeletonCacheAnimation(uuid, this._cacheMode == AnimationCacheMode.SHARED_CACHE);
+    } else {
+      nativeSkeleton = new spine.SkeletonAnimation();
+
+      try {
+        spine.initSkeletonRenderer(nativeSkeleton, uuid);
+      } catch (e) {
+        cc._throw(e);
+
+        return;
+      }
+
+      nativeSkeleton.setDebugSlotsEnabled(this.debugSlots);
+      nativeSkeleton.setDebugMeshEnabled(this.debugMesh);
+      nativeSkeleton.setDebugBonesEnabled(this.debugBones);
+    }
+
+    this._nativeSkeleton = nativeSkeleton;
+    nativeSkeleton._comp = this;
+    nativeSkeleton.setUseTint(this.useTint);
+    nativeSkeleton.setOpacityModifyRGB(this.premultipliedAlpha);
+    nativeSkeleton.setTimeScale(this.timeScale);
+    nativeSkeleton.setBatchEnabled(this.enableBatch);
+    nativeSkeleton.bindNodeProxy(this.node._proxy);
+    nativeSkeleton.setColor(this.node.color);
+    this._skeleton = nativeSkeleton.getSkeleton(); // init skeleton listener
+
+    this._startListener && this.setStartListener(this._startListener);
+    this._endListener && this.setEndListener(this._endListener);
+    this._completeListener && this.setCompleteListener(this._completeListener);
+    this._eventListener && this.setEventListener(this._eventListener);
+    this._interruptListener && this.setInterruptListener(this._interruptListener);
+    this._disposeListener && this.setDisposeListener(this._disposeListener);
+
+    this._updateMaterial();
+
+    this.markForRender(true);
+  };
+
+  skeleton._updateColor = function () {
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setColor(this.node.color);
+    }
+  };
+
+  skeleton.setAnimationStateData = function (stateData) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._stateData = stateData;
+      return this._nativeSkeleton.setAnimationStateData(stateData);
+    }
+  };
+
+  skeleton.onEnable = function () {
+    renderCompProto.onEnable.call(this);
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.onEnable();
+    }
+  };
+
+  skeleton.onDisable = function () {
+    renderCompProto.onDisable.call(this);
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.onDisable();
+    }
+  };
+
+  skeleton.setVertexEffectDelegate = function (effectDelegate) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setVertexEffectDelegate(effectDelegate);
+    }
+  };
+
+  skeleton.update = function () {
+    var nativeSkeleton = this._nativeSkeleton;
+    if (!nativeSkeleton) return;
+    var node = this.node;
+    if (!node) return;
+
+    if (!this.isAnimationCached() && (this.debugBones || this.debugSlots || this.debugMesh) && this._debugRenderer) {
+      var graphics = this._debugRenderer;
+      graphics.clear();
+      graphics.lineWidth = 2;
+      var debugData = this._debugData || nativeSkeleton.getDebugData();
+      if (!debugData) return;
+      var debugIdx = 0,
+          debugType = 0,
+          debugLen = 0;
+
+      while (true) {
+        debugType = debugData[debugIdx++];
+        if (debugType == 0) break;
+        debugLen = debugData[debugIdx++];
+
+        switch (debugType) {
+          case 1:
+            // slots
+            graphics.strokeColor = _slotColor;
+
+            for (var i = 0; i < debugLen; i += 8) {
+              graphics.moveTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.lineTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.lineTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.lineTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.close();
+              graphics.stroke();
+            }
+
+            break;
+
+          case 2:
+            // mesh
+            graphics.strokeColor = _meshColor;
+
+            for (var _i = 0; _i < debugLen; _i += 6) {
+              graphics.moveTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.lineTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.lineTo(debugData[debugIdx++], debugData[debugIdx++]);
+              graphics.close();
+              graphics.stroke();
+            }
+
+            break;
+
+          case 3:
+            // bones
+            graphics.strokeColor = _boneColor;
+            graphics.fillColor = _slotColor; // Root bone color is same as slot color.
+
+            for (var _i2 = 0; _i2 < debugLen; _i2 += 4) {
+              var bx = debugData[debugIdx++];
+              var by = debugData[debugIdx++];
+              var x = debugData[debugIdx++];
+              var y = debugData[debugIdx++]; // Bone lengths.
+
+              graphics.moveTo(bx, by);
+              graphics.lineTo(x, y);
+              graphics.stroke(); // Bone origins.
+
+              graphics.circle(bx, by, Math.PI * 1.5);
+              graphics.fill();
+
+              if (_i2 === 0) {
+                graphics.fillColor = _originColor;
+              }
+            }
+
+            break;
+
+          default:
+            return;
+        }
+      }
+    }
+  };
+
+  skeleton.updateWorldTransform = function () {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.updateWorldTransform();
+    }
+  };
+
+  skeleton.setToSetupPose = function () {
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setToSetupPose();
+    }
+  };
+
+  skeleton.setBonesToSetupPose = function () {
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setBonesToSetupPose();
+    }
+  };
+
+  skeleton.setSlotsToSetupPose = function () {
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.setSlotsToSetupPose();
+    }
+  };
+
+  skeleton.setSlotsRange = function (startSlotIndex, endSlotIndex) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setSlotsRange(startSlotIndex, endSlotIndex);
+    }
+  };
+
+  skeleton.updateAnimationCache = function (animName) {
+    if (!this.isAnimationCached()) return;
+
+    if (this._nativeSkeleton) {
+      if (animName) {
+        this._nativeSkeleton.updateAnimationCache(animName);
+      } else {
+        this._nativeSkeleton.updateAllAnimationCache();
+      }
+    }
+  };
+
+  skeleton.invalidAnimationCache = function () {
+    if (!this.isAnimationCached()) return;
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.updateAllAnimationCache();
+    }
+  };
+
+  skeleton.findBone = function (boneName) {
+    if (this._nativeSkeleton) return this._nativeSkeleton.findBone(boneName);
+    return null;
+  };
+
+  skeleton.findSlot = function (slotName) {
+    if (this._nativeSkeleton) return this._nativeSkeleton.findSlot(slotName);
+    return null;
+  };
+
+  skeleton.setSkin = function (skinName) {
+    if (this._nativeSkeleton) return this._nativeSkeleton.setSkin(skinName);
+    return null;
+  };
+
+  skeleton.getAttachment = function (slotName, attachmentName) {
+    if (this._nativeSkeleton) return this._nativeSkeleton.getAttachment(slotName, attachmentName);
+    return null;
+  };
+
+  skeleton.setAttachment = function (slotName, attachmentName) {
+    this._nativeSkeleton && this._nativeSkeleton.setAttachment(slotName, attachmentName);
+  };
+
+  skeleton.getTextureAtlas = function (regionAttachment) {
+    cc.warn("sp.Skeleton getTextureAtlas not support in native");
+    return null;
+  };
+
+  skeleton.setMix = function (fromAnimation, toAnimation, duration) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setMix(fromAnimation, toAnimation, duration);
+    }
+  };
+
+  skeleton.setAnimation = function (trackIndex, name, loop) {
+    if (this._nativeSkeleton) {
+      if (this.isAnimationCached()) {
+        return this._nativeSkeleton.setAnimation(name, loop);
+      } else {
+        return this._nativeSkeleton.setAnimation(trackIndex, name, loop);
+      }
+    }
+
+    return null;
+  };
+
+  skeleton.addAnimation = function (trackIndex, name, loop, delay) {
+    if (this._nativeSkeleton) {
+      delay = delay || 0;
+
+      if (this.isAnimationCached()) {
+        return this._nativeSkeleton.addAnimation(name, loop, delay);
+      } else {
+        return this._nativeSkeleton.addAnimation(trackIndex, name, loop, delay);
+      }
+    }
+
+    return null;
+  };
+
+  skeleton.findAnimation = function (name) {
+    if (this._nativeSkeleton) return this._nativeSkeleton.findAnimation(name);
+    return null;
+  };
+
+  skeleton.getCurrent = function (trackIndex) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      return this._nativeSkeleton.getCurrent(trackIndex);
+    }
+
+    return null;
+  };
+
+  skeleton.clearTracks = function () {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.clearTracks();
+    }
+  };
+
+  skeleton.clearTrack = function (trackIndex) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.clearTrack(trackIndex);
+    }
+  };
+
+  skeleton.setStartListener = function (listener) {
+    this._startListener = listener;
+
+    if (this._nativeSkeleton) {
+      if (this.isAnimationCached()) {
+        this._nativeSkeleton.setStartListener(function (animationName) {
+          var self = this._comp;
+          self._startEntry.animation.name = animationName;
+          self._startListener && self._startListener(self._startEntry);
+        });
+      } else {
+        this._nativeSkeleton.setStartListener(listener);
+      }
+    }
+  };
+
+  skeleton.setInterruptListener = function (listener) {
+    this._interruptListener = listener;
+
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setInterruptListener(listener);
+    }
+  };
+
+  skeleton.setEndListener = function (listener) {
+    this._endListener = listener;
+
+    if (this._nativeSkeleton) {
+      if (this.isAnimationCached()) {
+        this._nativeSkeleton.setEndListener(function (animationName) {
+          var self = this._comp;
+          self._endEntry.animation.name = animationName;
+          self._endListener && self._endListener(self._endEntry);
+        });
+      } else {
+        this._nativeSkeleton.setEndListener(listener);
+      }
+    }
+  };
+
+  skeleton.setDisposeListener = function (listener) {
+    this._disposeListener = listener;
+
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setDisposeListener(listener);
+    }
+  };
+
+  skeleton.setCompleteListener = function (listener) {
+    this._completeListener = listener;
+
+    if (this._nativeSkeleton) {
+      if (this.isAnimationCached()) {
+        this._nativeSkeleton.setCompleteListener(function (animationName) {
+          var self = this._comp;
+          self._endEntry.animation.name = animationName;
+          self._completeListener && self._completeListener(self._endEntry);
+        });
+      } else {
+        this._nativeSkeleton.setCompleteListener(listener);
+      }
+    }
+  };
+
+  skeleton.setEventListener = function (listener) {
+    this._eventListener = listener;
+
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setEventListener(listener);
+    }
+  };
+
+  skeleton.setTrackStartListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackStartListener(entry, listener);
+    }
+  };
+
+  skeleton.setTrackInterruptListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackInterruptListener(entry, listener);
+    }
+  };
+
+  skeleton.setTrackEndListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackEndListener(entry, listener);
+    }
+  };
+
+  skeleton.setTrackDisposeListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackDisposeListener(entry, listener);
+    }
+  };
+
+  skeleton.setTrackCompleteListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackCompleteListener(entry, listener);
+    }
+  };
+
+  skeleton.setTrackEventListener = function (entry, listener) {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      this._nativeSkeleton.setTrackEventListener(entry, listener);
+    }
+  };
+
+  skeleton.getState = function () {
+    if (this._nativeSkeleton && !this.isAnimationCached()) {
+      return this._nativeSkeleton.getState();
+    }
+  };
+
+  skeleton._ensureListener = function () {
+    cc.warn("sp.Skeleton _ensureListener not need in native");
+  };
+
+  skeleton._updateSkeletonData = function () {
+    if (this.skeletonData) {
+      this.skeletonData.init();
+      this.setSkeletonData(this.skeletonData);
+      this.attachUtil.init(this);
+
+      this.attachUtil._associateAttachedNode();
+
+      this._preCacheMode = this._cacheMode;
+      this.defaultSkin && this._nativeSkeleton.setSkin(this.defaultSkin);
+      this.animation = this.defaultAnimation;
+    } else {
+      if (this._nativeSkeleton) {
+        this._nativeSkeleton.stopSchedule();
+
+        this._nativeSkeleton._comp = null;
+        this._nativeSkeleton = null;
+      }
+    }
+  };
+
+  var _onDestroy = skeleton.onDestroy;
+
+  skeleton.onDestroy = function () {
+    _onDestroy.call(this);
+
+    if (this._nativeSkeleton) {
+      this._nativeSkeleton.stopSchedule();
+
+      this._nativeSkeleton._comp = null;
+      this._nativeSkeleton = null;
+    }
+
+    this._stateData = null;
+    this._materialCache = null;
+  }; ////////////////////////////////////////////////////////////
+  // adapt attach util
+  ////////////////////////////////////////////////////////////
+
+
+  var attachUtilProto = sp.AttachUtil.prototype;
+  var _attachUtilInit = attachUtilProto.init;
+
+  attachUtilProto.init = function (skeletonComp) {
+    _attachUtilInit.call(this, skeletonComp);
+
+    this._nativeSkeleton = skeletonComp._nativeSkeleton;
+    this._attachUtilNative = null;
+  };
+
+  var _generateAllAttachedNodes = attachUtilProto.generateAllAttachedNodes;
+
+  attachUtilProto.generateAllAttachedNodes = function () {
+    var res = _generateAllAttachedNodes.call(this);
+
+    this._associateAttachedNode();
+
+    return res;
+  };
+
+  var _generateAttachedNodes = attachUtilProto.generateAttachedNodes;
+
+  attachUtilProto.generateAttachedNodes = function (boneName) {
+    var res = _generateAttachedNodes.call(this, boneName);
+
+    this._associateAttachedNode();
+
+    return res;
+  };
+
+  var _associateAttachedNode = attachUtilProto._associateAttachedNode;
+
+  attachUtilProto._associateAttachedNode = function () {
+    if (!this._inited) return;
+
+    var rootNode = this._skeletonNode.getChildByName('ATTACHED_NODE_TREE');
+
+    if (!rootNode || !rootNode.isValid) return; // associate js
+
+    _associateAttachedNode.call(this); // associate native
+
+
+    if (!this._attachUtilNative) {
+      if (this._skeletonComp.isAnimationCached()) {
+        this._attachUtilNative = new spine.CacheModeAttachUtil();
+      } else {
+        this._attachUtilNative = new spine.RealTimeAttachUtil();
+      }
+
+      this._nativeSkeleton.setAttachUtil(this._attachUtilNative);
+    }
+
+    this._attachUtilNative.associateAttachedNode(this._skeleton, this._skeletonNode._proxy);
+  };
+})();
+
+},{"./jsb-cache-manager":30}],43:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -2878,7 +4978,7 @@ sys.getSafeAreaRect = function () {
   return cc.rect(leftBottom.x, leftBottom.y, rightTop.x - leftBottom.x, rightTop.y - leftBottom.y);
 };
 
-},{}],40:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3073,7 +5173,428 @@ sys.getSafeAreaRect = function () {
   }, renderer.TiledMapAssembler.prototype);
 })();
 
-},{}],41:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
+"use strict";
+
+/****************************************************************************
+ Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+
+ https://www.cocos.com/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated engine source code (the "Software"), a limited,
+  worldwide, royalty-free, non-assignable, revocable and non-exclusive license
+ to use Cocos Creator solely to develop games on your target platforms. You shall
+  not use Cocos Creator software for developing other software or tools that's
+  used for developing games. You are not granted to publish, distribute,
+  sublicense, and/or sell copies of Cocos Creator.
+
+ The software or tools in this License Agreement are licensed, not sold.
+ Xiamen Yaji Software Co., Ltd. reserves all rights not expressly granted to you.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+(function () {
+  if (!(cc && cc.VideoPlayer && cc.VideoPlayer.Impl)) {
+    return;
+  }
+
+  var vec3 = cc.Vec3;
+
+  var _worldMat = new cc.Mat4();
+
+  var _topLeft = new vec3();
+
+  var _bottomRight = new vec3();
+
+  var _impl = cc.VideoPlayer.Impl;
+  var _p = cc.VideoPlayer.Impl.prototype;
+
+  _p._bindEvent = function () {
+    var video = this._video,
+        self = this;
+
+    if (!video) {
+      return;
+    } //binding event
+
+
+    var cbs = this.__eventListeners;
+
+    cbs.loadedmetadata = function () {
+      self._loadedmeta = true;
+
+      self._dispatchEvent(_impl.EventType.META_LOADED);
+
+      if (self._playing) {
+        self._video.play();
+      }
+    };
+
+    cbs.ended = function () {
+      if (self._video !== video) return;
+      self._playing = false;
+
+      self._dispatchEvent(_impl.EventType.COMPLETED);
+    };
+
+    cbs.play = function () {
+      if (self._video !== video) return;
+      self._playing = true;
+
+      self._dispatchEvent(_impl.EventType.PLAYING);
+    };
+
+    cbs.pause = function () {
+      if (self._ignorePause || self._video !== video) return;
+      self._playing = false;
+
+      self._dispatchEvent(_impl.EventType.PAUSED);
+    };
+
+    cbs.click = function () {
+      self._dispatchEvent(_impl.EventType.CLICKED);
+    };
+
+    cbs.stoped = function () {
+      self._dispatchEvent(_impl.EventType.STOPPED);
+
+      self._ignorePause = false;
+    };
+
+    video.addEventListener("loadedmetadata", cbs.loadedmetadata);
+    video.addEventListener("ended", cbs.ended);
+    video.addEventListener("play", cbs.play);
+    video.addEventListener("pause", cbs.pause);
+    video.addEventListener("click", cbs.click);
+    video.addEventListener("stoped", cbs.stoped);
+
+    function onCanPlay() {
+      if (this._loaded) return;
+      this._loaded = true;
+
+      this._dispatchEvent(_impl.EventType.READY_TO_PLAY);
+
+      this._updateVisibility();
+    }
+
+    cbs.onCanPlay = onCanPlay.bind(this);
+    video.addEventListener('canplay', cbs.onCanPlay);
+    video.addEventListener('canplaythrough', cbs.onCanPlay);
+    video.addEventListener('suspend', cbs.onCanPlay);
+  };
+
+  _p._updateVisibility = function () {
+    if (!this._video) return;
+    var video = this._video;
+
+    if (this._visible) {
+      this._video.setVisible(true);
+    } else {
+      this._video.setVisible(false);
+
+      video.pause();
+      this._playing = false;
+    }
+  };
+
+  _p._updateSize = function (width, height) {};
+
+  _p.createDomElementIfNeeded = function () {
+    if (!jsb.VideoPlayer) {
+      cc.warn('VideoPlayer is not supported.');
+      return null;
+    }
+
+    if (!this._video) {
+      this._video = new jsb.VideoPlayer();
+    }
+  };
+
+  _p.removeDom = function () {
+    var video = this._video;
+
+    if (video) {
+      video.stop();
+      video.setVisible(false);
+      var cbs = this.__eventListeners;
+      cbs.loadedmetadata = null;
+      cbs.ended = null;
+      cbs.play = null;
+      cbs.pause = null;
+      cbs.click = null;
+      cbs.onCanPlay = null;
+      video.destroy();
+    }
+
+    this._video = null;
+    this._url = "";
+  };
+
+  _p.setURL = function (path) {
+    var source, extname;
+
+    if (this._url === path) {
+      return;
+    }
+
+    this.removeDom();
+    this._url = path;
+    this.createDomElementIfNeeded();
+
+    this._bindEvent();
+
+    var video = this._video;
+
+    if (!video) {
+      return;
+    }
+
+    video.setVisible(this._visible);
+    this._loaded = false;
+    this._played = false;
+    this._playing = false;
+    this._loadedmeta = false;
+    video.setURL(this._url);
+    this._forceUpdate = true;
+  };
+
+  _p.getURL = function () {
+    return this._url;
+  };
+
+  _p.play = function () {
+    var video = this._video;
+    if (!video || !this._visible || this._playing) return;
+    video.play();
+    this._playing = true;
+  };
+
+  _p.setStayOnBottom = function (enabled) {};
+
+  _p.pause = function () {
+    var video = this._video;
+    if (!this._playing || !video) return;
+    video.pause();
+    this._playing = false;
+  };
+
+  _p.resume = function () {
+    var video = this._video;
+    if (this._playing || !video) return;
+    video.resume();
+    this._playing = true;
+  };
+
+  _p.stop = function () {
+    var video = this._video;
+    if (!video || !this._visible) return;
+    this._ignorePause = true;
+    video.stop();
+    this._playing = false;
+  };
+
+  _p.setVolume = function (volume) {};
+
+  _p.seekTo = function (time) {
+    var video = this._video;
+    if (!video) return;
+
+    if (this._loaded) {
+      video.seekTo(time);
+    } else {
+      var cb = function cb() {
+        video.seekTo(time);
+      };
+
+      video.addEventListener(_impl._polyfill.event, cb);
+    }
+  };
+
+  _p.isPlaying = function () {
+    return this._playing;
+  };
+
+  _p.duration = function () {
+    var video = this._video;
+    var duration = -1;
+    if (!video) return duration;
+    duration = video.duration();
+
+    if (duration <= 0) {
+      cc.logID(7702);
+    }
+
+    return duration;
+  };
+
+  _p.currentTime = function () {
+    var video = this._video;
+    if (!video) return -1;
+    return video.currentTime();
+  };
+
+  _p.setKeepAspectRatioEnabled = function (isEnabled) {
+    if (!this._video) {
+      return false;
+    }
+
+    return this._video.setKeepAspectRatioEnabled(isEnabled);
+  };
+
+  _p.isKeepAspectRatioEnabled = function () {
+    if (!this._video) {
+      return false;
+    }
+
+    return this._video.isKeepAspectRatioEnabled();
+  };
+
+  _p.isFullScreenEnabled = function () {
+    return this._fullScreenEnabled;
+  };
+
+  _p.setEventListener = function (event, callback) {
+    this._EventList[event] = callback;
+  };
+
+  _p.removeEventListener = function (event) {
+    this._EventList[event] = null;
+  };
+
+  _p._dispatchEvent = function (event) {
+    var callback = this._EventList[event];
+    if (callback) callback.call(this, this, this._video.src);
+  };
+
+  _p.onPlayEvent = function () {
+    var callback = this._EventList[_impl.EventType.PLAYING];
+    callback.call(this, this, this._video.src);
+  };
+
+  _p.enable = function () {
+    var list = _impl.elements;
+    if (list.indexOf(this) === -1) list.push(this);
+    this.setVisible(true);
+  };
+
+  _p.disable = function () {
+    var list = _impl.elements;
+    var index = list.indexOf(this);
+    if (index !== -1) list.splice(index, 1);
+    this.setVisible(false);
+  };
+
+  _p.destroy = function () {
+    this.disable();
+    this.removeDom();
+  };
+
+  _p.setVisible = function (visible) {
+    if (this._visible !== visible) {
+      this._visible = !!visible;
+
+      this._updateVisibility();
+    }
+  };
+
+  _p.setFullScreenEnabled = function (enable) {
+    var video = this._video;
+
+    if (!video) {
+      return;
+    }
+
+    this._fullScreenEnabled = enable;
+    video.setFullScreenEnabled(enable);
+  };
+
+  _p.updateMatrix = function (node) {
+    if (!this._video || !this._visible) return;
+
+    var camera = cc.Camera.findCamera(node)._camera;
+
+    if (!camera) {
+      return;
+    }
+
+    node.getWorldMatrix(_worldMat);
+
+    if (!this._forceUpdate && this._m00 === _worldMat.m[0] && this._m01 === _worldMat.m[1] && this._m04 === _worldMat.m[4] && this._m05 === _worldMat.m[5] && this._m12 === _worldMat.m[12] && this._m13 === _worldMat.m[13] && this._w === node._contentSize.width && this._h === node._contentSize.height) {
+      return;
+    } // update matrix cache
+
+
+    this._m00 = _worldMat.m[0];
+    this._m01 = _worldMat.m[1];
+    this._m04 = _worldMat.m[4];
+    this._m05 = _worldMat.m[5];
+    this._m12 = _worldMat.m[12];
+    this._m13 = _worldMat.m[13];
+    this._w = node._contentSize.width;
+    this._h = node._contentSize.height;
+    var canvas_width = cc.game.canvas.width;
+    var canvas_height = cc.game.canvas.height;
+    var ap = node._anchorPoint; // Vectors in node space
+
+    vec3.set(_topLeft, -ap.x * this._w, (1.0 - ap.y) * this._h, 0);
+    vec3.set(_bottomRight, (1 - ap.x) * this._w, -ap.y * this._h, 0); // Convert to world space
+
+    vec3.transformMat4(_topLeft, _topLeft, _worldMat);
+    vec3.transformMat4(_bottomRight, _bottomRight, _worldMat); // Convert to Screen space
+
+    camera.worldToScreen(_topLeft, _topLeft, canvas_width, canvas_height);
+    camera.worldToScreen(_bottomRight, _bottomRight, canvas_width, canvas_height);
+    var finalWidth = _bottomRight.x - _topLeft.x;
+    var finalHeight = _topLeft.y - _bottomRight.y;
+
+    this._video.setFrame(_topLeft.x, canvas_height - _topLeft.y, finalWidth, finalHeight);
+  };
+
+  _impl.EventType = {
+    PLAYING: 0,
+    PAUSED: 1,
+    STOPPED: 2,
+    COMPLETED: 3,
+    META_LOADED: 4,
+    CLICKED: 5,
+    READY_TO_PLAY: 6
+  }; // video 队列，所有 vidoe 在 onEnter 的时候都会插入这个队列
+
+  _impl.elements = []; // video 在 game_hide 事件中被自动暂停的队列，用于回复的时候重新开始播放
+
+  _impl.pauseElements = [];
+  cc.game.on(cc.game.EVENT_HIDE, function () {
+    var list = _impl.elements;
+
+    for (var element, i = 0; i < list.length; i++) {
+      element = list[i];
+
+      if (element.isPlaying()) {
+        element.pause();
+
+        _impl.pauseElements.push(element);
+      }
+    }
+  });
+  cc.game.on(cc.game.EVENT_SHOW, function () {
+    var list = _impl.pauseElements;
+    var element = list.pop();
+
+    while (element) {
+      element.play();
+      element = list.pop();
+    }
+  });
+})();
+
+},{}],46:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3425,7 +5946,7 @@ sys.getSafeAreaRect = function () {
   };
 })();
 
-},{}],42:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3462,7 +5983,7 @@ cc.js.mixin(nativeCameraProto, {
   }
 });
 
-},{}],43:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3499,7 +6020,7 @@ cc.js.mixin(nativeLightProto, {
   }
 });
 
-},{}],44:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3679,7 +6200,7 @@ cc.js.mixin(nativeLightProto, {
   };
 })();
 
-},{}],45:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3799,7 +6320,7 @@ cc.js.mixin(renderer.NodeProxy.prototype, {
   }
 });
 
-},{}],46:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
 
@@ -3864,7 +6385,7 @@ cc.PrivateNode.prototype._posDirty = function (sendEvent) {
   }
 };
 
-},{}],47:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -3927,7 +6448,7 @@ cc.PrivateNode.prototype._posDirty = function (sendEvent) {
   };
 })();
 
-},{}],48:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 "use strict";
 
 var proto = cc.RenderData.prototype;
@@ -3962,7 +6483,7 @@ proto.updateMeshRange = function (verticesCount, indicesCount) {
   this._nativeAssembler.updateIndicesRange(0, 0, indicesCount);
 };
 
-},{}],49:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 
 /****************************************************************************
@@ -4054,4 +6575,4 @@ RenderFlow.register = function (target) {
   target._inJsbDirtyList = true;
 };
 
-},{}]},{},[26]);
+},{}]},{},[27]);

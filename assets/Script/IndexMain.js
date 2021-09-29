@@ -37,11 +37,11 @@ cc.Class({
     },
 
     // LIFE-CYCLE CALLBACKS:
-
     onLoad() {
         //关闭FPS面板
         // cc.director.setDisplayStats(false);
         cc.zm = {};
+        cc.zm.ad = {};
         // 增加屏幕视频
         this.screenAdapter();
         // 判断是否是第一次进入游戏 如果第一次进入那么弹出First弹窗
@@ -78,6 +78,7 @@ cc.Class({
         cc.zm.showMusic = true;
         cc.zm.showShake = true;
         this.countDownTime = 0;
+        this.signNumber = 0;
         // startBtn.on(cc.Node.EventType.TOUCH_END,this.StartGame.bind(this));
         this.BGM_ID = cc.audioEngine.play(this.BGM);
         // console.log(http.sendRequest);
@@ -100,6 +101,8 @@ cc.Class({
                 guide.getChildByName("guide_4").active = true;
             }
         }
+        // 显示banner广告
+        this.showBanner();
         // 获取用户信息
         this.getUserInfo();
     },
@@ -145,7 +148,9 @@ cc.Class({
         http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
             this.userInfo = res.data;
             cc.zm.userInfo = this.userInfo
-            // console.log(this.userInfo);
+            cc.log("cocos user info "+this.userInfo);
+            // 注册打点
+            cc.Tools.dot("register",{register_time:new Date(),channel:"微信"})
             this.showIndexLayer();
             // 刷新一下用户的Ecpm
             this.getUserEcpm();
@@ -359,21 +364,25 @@ cc.Class({
             // 通过数据初始化界面 状态 0.未领取 1.已领取
             let items = res.data.items;
             let serverDay = res.data.day;
-            let signNumber = 0;
+            if (this.signNumber === serverDay) {
+                return;
+            }
             let arr = [];
             for (let i = 0; i < items.length; i++) {
                 // 先获取自己的数据 
                 let _status = items[i].status;
                 if (!_status) {
-                    signNumber = items[i].num;
+                    this.signNumber = items[i].num;
                     break;
                 }
             }
-            if (signNumber > serverDay) {
-                signNumber = serverDay;
+            if (this.signNumber > serverDay) {
+                this.signNumber = serverDay;
             }
+            // todo
+            // this.signNumber = 7;
             for (let i = 0; i < items.length; i++) {
-                if (signNumber === items[i].num) {
+                if (this.signNumber === items[i].num) {
                     arr.push(items[i]);
                 }
             }
@@ -382,6 +391,10 @@ cc.Class({
             title.spriteFrame = this.SevenFrames[arr[0].num - 1]
             // 一只当前数据item 通过数据
             let layout = this.SevenWorkLayer.getChildByName("layout");
+            if (arr.length === 1) {
+                let _layout = layout.getChildByName("layout_2");
+                _layout.active = false
+            }
             for (let j = 0; j < arr.length; j++) {
                 let _data = arr[j];
                 let _layoutH = layout.getChildByName("layout_" + (j + 1));
@@ -444,7 +457,7 @@ cc.Class({
                 if (_data.need_invite) {
                     item2.active = true;
                     item2.getChildByName("lbl").getComponent(cc.Label).string = `邀请${_data.need_invite}个好友`;
-                    let arrow = item1.getChildByName("icon").getChildByName("arrow");
+                    let arrow = item2.getChildByName("icon").getChildByName("arrow");
                     arrow.active = _data.curr_invite >= _data.need_invite
                 } else {
                     item2.active = false;
@@ -476,6 +489,8 @@ cc.Class({
                 btnCom.enableAutoGrayEffect = true;
                 btnCom.interactable = false;
                 this.SevenWorkLayer.getChildByName("getLayer").active = true;
+                // 重新刷新
+                this.showSevenWorkLayer();
             })
         }
     },
@@ -599,14 +614,6 @@ cc.Class({
         btn.getChildByName("select").active = false;
         btn.getChildByName("complete").active = true;
     },
-    // 用户协议
-    showUserXieYi() {
-        // console.log("用户协议");
-    },
-    // 隐私政策
-    showUserYinSi() {
-        // console.log("隐私政策");
-    },
     // 退出登陆
     ExitBackBtn(e) {
         e.target.parent.active = false;
@@ -618,6 +625,7 @@ cc.Class({
             this.showTurntableLayer();
         }
         // 关闭当前也进入首页 刷新界面
+        this.signNumber = 0;
         this.getUserInfo();
         // console.log("退出登陆");
     },
@@ -642,11 +650,6 @@ cc.Class({
         }).catch((res) => {
             this.showTips("今日奖励已领取");
         });
-    },
-    // 点击体现按钮
-    clickGetMoneyBtn(e) {
-        // console.log("点击提现按钮");
-        // this.showGetMoneyLayer();
     },
     // 点击转盘开始按钮
     clickTurnTableBtn(e) {
@@ -761,10 +764,6 @@ cc.Class({
         cc.sys.localStorage.removeItem("token");
         cc.director.loadScene("Login");
     },
-    // 点击加载广告
-    adPlay() {
-        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "loadJiLiVideo", "()V");
-    },
     // 显示用户协议
     showUserProtocol() {
         let protocol = this.SetLayer.getChildByName("user_protocol");
@@ -783,5 +782,5 @@ cc.Class({
     hideUserPrivacy() {
         let protocol = this.SetLayer.getChildByName("user_privacy");
         protocol.active = false;
-    }
+    },
 });

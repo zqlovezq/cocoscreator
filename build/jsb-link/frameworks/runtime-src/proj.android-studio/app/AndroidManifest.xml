@@ -8,19 +8,22 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <!--添加穿山甲sdk权限-->
+
+    <!--必要权限-->
     <!--必要权限，解决安全风险漏洞，发送和注册广播事件需要调用带有传递权限的接口-->
     <permission      android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="${applicationId}.openadsdk.permission.TT_PANGOLIN" />
+
+
     <!--可选权限-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.GET_TASKS"/>
+
     <!--可选，穿山甲提供“获取地理位置权限”和“不给予地理位置权限，开发者传入地理位置参数”两种方式上报用户位置，两种方式均可不选，添加位置权限或参数将帮助投放定位广告-->
     <!--请注意：无论通过何种方式提供给穿山甲用户地理位置，均需向用户声明地理位置权限将应用于穿山甲广告投放，穿山甲不强制获取地理位置信息-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -37,14 +40,15 @@
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
     <application
+        android:name="org.cocos2dx.javascript.MyApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <!-- Tell Cocos2dxActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
-            android:value="cocos2djs" />
-
+                   android:value="cocos2djs" />
+        
         <activity
             android:name="org.cocos2dx.javascript.AppActivity"
             android:screenOrientation="portrait"
@@ -59,14 +63,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--微信授权登陆-->
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name= ".wxapi.WXEntryActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="true"
-            android:taskAffinity="com.zhima.kxkg"
-            android:launchMode="singleTask">
-        </activity>
-    </application>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent"
+            android:exported="true" />
+        <!--穿山甲-->
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+            android:authorities="${applicationId}.TTFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+            android:authorities="${applicationId}.TTMultiProvider"
+            android:exported="false" />
+    </application>
+    
 </manifest>

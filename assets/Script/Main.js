@@ -136,7 +136,6 @@ cc.Class({
         //钩子矿工
         this.Miner = cc.find('Canvas/Header/Miner');
         //矿工动画 
-        this.MinerAnimation = this.Miner.getComponent(cc.Animation);
         //获取钩子
         this.Hook = cc.find('Canvas/Header/Miner/Hook');
         //获取钩子初始长度
@@ -146,7 +145,7 @@ cc.Class({
         this.curScore = 0;
         this.pauseGame = false;
         // 初始化矿工的精灵帧
-        this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[0];
+        this.MinerSp = this.Miner.getComponent("sp.Skeleton");
         // 看视频得体力界面
         this.seeVideoLayer = cc.find('Canvas/SeeVideolayer')
         //得分累计
@@ -229,9 +228,7 @@ cc.Class({
         }
     },
     LookVideoGetAward() {
-        // http.sendRequest("pit.v1.PitSvc/ExchangeWeapon", "POST", {prop:this.LotteryAward}).then((res) => {
-        //     this.hideLotteryLayer();
-        // })
+        cc.Tools.showJiliAd();
         let sendData = {
             "ad": cc.zm.ad,
             "weapon": this.LotteryProp
@@ -241,7 +238,6 @@ cc.Class({
             // 炸弹：10 11时钟 13药水
             this.LotteryAward = res.data.award;
             this.hideLotteryLayer();
-
         });
     },
     // 使用道具
@@ -325,7 +321,8 @@ cc.Class({
         //TODO 停止钩子旋转
         //打开/关闭 钩子开关 没有拉回之前 当前position ！= 初始位置时 不允许操作
         if (this.HookState) return;
-
+        // 当前发射绳子
+        this.MinerSp.setAnimation(0, "fang", true);
         this.HookState = 1;
     },
 
@@ -336,8 +333,6 @@ cc.Class({
         switch (this.HookState) {
             case 1:
                 this.Hook.height += this.speed;
-                // 当前发射绳子
-                this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[1];
                 break;
             case 2:
                 if (this.Hook.height <= this.HookHeight) {
@@ -346,7 +341,12 @@ cc.Class({
                     if (this.Hook.children[0]) {
                         if (this.Hook.children[0].childrenCount) {
                             this.Handle(this.Hook.children[0].children);
-                        };
+                            //停止播放拉回动画
+                            this.MinerSp.setAnimation(0, "idle3", false);
+                            this.MinerSp.addAnimation(0, "idle", true);
+                        } else {
+                            this.MinerSp.setAnimation(0, "idle", true);
+                        }
                     }
                     this.StopHookMove();
                 } else {
@@ -361,9 +361,8 @@ cc.Class({
      */
     PullBackHook() {
         //播放拉回钩子动画
-        this.MinerAnimation.play('hero');
         // 将钩子的图片转化
-
+        this.MinerSp.setAnimation(0, "la", true);
         this.HookState = 2;
     },
 
@@ -800,9 +799,6 @@ cc.Class({
     StopHookMove() {
         this.HookState = 0;
         this.Hook.height = this.HookHeight;
-        //停止播放拉回动画
-        this.MinerAnimation.stop('hero');
-        this.Miner.getComponent(cc.Sprite).spriteFrame = this.HeroFrames[0];
         //重置发射钩子速度
         this.speed = 6;
         this.Hook.getChildByName("hook_1").getComponent(cc.Sprite).spriteFrame = this.HookFrames[0]
@@ -989,7 +985,7 @@ cc.Class({
             })
             let awrad = Success.getChildByName("award").getComponent(cc.Label);
             awrad.string = `奖励红包+${this.redPack}`;
-            if(cc.zm.LevelInfo.ever_pass){
+            if (cc.zm.LevelInfo.ever_pass) {
                 awrad.node.active = false;
             }
             let extatAward = Success.getChildByName("layout").getChildByName("extraAward").getComponent(cc.Label);
@@ -1103,46 +1099,23 @@ cc.Class({
         };
     },
     AwardVideo(e) {
-        console.log("看视频得奖励");
-        let pack = cc.zm.LevelInfo.ever_pass?0:this.redPack;
+        cc.log("看视频得奖励");
+        cc.Tools.showJiliAd();
+        let pack = cc.zm.LevelInfo.ever_pass ? 0 : this.redPack;
         let sendData = {
             "red_pack": parseInt((pack + this.extarRedPack) * 100),//红包
             "ad": cc.zm.ad
         }
-        http.sendRequest("pit.v1.PitSvc/PassAd", "POST", sendData).then((res) => {
-            console.log("PassAd返回信息", res);
-            let sendData = {};
-            http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
-                cc.zm.userInfo = res.data;
-                // 如果体力大于0 进入下一关
-                if (cc.zm.userInfo.power > 0) {
-                    http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
-                        cc.zm.LevelInfo = res.data;
-                        // console.log("关卡信息=", cc.zm.LevelInfo);
-                        if (cc.zm.LevelInfo.stage < 30) {
-                            this.Reload();
-                        } else {
-                            // 直接返回主界面
-                            cc.director.loadScene('Index');
-                        }
-                    });
-                } else {
-                    // 小于0 弹出看视频获得体力的接口
-                    cc.director.loadScene('Index');
-                }
-            })
-        });
+        cc.zm.ad.redPack = sendData;
+        this.timer && this.unschedule(this.timer);
     },
     // 看视频得奖励
     seeVideoAward(e) {
+        cc.Tools.showJiliAd();
         let target = e.target
-        let sendData = {
-            ad: cc.zm.ad
-        }
-        http.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then((res) => {
-            target.parent.active = false;
-            this.Reload();
-        });
+        cc.zm.ad.power = true;
+        this.timer && this.unschedule(this.timer);
+        target.parent.active = false;
     },
     closeLayer(e) {
         let target = e.target
@@ -1158,17 +1131,13 @@ cc.Class({
         this.BackLayer.active = false;
         this.pauseGame = false;
         this.StartTime();
-        if (this.HookState === 2) {
-            this.MinerAnimation.play('hero');
-        }
+        this.MinerSp.paused = false;
     },
     // 暂停当前界面
     PauseGameLayer() {
         this.pauseGame = true;
         this.unschedule(this.timer);
-        if (this.HookState === 2) {
-            this.MinerAnimation.stop('hero');
-        }
+        this.MinerSp.paused = true;
     },
     /**
      * 游戏结束
@@ -1243,5 +1212,5 @@ cc.Class({
             default:
                 break;
         }
-    }
+    },
 });

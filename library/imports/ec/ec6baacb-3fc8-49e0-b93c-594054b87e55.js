@@ -45,7 +45,8 @@ cc.Class({
   onLoad: function onLoad() {
     //关闭FPS面板
     // cc.director.setDisplayStats(false);
-    cc.zm = {}; // 增加屏幕视频
+    cc.zm = {};
+    cc.zm.ad = {}; // 增加屏幕视频
 
     this.screenAdapter(); // 判断是否是第一次进入游戏 如果第一次进入那么弹出First弹窗
 
@@ -86,7 +87,8 @@ cc.Class({
     this.ResumeLayer = cc.find("Canvas/ResumeLayer");
     cc.zm.showMusic = true;
     cc.zm.showShake = true;
-    this.countDownTime = 0; // startBtn.on(cc.Node.EventType.TOUCH_END,this.StartGame.bind(this));
+    this.countDownTime = 0;
+    this.signNumber = 0; // startBtn.on(cc.Node.EventType.TOUCH_END,this.StartGame.bind(this));
 
     this.BGM_ID = cc.audioEngine.play(this.BGM); // console.log(http.sendRequest);
     //预加载场景2
@@ -110,8 +112,10 @@ cc.Class({
         guide.active = true;
         guide.getChildByName("guide_4").active = true;
       }
-    } // 获取用户信息
+    } // 显示banner广告
 
+
+    this.showBanner(); // 获取用户信息
 
     this.getUserInfo();
   },
@@ -161,7 +165,13 @@ cc.Class({
     var sendData = {};
     http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
       _this.userInfo = res.data;
-      cc.zm.userInfo = _this.userInfo; // console.log(this.userInfo);
+      cc.zm.userInfo = _this.userInfo;
+      cc.log("cocos user info " + _this.userInfo); // 注册打点
+
+      cc.Tools.dot("register", {
+        register_time: new Date(),
+        channel: "微信"
+      });
 
       _this.showIndexLayer(); // 刷新一下用户的Ecpm
 
@@ -409,7 +419,11 @@ cc.Class({
       // 通过数据初始化界面 状态 0.未领取 1.已领取
       var items = res.data.items;
       var serverDay = res.data.day;
-      var signNumber = 0;
+
+      if (_this7.signNumber === serverDay) {
+        return;
+      }
+
       var arr = [];
 
       for (var i = 0; i < items.length; i++) {
@@ -417,17 +431,19 @@ cc.Class({
         var _status = items[i].status;
 
         if (!_status) {
-          signNumber = items[i].num;
+          _this7.signNumber = items[i].num;
           break;
         }
       }
 
-      if (signNumber > serverDay) {
-        signNumber = serverDay;
-      }
+      if (_this7.signNumber > serverDay) {
+        _this7.signNumber = serverDay;
+      } // todo
+      // this.signNumber = 7;
+
 
       for (var _i = 0; _i < items.length; _i++) {
-        if (signNumber === items[_i].num) {
+        if (_this7.signNumber === items[_i].num) {
           arr.push(items[_i]);
         }
       } // 设置title
@@ -438,6 +454,12 @@ cc.Class({
       title.spriteFrame = _this7.SevenFrames[arr[0].num - 1]; // 一只当前数据item 通过数据
 
       var layout = _this7.SevenWorkLayer.getChildByName("layout");
+
+      if (arr.length === 1) {
+        var _layout = layout.getChildByName("layout_2");
+
+        _layout.active = false;
+      }
 
       for (var j = 0; j < arr.length; j++) {
         var _data = arr[j];
@@ -521,7 +543,7 @@ cc.Class({
           item2.active = true;
           item2.getChildByName("lbl").getComponent(cc.Label).string = "\u9080\u8BF7" + _data.need_invite + "\u4E2A\u597D\u53CB";
 
-          var _arrow2 = item1.getChildByName("icon").getChildByName("arrow");
+          var _arrow2 = item2.getChildByName("icon").getChildByName("arrow");
 
           _arrow2.active = _data.curr_invite >= _data.need_invite;
         } else {
@@ -562,7 +584,9 @@ cc.Class({
         var btnCom = target.getComponent(cc.Button);
         btnCom.enableAutoGrayEffect = true;
         btnCom.interactable = false;
-        _this9.SevenWorkLayer.getChildByName("getLayer").active = true;
+        _this9.SevenWorkLayer.getChildByName("getLayer").active = true; // 重新刷新
+
+        _this9.showSevenWorkLayer();
       });
     }
   },
@@ -719,6 +743,7 @@ cc.Class({
     } // 关闭当前也进入首页 刷新界面
 
 
+    this.signNumber = 0;
     this.getUserInfo(); // console.log("退出登陆");
   },
   // 点击签到按钮
@@ -893,10 +918,7 @@ cc.Class({
     cc.wxLoginResultcode = null;
     cc.sys.localStorage.removeItem("token");
     cc.director.loadScene("Login");
-  },
-  // 点击加载广告
-  adPlay: function adPlay() {
-    jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "loadJiLiVideo", "()V");
+    this.ta.logout();
   },
   // 显示用户协议
   showUserProtocol: function showUserProtocol() {

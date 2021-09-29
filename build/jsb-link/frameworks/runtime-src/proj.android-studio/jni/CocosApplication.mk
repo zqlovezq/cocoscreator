@@ -14,12 +14,12 @@ USE_ARM_MODE := 1
 # MUST be careful to modify this manually
 # disable module will speed up compile time, and reduce package size
 USE_GFX_RENDERER := 1
-USE_VIDEO := 0
+USE_VIDEO := 1
 USE_WEB_VIEW := 1
 USE_AUDIO := 1
 USE_SOCKET := 1
-USE_SPINE := 0
-USE_DRAGONBONES := 0
+USE_SPINE := 1
+USE_DRAGONBONES := 1
 USE_TIFF := 1
 USE_MIDDLEWARE := 1
 USE_PARTICLE := 1
@@ -47,4 +47,4 @@ endif
 
 # Some Android Simulators don't support SSE instruction, so disable it for x86 arch.
 APP_CPPFLAGS += -U__SSE__
-USE_EDIT_BOX := 0
+USE_EDIT_BOX := 1
