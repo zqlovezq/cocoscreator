@@ -11,8 +11,9 @@ cc.Tools = {
   */
   dot: function dot(event, pro) {
     if (cc.sys.isNative) {
-      cc.log("注册打点" + event);
-      jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;)V", event, pro);
+      console.log("cocos----注册打点" + event); // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;)V", event, JSON.stringify(pro));
+
+      jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;Ljava/lang/String;)V", event, JSON.stringify(pro));
     }
   },
 
@@ -20,18 +21,19 @@ cc.Tools = {
    * 看视频回调
    */
   adCallBack: function adCallBack(ecpm) {
-    cc.log("观看视频回调"); // 获取广告ad之前先用epcr
+    console.log("cocos----观看视频回调"); // 获取广告ad之前先用epcr
     // 看视频得体力
 
     this.getUserEcpm(ecpm).then(function () {
-      cc.log("获取ecpm之后才调用");
+      console.log("cocos----获取ecpm之后才调用");
 
       if (cc.zm.userInfo.power <= 0) {
+        console.log("cocos----体力接口");
         var sendData = {
           ad: cc.zm.ad
         };
         cc.Tools.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then(function (res) {
-          cc.log("获取体力奖励");
+          console.log("cocos----获取体力奖励");
           cc.zm.userInfo.power = res.data.value;
 
           if (cc.zm.videoAd.enterGame) {
@@ -42,8 +44,9 @@ cc.Tools = {
 
 
       if (cc.zm.videoAd.redPack) {
-        cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.ad.redPack).then(function (res) {
-          cc.log("获取红包奖励", res);
+        console.log("cocos----获取红包接口");
+        cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.videoAd.redPack).then(function (res) {
+          console.log("cocos----获取红包奖励", res);
           var sendData = {};
           cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
             cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
@@ -51,7 +54,7 @@ cc.Tools = {
             if (cc.zm.userInfo.power > 0) {
               cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
                 cc.zm.LevelInfo = res.data;
-                cc.zm.videoAd.redPack = null; // console.log("关卡信息=", cc.zm.LevelInfo);
+                cc.zm.videoAd.redPack = null;
 
                 if (cc.zm.LevelInfo.stage < 30) {
                   cc.director.loadScene('Game');
@@ -69,17 +72,19 @@ cc.Tools = {
       }
 
       if (cc.zm.videoAd.clickSign) {
+        console.log("cocos----签到接口");
         cc.zm.videoAd.clickSign = false;
       }
 
       if (cc.zm.videoAd.clickTable) {
+        console.log("cocos----转盘接口");
         cc.zm.videoAd.clickTable = false;
       }
     });
   },
   // 显示激励视频
   showJiliAd: function showJiliAd() {
-    cc.log("点击显示激励视频");
+    console.log("cocos----点击显示激励视频");
 
     if (cc.sys.isNative) {
       jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "()V");
@@ -99,6 +104,8 @@ cc.Tools = {
   },
   // 显示插屏广告
   showTableScreen: function showTableScreen() {
+    console.log("cococ----触发插屏");
+
     if (cc.sys.isNative) {
       jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showTableScreen", "()V");
     }
@@ -111,7 +118,7 @@ cc.Tools = {
   },
   // 微信登陆
   wxLogin: function wxLogin() {
-    cc.log("wxLogin");
+    console.log("cocos----wxLogin");
 
     if (cc.sys.isNative) {
       jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weixin_login");
@@ -123,7 +130,7 @@ cc.Tools = {
   * @param errCode 
   */
   wxLoginResult: function wxLoginResult(errCode) {
-    cc.log("wxLoginResultcode=" + errCode);
+    console.log("cocos----wxLoginResultcode=" + errCode);
     cc.wxLoginResultcode = errCode;
   },
 
@@ -135,20 +142,20 @@ cc.Tools = {
       return;
     }
 
-    cc.log("调用ecpm=", ecpm);
+    console.log("cocos----调用ecpm=", ecpm);
     return new Promise(function (resolve, reject) {
       var sendData = {
-        "ecpm": ecpm,
+        "ecpm": parseInt(ecpm),
         "ts": new Date().getTime() //时间戳
 
       };
       var data = cc.Tools.createSignData(sendData);
       cc.Tools.sendRequest("pit.v1.PitSvc/Rc", "POST", data).then(function (res) {
-        cc.log("Ecpm成功", res.data);
+        console.log("cocos----Ecpm成功", res.data);
         cc.zm.ad = res.data.ad;
         resolve();
       })["catch"](function (res) {
-        cc.log("Ecpm失败", res);
+        console.log("cocos----Ecpm失败", res);
         reject(res);
       });
     });
@@ -177,14 +184,12 @@ cc.Tools = {
     sortList.forEach(function (key) {
       strToJiaMi += "&" + key + "=" + data[key];
     }, this);
-    strToJiaMi = "token=" + cc.zm.userInfo.sc1 + strToJiaMi; // var noJiaMi = strToJiaMi;
-    // console.log("未加密前=", strToJiaMi)
+    strToJiaMi = "token=" + cc.zm.userInfo.sc1 + strToJiaMi;
 
     var hex_md5 = require("MD5");
 
     strToJiaMi = hex_md5(strToJiaMi);
-    data.sign = strToJiaMi; // console.log("加密后=", strToJiaMi)
-
+    data.sign = strToJiaMi;
     return data;
   },
   // 适配屏幕
@@ -234,7 +239,6 @@ cc.Tools = {
       xhr.open(type, requestURL, true);
 
       if (cc.sys.isNative) {
-        cc.log("isNative");
         xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
       }
 
@@ -243,19 +247,19 @@ cc.Tools = {
       }
 
       xhr.setRequestHeader("Content-Type", "application/json");
-      cc.log("requestURL=", requestURL);
-      cc.log("data=", JSON.stringify(data));
+      console.log("cocos----requestURL=", requestURL);
+      console.log("cocos----data=", JSON.stringify(data));
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status == 200) {
-          cc.log("http res:" + xhr.response); // 统一处理
+          console.log("cocos----http res:" + xhr.response); // 统一处理
 
           var _response = JSON.parse(xhr.response);
 
           if (_response.code === 0) {
             resolve(_response);
           } else {
-            console.log(_response.message);
+            console.log("cocos----" + _response.message);
             reject(_response.message);
           }
         }

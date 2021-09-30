@@ -22,11 +22,13 @@ cc.Class({
             cc.wxToken = cc.sys.localStorage.getItem("token");
             if(cc.sys.isNative){
                 if (cc.sys.localStorage.getItem("realName")) {
+                    cc.beginCountTime = new Date().getTime();
                     cc.director.loadScene('Index');
                 } else {
                     this.showRealLayer();
                 }
             }else{
+                cc.beginCountTime = new Date().getTime();
                 cc.director.loadScene('Index');
             }
         }
@@ -75,6 +77,7 @@ cc.Class({
                     cc.sys.localStorage.setItem("token", res.data.token);
                     cc.Tools.dot("register", { register_time: new Date(), channel: "微信" })
                     if (cc.sys.localStorage.getItem("realName")) {
+                        cc.beginCountTime = new Date().getTime();
                         cc.director.loadScene('Index');
                     } else {
                         this.showRealLayer();
@@ -111,10 +114,10 @@ cc.Class({
         let target = e.target;
         let _realName = this.realNameLayer.getChildByName("edit1").getComponent(cc.EditBox).string;
         let _realNumber = this.realNameLayer.getChildByName("edit2").getComponent(cc.EditBox).string;
-        cc.log(`真实姓名${_realName}------身份证号${_realNumber}`);
+        console.log(`cocos----真实姓名${_realName}------身份证号${_realNumber}`);
         // 用local记录 是否实名
         if(this.regYourName(_realName)&&this.regYourNumber(_realNumber)){
-            cc.log("认证成功");
+            console.log("cocos----认证成功");
             cc.sys.localStorage.setItem("realName", true)
             cc.director.loadScene('Index');
         }

@@ -171,12 +171,18 @@ public class AppActivity extends Cocos2dxActivity {
         });
 
     };
-    public static void dot(String eventId,JSONObject jsonObject){
-        Log.i(TAG, "dot--------eventId-----"+eventId+"--------"+jsonObject.toString());
-        if(jsonObject!=null){
-            ShushuAnalysisHelp.track(eventId,jsonObject);
-        }else{
-            ShushuAnalysisHelp.track(eventId);
+    public static void dot(String eventId,String jsonObject){
+        Log.i(TAG, eventId);
+        try {
+            JSONObject properties = new JSONObject(jsonObject);
+            Log.i(TAG, "dot--------eventId-----"+eventId+"--------"+jsonObject);
+            if(jsonObject!=null){
+                ShushuAnalysisHelp.track(eventId,properties);
+            }else{
+                ShushuAnalysisHelp.track(eventId);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     };
     //新增代码(回调函数)
@@ -383,7 +389,7 @@ public class AppActivity extends Cocos2dxActivity {
                     @Override
                     public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName,int code,String msg) {
                         if(rewardVerify)
-                            Log.i(TAG, "激励视频发放奖励");
+//                            Log.i(TAG, "激励视频发放奖励"+"rewardAmount="+rewardAmount+"------rewardName="+rewardName+"-------code"+code+"--------msg="+msg);
 //                        activity.sendJs("cc.Tools.adCallBack()");
                         //值为ecpm
                         activity.callJsAdFunction(1);

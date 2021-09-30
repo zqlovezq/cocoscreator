@@ -53,7 +53,7 @@ cc.Class({
 
     cc.Tools.screenAdapter(); // 进入主界面打点
 
-    cc.Tools.dot("enter_main"); // 判断是否是第一次进入游戏 如果第一次进入那么弹出First弹窗
+    cc.Tools.dot("enter_main", null); // 判断是否是第一次进入游戏 如果第一次进入那么弹出First弹窗
 
     var firstLayer = cc.find('Canvas/First');
     firstLayer.active = false;
@@ -61,7 +61,9 @@ cc.Class({
     var _first = cc.sys.localStorage.getItem("first");
 
     if (!_first) {
-      cc.sys.localStorage.setItem("first", true);
+      cc.sys.localStorage.setItem("first", true); // 显示banner广告
+
+      cc.Tools.showBanner();
       this.scheduleOnce(function () {
         firstLayer.scale = 0;
         firstLayer.active = true;
@@ -115,10 +117,8 @@ cc.Class({
         guide.active = true;
         guide.getChildByName("guide_4").active = true;
       }
-    } // 显示banner广告
+    } // 获取用户信息
 
-
-    cc.Tools.showBanner(); // 获取用户信息
 
     this.getUserInfo(); // 记录打点的值
     // 签到打点
@@ -142,7 +142,7 @@ cc.Class({
     cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
       _this.userInfo = res.data;
       cc.zm.userInfo = _this.userInfo;
-      cc.log("cocos user info " + _this.userInfo); // 注册打点
+      console.log("cocos----user info " + JSON.stringify(_this.userInfo)); // 注册打点
 
       cc.Tools.dot("sign_in", {
         sigsign_in_time: new Date()
@@ -215,7 +215,7 @@ cc.Class({
       };
       cc.Tools.dot("click", dotData);
       cc.zm.LevelInfo = res.data;
-      console.log("关卡信息=", cc.zm.LevelInfo); // 判断
+      console.log("cocos----关卡信息=", JSON.stringify(cc.zm.LevelInfo)); // 判断
 
       if (cc.zm.userInfo.power <= 0) {
         // 显示看视频获得体力界面
@@ -255,6 +255,9 @@ cc.Class({
         level_start: _this3.level_start
       };
       cc.Tools.dot("click", dotData);
+
+      var btnCom = _this3.SignLayer.getChildByName("signBtn").getComponent(cc.Button);
+
       _this3.signDay = res.data.day;
       _this3.SignLayer.active = true;
 
@@ -262,6 +265,15 @@ cc.Class({
         var dayNode = _this3.SignLayer.getChildByName("day_" + i);
 
         var _data = items[i - 1];
+
+        if (i === _this3.signDay) {
+          if (_data.status) {
+            btnCom.enableAutoGrayEffect = true;
+            btnCom.interactable = false;
+          } else {
+            btnCom.interactable = true;
+          }
+        }
 
         if (_data.status) {
           _this3.completeBtn(dayNode);
@@ -297,6 +309,16 @@ cc.Class({
   // 显示主界面
   showIndexLayer: function showIndexLayer() {
     // 隐藏banner
+    if (!cc.endCountTime) {
+      cc.endCountTime = new Date().getTime();
+    } else {
+      if (cc.endCountTime - cc.beginCountTime > 30000) {
+        // 触发插屏
+        cc.Tools.showTableScreen();
+        cc.beginCountTime = cc.endCountTime;
+      }
+    }
+
     cc.Tools.hideBanner(); // 红包的数量
 
     cc.find("Canvas/Index/GetMoney/lbl").getComponent(cc.Label).string = this.userInfo.red_pack;
@@ -394,11 +416,10 @@ cc.Class({
 
         com.string = "x" + value;
       } // 奖池金额 
+      // let award_lbl = this.RedPoolLayer.getChildByName("award_lbl").getComponent(cc.Label);
+      // award_lbl.string = poolInfo.amount
+      // 增加倒计时
 
-
-      var award_lbl = _this5.RedPoolLayer.getChildByName("award_lbl").getComponent(cc.Label);
-
-      award_lbl.string = poolInfo.amount; // 增加倒计时
 
       var hour = _this5.RedPoolLayer.getChildByName("count_1").getComponent(cc.Label);
 
@@ -416,8 +437,7 @@ cc.Class({
     // 现获取七日任务列表
     var sendData = {};
     cc.Tools.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then(function (res) {
-      cc.Tools.showBanner(); // console.log("七日任务列表=", res.data);
-      // 通过数据初始化界面 状态 0.未领取 1.已领取
+      cc.Tools.showBanner(); // 通过数据初始化界面 状态 0.未领取 1.已领取
 
       var items = res.data.items;
       var serverDay = res.data.day;
@@ -593,7 +613,6 @@ cc.Class({
         id: target._id
       }).then(function (res) {
         // 像服务器发送提现请求
-        // console.log("像服务器发送提现请求", res.data);
         var btnCom = target.getComponent(cc.Button);
         btnCom.enableAutoGrayEffect = true;
         btnCom.interactable = false;
@@ -607,7 +626,7 @@ cc.Class({
           cash_times: "",
           cash_result: "成功"
         };
-        cc.log("打点数据", dotData);
+        console.log("cocos----打点数据", JSON.stringify(dotData));
         cc.Tools.dot("cash_out", dotData);
       });
     }
@@ -630,8 +649,7 @@ cc.Class({
       };
       cc.Tools.dot("click", dotData);
       var data = res.data;
-      var gc = data.gc || 0; // console.log("存钱罐信息=", data);
-      // 先定义当前那个阶段是否可以提取
+      var gc = data.gc || 0; // 先定义当前那个阶段是否可以提取
 
       _this9.getMoneyStage = 0;
       var arr = [0.3, 0.5, 1, 2, 5, 10, 20];
@@ -700,7 +718,6 @@ cc.Class({
       // 开始提现金钱
       // 判断条件 1  是否元宝数量是否满足提现档位，不满足时提示：元宝数量不足
       // 判断条件 2  档位是否为最小档位，如果不是提示：请先完成上一个档位提现
-      // console.log("开始提现", this.choiceBtn.money);
       if (this.extractMoney < this.choiceBtn.money) {
         // 不符合条件1 弹出元宝数量不足的tips
         cc.Tools.showTips(this.node, "元宝数量不足");
@@ -722,7 +739,7 @@ cc.Class({
           cash_times: "",
           cash_result: "成功"
         };
-        cc.log("打点数据", dotData);
+        console.log("cocos----打点数据", JSON.stringify(dotData));
         cc.Tools.dot("cash_out", dotData);
         var layer = target.parent.getChildByName("getLayer");
         layer.active = true;
@@ -772,11 +789,16 @@ cc.Class({
 
     if (this.TurntableLayer.active === true) {
       this.showTurntableLayer();
+    }
+
+    if (this.SignLayer.active === true) {
+      this.showSignLayer();
     } // 关闭当前也进入首页 刷新界面
 
 
     this.signNumber = 0;
-    this.getUserInfo(); // console.log("退出登陆");
+    this.getUserInfo();
+    cc.endCountTime = new Date().getTime();
   },
   // 点击签到按钮
   clickSignBtn: function clickSignBtn(e) {
@@ -829,8 +851,7 @@ cc.Class({
             this.value += 1.5;
           }
         }
-      } // console.log(this.speed);
-
+      }
 
       if (this.speed <= 5 && this.point.angle <= this.endAngle) {
         this.beginTurn = false;
@@ -840,9 +861,13 @@ cc.Class({
 
 
     if (!cc.zm.videoAd.clickSign) {
-      cc.log("获取签到奖励");
+      console.log("cocos----获取签到奖励");
       cc.zm.videoAd.clickSign = true; // 实时更新签到界面
+      // 先像服务器发送请求获取物品id
 
+      var sendData = {
+        "ad": cc.zm.ad
+      };
       cc.Tools.sendRequest("pit.v1.PitSvc/SignIn", "POST", sendData).then(function (res) {
         var signDay = _this11.SignLayer.getChildByName("day_" + _this11.signDay);
 

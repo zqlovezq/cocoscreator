@@ -25,11 +25,13 @@ cc.Class({
 
       if (cc.sys.isNative) {
         if (cc.sys.localStorage.getItem("realName")) {
+          cc.beginCountTime = new Date().getTime();
           cc.director.loadScene('Index');
         } else {
           this.showRealLayer();
         }
       } else {
+        cc.beginCountTime = new Date().getTime();
         cc.director.loadScene('Index');
       }
     }
@@ -88,6 +90,7 @@ cc.Class({
           });
 
           if (cc.sys.localStorage.getItem("realName")) {
+            cc.beginCountTime = new Date().getTime();
             cc.director.loadScene('Index');
           } else {
             _this.showRealLayer();
@@ -124,10 +127,10 @@ cc.Class({
     var target = e.target;
     var _realName = this.realNameLayer.getChildByName("edit1").getComponent(cc.EditBox).string;
     var _realNumber = this.realNameLayer.getChildByName("edit2").getComponent(cc.EditBox).string;
-    cc.log("\u771F\u5B9E\u59D3\u540D" + _realName + "------\u8EAB\u4EFD\u8BC1\u53F7" + _realNumber); // 用local记录 是否实名
+    console.log("cocos----\u771F\u5B9E\u59D3\u540D" + _realName + "------\u8EAB\u4EFD\u8BC1\u53F7" + _realNumber); // 用local记录 是否实名
 
     if (this.regYourName(_realName) && this.regYourNumber(_realNumber)) {
-      cc.log("认证成功");
+      console.log("cocos----认证成功");
       cc.sys.localStorage.setItem("realName", true);
       cc.director.loadScene('Index');
     }

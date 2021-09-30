@@ -110,7 +110,7 @@ cc.Class({
                 prop: 4
             }
             cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then((res) => {
-                console.log("使用体力成功")
+                console.log("cocos---使用体力成功")
             });
             cc.zm.LevelInfo = res.data;
             // 关闭界面开始游戏
@@ -123,7 +123,7 @@ cc.Class({
             this.ResumeGameLayer();
             // 对关卡进行打点
             if(cc.zm.LevelInfo.stage<=5){
-                cc.Tools.dot("start_"+cc.zm.LevelInfo.stage)
+                cc.Tools.dot("start_"+cc.zm.LevelInfo.stage,null)
             }
         });
     },
@@ -209,6 +209,7 @@ cc.Class({
             this.guide = false;
             this.PauseGameLayer();
             cc.find('Canvas/Guide').active = false;
+            cc.Tools.showBanner();
             this.NeedLayer.active = true;
             let needScore = this.NeedLayer.getChildByName("needScore").getComponent(cc.Label);
             let needLevel = this.NeedLayer.getChildByName("needLevel").getComponent(cc.Label);
@@ -270,7 +271,7 @@ cc.Class({
                         prop: weapon[i].prop
                     }
                     cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then((res) => {
-                        console.log("使用成功-", data[weapon[i].prop])
+                        console.log("cocos---使用成功-", data[weapon[i].prop])
                     });
                 }
             }
@@ -365,7 +366,7 @@ cc.Class({
         let promote = 1;
         ItemAttr[other.node.name] = ItemAttr[other.node.name] || {};
         if (this.liquidNumber) {
-            console.log("药水效果速度增加10%")
+            console.log("cocos----药水效果速度增加10%")
             promote = 1.1
         }
         this.speed = ItemAttr[other.node.name].speed * promote || 10;
@@ -389,7 +390,7 @@ cc.Class({
     StartTime() {
         // 是否存在时钟 存在时钟 this.InitTime+10秒
         if (this.clockNumber) {
-            console.log("使用时钟成功+10s")
+            console.log("cocos----使用时钟成功+10s")
             this.clockNumber = 0;
             this.InitTime += 10;
         }
@@ -435,7 +436,6 @@ cc.Class({
         let newItemArr = this.newCreateCalc();
         // 写一个算法 根据分数先将arr 排序 总分不能超过最大分数 如果超了 则从小开始减少 直到分数小于最大分数
         //生成相应的Prfab
-        console.log("itemArr=", newItemArr);
         newItemArr.forEach(item => {
             let node = cc.instantiate(this.Prefab[item.name]);
             let XY = this.randomXY(node);
@@ -594,7 +594,6 @@ cc.Class({
             }
         }
         createItemArr = [...createItemArr, ...newArr];
-        console.log("createItemArr未按照宽度排序=", createItemArr);
         // 将createItemArr排序按照宽度
         createItemArr = createItemArr.sort((a, b) => {
             if (a.width > b.width) {
@@ -605,7 +604,6 @@ cc.Class({
             }
             return 0
         })
-        console.log("createItemArr照宽度排序=", createItemArr);
         return createItemArr;
     },
     // 根据积分跟类型生成数量name
@@ -617,7 +615,7 @@ cc.Class({
                 // 当前是石块 是否有化石手册 如果有 石头的价值提升20% todo
                 let promote = 1;
                 if (this.handbookNumber) {
-                    console.log("石化手册使用成功石头的价值提升20%")
+                    console.log("cocos----石化手册使用成功石头的价值提升20%")
                     promote = 1.2
                 }
                 for (let i = 0; i < 30; i++) {
@@ -942,7 +940,7 @@ cc.Class({
         Fail.active = false;
         Success.active = false;
         if(cc.zm.LevelInfo.stage<=5){
-            cc.Tools.dot("end_"+cc.zm.LevelInfo.stage)
+            cc.Tools.dot("end_"+cc.zm.LevelInfo.stage,null)
         }
         if (this.victory === 1) {
             Success.active = true;
@@ -955,7 +953,6 @@ cc.Class({
             let lbl = Success.getChildByName("lbl").getComponent(cc.Label);
             // 像服务器发送每日任务请求
             cc.Tools.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then((res) => {
-                // console.log("七日任务列表=", res.data);
                 let items = res.data.items;
                 let item = null;
                 for (let i = 0; i < items.length; i++) {
@@ -1005,7 +1002,7 @@ cc.Class({
             }
             let data = cc.Tools.createSignData(sendData);
             cc.Tools.sendRequest("pit.v1.PitSvc/Pass", "POST", data).then((res) => {
-                console.log("Pass通关成功返回信息", res)
+                console.log("cocos----Pass通关成功返回信息", res)
             });
         } else if (this.victory === 2) {
             Fail.active = true;
@@ -1061,6 +1058,8 @@ cc.Class({
                                 this.Reload();
                             } else {
                                 // 直接返回主界面
+                                cc.Tools.hideBanner();
+                                cc.endCountTime = new Date().getTime();
                                 cc.director.loadScene('Index');
                             }
                         });
@@ -1078,7 +1077,7 @@ cc.Class({
     },
     // 看视频得红包
     AwardVideo(e) {
-        cc.log("看视频得奖励");
+        console.log("cocos----看视频得奖励");
         cc.Tools.showJiliAd();
         let pack = cc.zm.LevelInfo.ever_pass ? 0 : this.redPack;
         let sendData = {
@@ -1104,6 +1103,7 @@ cc.Class({
      * 退出游戏 返回上一个场景
      */
     ExitGame() {
+        cc.endCountTime = new Date().getTime();
         cc.director.loadScene('Index');
     },
     ResumeGameLayer() {

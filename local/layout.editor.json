@@ -19,7 +19,7 @@
             "children": [
               {
                 "width": 291,
-                "height": 456.234375,
+                "height": 637.671875,
                 "type": "panel",
                 "active": 0,
                 "children": [
@@ -28,7 +28,7 @@
               },
               {
                 "width": 291,
-                "height": 508.265625,
+                "height": 326.828125,
                 "type": "panel",
                 "active": 0,
                 "children": [
@@ -38,17 +38,17 @@
             ]
           },
           {
-            "width": 778,
+            "width": 1071,
             "height": 967.5,
             "type": "dock-v",
             "children": [
               {
-                "width": 778,
+                "width": 1071,
                 "height": 601.6875,
                 "type": "dock-h",
                 "children": [
                   {
-                    "width": 494,
+                    "width": 583,
                     "height": 601.6875,
                     "type": "panel",
                     "active": 0,
@@ -57,7 +57,7 @@
                     ]
                   },
                   {
-                    "width": 281,
+                    "width": 485,
                     "height": 601.6875,
                     "type": "panel",
                     "active": 0,
@@ -68,7 +68,7 @@
                 ]
               },
               {
-                "width": 778,
+                "width": 1071,
                 "height": 362.8125,
                 "type": "panel",
                 "active": 0,
@@ -81,10 +81,10 @@
             ]
           },
           {
-            "width": 845,
+            "width": 552,
             "height": 967.5,
             "type": "panel",
-            "active": 0,
+            "active": 1,
             "children": [
               "inspector",
               "builder",
@@ -105,7 +105,8 @@
         "builder",
         "cocos-services"
       ]
-    }
+    },
+    "worker": {}
   },
   "panels": {
     "project-settings": {
