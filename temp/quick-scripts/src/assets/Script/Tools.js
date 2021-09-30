@@ -6,7 +6,8 @@ cc._RF.push(module, '5f815fcXZ9BIY+pPRsOeaGx', 'Tools');
 
 cc.Tools = {
   /**
-   * 打点
+   * @param {*} event 数数打点的事件名称
+   * @param {*} pro 数数打点的关联属性
   */
   dot: function dot(event, pro) {
     if (cc.sys.isNative) {
@@ -17,47 +18,64 @@ cc.Tools = {
 
   /**
    * 看视频回调
-   * @param errCode 
    */
-  adCallBack: function adCallBack() {
-    cc.log("观看视频回调");
+  adCallBack: function adCallBack(ecpm) {
+    cc.log("观看视频回调"); // 获取广告ad之前先用epcr
+    // 看视频得体力
 
-    if (cc.zm.ad.power) {
-      var sendData = {
-        ad: cc.zm.ad
-      };
-      http.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then(function (res) {
-        cc.zm.ad.power = false;
-        cc.director.loadScene('Game');
-      });
-    }
+    this.getUserEcpm(ecpm).then(function () {
+      cc.log("获取ecpm之后才调用");
 
-    if (cc.zm.ad.redPack) {
-      http.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.ad.redPack).then(function (res) {
-        console.log("PassAd返回信息", res);
-        var sendData = {};
-        http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
-          cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
+      if (cc.zm.userInfo.power <= 0) {
+        var sendData = {
+          ad: cc.zm.ad
+        };
+        cc.Tools.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then(function (res) {
+          cc.log("获取体力奖励");
+          cc.zm.userInfo.power = res.data.value;
 
-          if (cc.zm.userInfo.power > 0) {
-            http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
-              cc.zm.LevelInfo = res.data;
-              cc.zm.ad.redPack = null; // console.log("关卡信息=", cc.zm.LevelInfo);
-
-              if (cc.zm.LevelInfo.stage < 30) {
-                cc.director.loadScene('Game');
-              } else {
-                // 直接返回主界面
-                cc.director.loadScene('Index');
-              }
-            });
-          } else {
-            // 小于0 弹出看视频获得体力的接口
-            cc.director.loadScene('Index');
+          if (cc.zm.videoAd.enterGame) {
+            cc.director.loadScene('Game');
           }
         });
-      });
-    }
+      } // 看视频得红包
+
+
+      if (cc.zm.videoAd.redPack) {
+        cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.ad.redPack).then(function (res) {
+          cc.log("获取红包奖励", res);
+          var sendData = {};
+          cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
+            cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
+
+            if (cc.zm.userInfo.power > 0) {
+              cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
+                cc.zm.LevelInfo = res.data;
+                cc.zm.videoAd.redPack = null; // console.log("关卡信息=", cc.zm.LevelInfo);
+
+                if (cc.zm.LevelInfo.stage < 30) {
+                  cc.director.loadScene('Game');
+                } else {
+                  // 直接返回主界面
+                  cc.director.loadScene('Index');
+                }
+              });
+            } else {
+              // 小于0 弹出看视频获得体力的接口
+              cc.director.loadScene('Index');
+            }
+          });
+        });
+      }
+
+      if (cc.zm.videoAd.clickSign) {
+        cc.zm.videoAd.clickSign = false;
+      }
+
+      if (cc.zm.videoAd.clickTable) {
+        cc.zm.videoAd.clickTable = false;
+      }
+    });
   },
   // 显示激励视频
   showJiliAd: function showJiliAd() {
@@ -107,6 +125,148 @@ cc.Tools = {
   wxLoginResult: function wxLoginResult(errCode) {
     cc.log("wxLoginResultcode=" + errCode);
     cc.wxLoginResultcode = errCode;
+  },
+
+  /**
+   * 看广告之后刷新一下ecpm
+   */
+  getUserEcpm: function getUserEcpm(ecpm) {
+    if (!cc.zm) {
+      return;
+    }
+
+    cc.log("调用ecpm=", ecpm);
+    return new Promise(function (resolve, reject) {
+      var sendData = {
+        "ecpm": ecpm,
+        "ts": new Date().getTime() //时间戳
+
+      };
+      var data = cc.Tools.createSignData(sendData);
+      cc.Tools.sendRequest("pit.v1.PitSvc/Rc", "POST", data).then(function (res) {
+        cc.log("Ecpm成功", res.data);
+        cc.zm.ad = res.data.ad;
+        resolve();
+      })["catch"](function (res) {
+        cc.log("Ecpm失败", res);
+        reject(res);
+      });
+    });
+  },
+
+  /**
+   * 
+   * @param {*} data 需要签名数据
+   * @returns 
+   */
+  createSignData: function createSignData(data) {
+    var sortList = [];
+
+    for (var key in data) {
+      if (data.hasOwnProperty(key) && key != "sign") {
+        var value = data[key];
+        var item = {};
+        item.key = key;
+        item.value = value;
+        sortList.push(key);
+      }
+    }
+
+    sortList.sort();
+    var strToJiaMi = "";
+    sortList.forEach(function (key) {
+      strToJiaMi += "&" + key + "=" + data[key];
+    }, this);
+    strToJiaMi = "token=" + cc.zm.userInfo.sc1 + strToJiaMi; // var noJiaMi = strToJiaMi;
+    // console.log("未加密前=", strToJiaMi)
+
+    var hex_md5 = require("MD5");
+
+    strToJiaMi = hex_md5(strToJiaMi);
+    data.sign = strToJiaMi; // console.log("加密后=", strToJiaMi)
+
+    return data;
+  },
+  // 适配屏幕
+  screenAdapter: function screenAdapter() {
+    var canvas = cc.find("Canvas").getComponent(cc.Canvas);
+    var winSize = cc.view.getVisibleSize();
+
+    if (winSize.height / winSize.width <= 720 / 1280) {
+      canvas.fitHeight = true;
+      canvas.fitWidth = false;
+    } else {
+      canvas.fitHeight = false;
+      canvas.fitWidth = true;
+    }
+  },
+
+  /**
+   * 
+   * @param {*} n node节点
+   * @param {*} str  显示的tips内容
+   */
+  showTips: function showTips(n, str) {
+    var tips = n.getChildByName("Tips");
+    tips.getComponent(cc.Label).string = str;
+    tips.stopAllActions();
+    tips.y = 145;
+    cc.tween(tips).to(0.1, {
+      opacity: 255
+    }).to(1, {
+      y: 300
+    }).delay(0.5).to(0.1, {
+      opacity: 0
+    }).start();
+  },
+
+  /**
+   * 
+   * @param {*} url 请求接口的url----pit.v1.PitSvc/UserInfo
+   * @param {*} type 请求接口的类型 只能是GET--POST
+   * @param {*} data 请求接口所需要的数据
+   * @returns 
+   */
+  sendRequest: function sendRequest(url, type, data) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      var requestURL = "https://pit.api.jiankangzhuan.com/" + url;
+      xhr.open(type, requestURL, true);
+
+      if (cc.sys.isNative) {
+        cc.log("isNative");
+        xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
+      }
+
+      if (cc.wxToken) {
+        xhr.setRequestHeader("Authorization", cc.wxToken);
+      }
+
+      xhr.setRequestHeader("Content-Type", "application/json");
+      cc.log("requestURL=", requestURL);
+      cc.log("data=", JSON.stringify(data));
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status == 200) {
+          cc.log("http res:" + xhr.response); // 统一处理
+
+          var _response = JSON.parse(xhr.response);
+
+          if (_response.code === 0) {
+            resolve(_response);
+          } else {
+            console.log(_response.message);
+            reject(_response.message);
+          }
+        }
+      };
+
+      xhr.onerror = function () {
+        reject(new Error(xhr.statusText));
+      };
+
+      xhr.send(JSON.stringify(data));
+    });
   }
 };
 

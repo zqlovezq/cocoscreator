@@ -4,8 +4,6 @@ cc._RF.push(module, '6b7cdHix81Ol6r4h+cnHYQh', 'login');
 
 "use strict";
 
-var http = require("Http");
-
 cc.Class({
   "extends": cc.Component,
   properties: {},
@@ -22,8 +20,18 @@ cc.Class({
 
     if (cc.sys.localStorage.getItem("token")) {
       this.needLogin = false;
+      this.protocol = true;
       cc.wxToken = cc.sys.localStorage.getItem("token");
-      cc.director.loadScene('Index');
+
+      if (cc.sys.isNative) {
+        if (cc.sys.localStorage.getItem("realName")) {
+          cc.director.loadScene('Index');
+        } else {
+          this.showRealLayer();
+        }
+      } else {
+        cc.director.loadScene('Index');
+      }
     }
   },
   onLoginWX: function onLoginWX() {
@@ -31,7 +39,7 @@ cc.Class({
       if (this.protocol) {
         cc.Tools.wxLogin();
       } else {
-        this.showTips();
+        cc.Tools.showTips(this.node, "请先同意用户协议和隐私政策");
       }
     }
   },
@@ -48,17 +56,9 @@ cc.Class({
       this.protocol = true;
     }
   },
-  showTips: function showTips() {
-    var tips = this.node.getChildByName("tips");
-    tips.y = 0;
-    tips.active = true;
-    cc.tween(tips).to(1, {
-      y: 100
-    }).delay(0.5).call(function () {
-      tips.active = false;
-    }).start();
-  },
   update: function update(dt) {
+    var _this = this;
+
     this.time += dt;
 
     if (!this.needLogin) {
@@ -79,11 +79,19 @@ cc.Class({
           "android_id": "1",
           "code": cc.wxLoginResultcode
         };
-        http.sendRequest("pit.v1/register", "POST", data).then(function (res) {
-          // this.token.string = JSON.stringify(res)
+        cc.Tools.sendRequest("pit.v1/register", "POST", data).then(function (res) {
           cc.wxToken = res.data.token;
           cc.sys.localStorage.setItem("token", res.data.token);
-          cc.director.loadScene('Index');
+          cc.Tools.dot("register", {
+            register_time: new Date(),
+            channel: "微信"
+          });
+
+          if (cc.sys.localStorage.getItem("realName")) {
+            cc.director.loadScene('Index');
+          } else {
+            _this.showRealLayer();
+          }
         });
       }
     }
@@ -105,6 +113,46 @@ cc.Class({
   hideUserPrivacy: function hideUserPrivacy() {
     var privacy = this.node.getChildByName("user_privacy");
     privacy.active = false;
+  },
+  // 实名认证
+  showRealLayer: function showRealLayer() {
+    this.realNameLayer = this.node.getChildByName("RealName");
+    this.realNameLayer.active = true;
+  },
+  // 实名认证点击
+  clickRealLayer: function clickRealLayer(e) {
+    var target = e.target;
+    var _realName = this.realNameLayer.getChildByName("edit1").getComponent(cc.EditBox).string;
+    var _realNumber = this.realNameLayer.getChildByName("edit2").getComponent(cc.EditBox).string;
+    cc.log("\u771F\u5B9E\u59D3\u540D" + _realName + "------\u8EAB\u4EFD\u8BC1\u53F7" + _realNumber); // 用local记录 是否实名
+
+    if (this.regYourName(_realName) && this.regYourNumber(_realNumber)) {
+      cc.log("认证成功");
+      cc.sys.localStorage.setItem("realName", true);
+      cc.director.loadScene('Index');
+    }
+  },
+  // 判断真实姓名
+  regYourName: function regYourName(name) {
+    var regName = /^[\u4e00-\u9fa5]{2,4}$/;
+
+    if (!regName.test(name)) {
+      cc.Tools.showTips(this.node, "真实姓名填写有误");
+      return false;
+    }
+
+    return true;
+  },
+  // 判断身份证号
+  regYourNumber: function regYourNumber(num) {
+    var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+
+    if (!regIdNo.test(num)) {
+      cc.Tools.showTips(this.node, '身份证号填写有误');
+      return false;
+    }
+
+    return true;
   }
 });
 

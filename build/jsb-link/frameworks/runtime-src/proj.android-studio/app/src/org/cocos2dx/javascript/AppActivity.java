@@ -64,6 +64,8 @@ import java.util.List;
 import java.util.Timer;
 //新增代码
 import java.util.TimerTask;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import cn.thinkingdata.android.ThinkingAnalyticsSDK;
 
@@ -196,6 +198,25 @@ public class AppActivity extends Cocos2dxActivity {
         Timer timer = new Timer();
         timer.schedule(task, 500);
     }
+    //新增代码(回调函数)返回ecpm
+    public static void callJsAdFunction(final Integer value) {
+        System.out.println("Enter the callJsFunction" + value);
+        final String exes = "cc.Tools.adCallBack(\""+ value + "\")";
+        TimerTask task = new TimerTask(){
+            public void run(){
+                //execute the task
+                Cocos2dxGLSurfaceView.getInstance().queueEvent(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("chenggong  ==  "+ exes);
+                        Cocos2dxJavascriptJavaBridge.evalString(exes);
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 500);
+    }
     @Override
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
@@ -298,6 +319,13 @@ public class AppActivity extends Cocos2dxActivity {
             @Override
             public void onError(int code, String message) {
                 Log.e(TAG,code+"------"+String.valueOf(message));
+                try {
+                    JSONObject properties = new JSONObject();
+                    properties.put("ad_preloading","失败");
+                    ShushuAnalysisHelp.track("ad_preloading",properties);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
             @Override
@@ -305,12 +333,19 @@ public class AppActivity extends Cocos2dxActivity {
                 //开发者做一个标识
                 isLoadVideoSuccess = true;
                 Log.e(TAG, "rewardVideoAd video cached");
-//                activity.mttRewardVideoAd.showRewardVideoAd(activity);
+//                预加载成功
+                try {
+                    JSONObject properties = new JSONObject();
+                    properties.put("ad_preloading","成功");
+                    ShushuAnalysisHelp.track("ad_preloading",properties);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onRewardVideoCached(TTRewardVideoAd ttRewardVideoAd) {
-
+                Log.e(TAG, "ttRewardVideoAd----"+ttRewardVideoAd);
             }
 
             //视频广告的素材加载完毕，比如视频url等，在此回调后，可以播放在线视频，网络不好可能出现加载缓冲，影响体验。
@@ -349,7 +384,9 @@ public class AppActivity extends Cocos2dxActivity {
                     public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName,int code,String msg) {
                         if(rewardVerify)
                             Log.i(TAG, "激励视频发放奖励");
-                        activity.sendJs("cc.Tools.adCallBack()");
+//                        activity.sendJs("cc.Tools.adCallBack()");
+                        //值为ecpm
+                        activity.callJsAdFunction(1);
                     }
                     //视频广告跳过回调
                     @Override

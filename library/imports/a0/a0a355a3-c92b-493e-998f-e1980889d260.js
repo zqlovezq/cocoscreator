@@ -11,8 +11,6 @@ var _Level = _interopRequireDefault(require("./Level"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 //引入 得分等配置 太长 所以换个文件写
-var http = require("Http");
-
 cc.Class({
   "extends": cc.Component,
   properties: {
@@ -117,22 +115,30 @@ cc.Class({
     var _this = this;
 
     // 如果开始游戏 那么刷新一下道具数据
-    http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
+    cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
       var sendDta = {
         prop: 4
       };
-      http.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then(function (res) {
+      cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then(function (res) {
         console.log("使用体力成功");
       });
       cc.zm.LevelInfo = res.data; // 关闭界面开始游戏
 
       _this.NeedLayer.active = false; // 点击开始游戏之前 重新同步一下道具信息
+      // 隐藏banner
+
+      cc.Tools.hideBanner();
 
       _this.handleDaoju();
 
       _this.adjusBoomLayout();
 
-      _this.ResumeGameLayer();
+      _this.ResumeGameLayer(); // 对关卡进行打点
+
+
+      if (cc.zm.LevelInfo.stage <= 5) {
+        cc.Tools.dot("start_" + cc.zm.LevelInfo.stage);
+      }
     });
   },
   hideLotteryLayer: function hideLotteryLayer() {
@@ -198,7 +204,7 @@ cc.Class({
     this.boomNumber = -1;
     this.liquidNumber = 0;
     this.adjusBoomLayout();
-    this.screenAdapter();
+    cc.Tools.screenAdapter();
     this.ResetInfo();
     this.StartTime();
     this.SetLevel();
@@ -251,8 +257,7 @@ cc.Class({
       "ad": cc.zm.ad,
       "weapon": this.LotteryProp
     };
-    http.sendRequest("pit.v1.PitSvc/Lottery2", "POST", sendData).then(function (res) {
-      // console.log("点击开始转盘", res);
+    cc.Tools.sendRequest("pit.v1.PitSvc/Lottery2", "POST", sendData).then(function (res) {
       // 炸弹：10 11时钟 13药水
       _this3.LotteryAward = res.data.award;
 
@@ -287,7 +292,7 @@ cc.Class({
           var sendDta = {
             prop: weapon[i].prop
           };
-          http.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then(function (res) {
+          cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then(function (res) {
             console.log("使用成功-", data[weapon[i].prop]);
           });
         }
@@ -312,18 +317,6 @@ cc.Class({
 
     for (var i = 0; i < weapon.length; i++) {
       _loop(i);
-    }
-  },
-  screenAdapter: function screenAdapter() {
-    var canvas = cc.find("Canvas").getComponent(cc.Canvas);
-    var winSize = cc.view.getVisibleSize();
-
-    if (winSize.height / winSize.width <= 720 / 1280) {
-      canvas.fitHeight = true;
-      canvas.fitWidth = false;
-    } else {
-      canvas.fitHeight = false;
-      canvas.fitWidth = true;
     }
   },
 
@@ -1101,6 +1094,7 @@ cc.Class({
     var _this6 = this;
 
     //显示弹出框
+    cc.Tools.showBanner();
     this.Mask.active = true; // this.PauseGameLayer()
 
     var Fail = this.Mask.getChildByName("Fail");
@@ -1108,12 +1102,21 @@ cc.Class({
     Fail.active = false;
     Success.active = false;
 
+    if (cc.zm.LevelInfo.stage <= 5) {
+      cc.Tools.dot("end_" + cc.zm.LevelInfo.stage);
+    }
+
     if (this.victory === 1) {
-      Success.active = true; // 设置目标内容
+      Success.active = true; // 通关成功打点
+
+      cc.Tools.dot("through", {
+        level_num: cc.zm.LevelInfo.stage,
+        level_result: "成功"
+      }); // 设置目标内容
 
       var lbl = Success.getChildByName("lbl").getComponent(cc.Label); // 像服务器发送每日任务请求
 
-      http.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then(function (res) {
+      cc.Tools.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then(function (res) {
         // console.log("七日任务列表=", res.data);
         var items = res.data.items;
         var item = null;
@@ -1173,12 +1176,16 @@ cc.Class({
         "ts": new Date().getTime() //时间戳
 
       };
-      var data = this.createSignData(sendData);
-      http.sendRequest("pit.v1.PitSvc/Pass", "POST", data).then(function (res) {
+      var data = cc.Tools.createSignData(sendData);
+      cc.Tools.sendRequest("pit.v1.PitSvc/Pass", "POST", data).then(function (res) {
         console.log("Pass通关成功返回信息", res);
       });
     } else if (this.victory === 2) {
-      Fail.active = true; // 通关失败不用告诉服务器
+      Fail.active = true;
+      cc.Tools.dot("through", {
+        level_num: cc.zm.LevelInfo.stage,
+        level_result: "失败"
+      }); // 通关失败不用告诉服务器
     }
 
     cc.tween(this.Mask).to(0.3, {
@@ -1186,34 +1193,6 @@ cc.Class({
     }).call(function () {
       _this6.PauseGameLayer();
     }).start();
-  },
-  createSignData: function createSignData(data) {
-    var sortList = [];
-
-    for (var key in data) {
-      if (data.hasOwnProperty(key) && key != "sign") {
-        var value = data[key];
-        var item = {};
-        item.key = key;
-        item.value = value;
-        sortList.push(key);
-      }
-    }
-
-    sortList.sort();
-    var strToJiaMi = "";
-    sortList.forEach(function (key) {
-      strToJiaMi += "&" + key + "=" + data[key];
-    }, this);
-    strToJiaMi = "token=" + cc.zm.userInfo.sc1 + strToJiaMi; // var noJiaMi = strToJiaMi;
-    // console.log("未加密前=",strToJiaMi)
-
-    var hex_md5 = require("MD5");
-
-    strToJiaMi = hex_md5(strToJiaMi);
-    data.sign = strToJiaMi; // console.log("加密后=",strToJiaMi)
-
-    return data;
   },
 
   /**
@@ -1250,11 +1229,11 @@ cc.Class({
       case 1:
         // 过关成功点击进入下一关之前 先获取用户信息 看用户是否有体力
         var sendData = {};
-        http.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
+        cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
           cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
 
           if (cc.zm.userInfo.power > 0) {
-            http.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
+            cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
               cc.zm.LevelInfo = res.data;
 
               if (cc.zm.LevelInfo.stage < 30) {
@@ -1279,6 +1258,7 @@ cc.Class({
 
     ;
   },
+  // 看视频得红包
   AwardVideo: function AwardVideo(e) {
     cc.log("看视频得奖励");
     cc.Tools.showJiliAd();
@@ -1288,14 +1268,14 @@ cc.Class({
       //红包
       "ad": cc.zm.ad
     };
-    cc.zm.ad.redPack = sendData;
+    cc.zm.videoAd.redPack = sendData;
     this.timer && this.unschedule(this.timer);
   },
-  // 看视频得奖励
+  // 看视频得体力
   seeVideoAward: function seeVideoAward(e) {
+    cc.zm.videoAd.enterGame = true;
     cc.Tools.showJiliAd();
     var target = e.target;
-    cc.zm.ad.power = true;
     this.timer && this.unschedule(this.timer);
     target.parent.active = false;
   },
@@ -1396,7 +1376,7 @@ cc.Class({
           var sendDta = {
             prop: 10
           };
-          http.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta);
+          cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta);
         }
 
         break;
