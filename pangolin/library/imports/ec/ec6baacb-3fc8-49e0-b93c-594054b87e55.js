@@ -200,7 +200,11 @@ cc.Class({
     var _this3 = this;
 
     //关闭BGM
-    // cc.zm.userInfo.win = true;
+    if (!cc.sys.localStorage.getItem("first")) {
+      return;
+    } // cc.zm.userInfo.win = true;
+
+
     cc.audioEngine.stop(this.BGM_ID); //清空关卡数 不清空关卡
 
     if (this.guide) {
@@ -786,6 +790,8 @@ cc.Class({
   },
   // 退出登陆
   ExitBackBtn: function ExitBackBtn(e) {
+    e.target.parent.active = false;
+
     if (this.choiceBtn) {
       this.unSelectBtn(this.choiceBtn);
       this.choiceBtn = null;
@@ -803,9 +809,8 @@ cc.Class({
       if (!this.canClickFristBtn) {
         return;
       }
-    }
+    } // 关闭当前也进入首页 刷新界面
 
-    e.target.parent.active = false; // 关闭当前也进入首页 刷新界面
 
     this.signNumber = 0;
     this.getUserInfo();
@@ -815,10 +820,6 @@ cc.Class({
   clickSignBtn: function clickSignBtn(e) {
     // 签到
     cc.Tools.showJiliAd();
-
-    if (!cc.sys.isNative) {
-      cc.zm.videoAd.clickSign = false;
-    }
   },
   // 点击转盘开始按钮
   clickTurnTableBtn: function clickTurnTableBtn(e) {
@@ -829,10 +830,6 @@ cc.Class({
     }
 
     cc.Tools.showJiliAd();
-
-    if (!cc.sys.isNative) {
-      cc.zm.videoAd.clickTable = false;
-    }
   },
   createRandm: function createRandm(n, m) {
     m += 1;

@@ -35,7 +35,7 @@ cc.Tools = {
             }
             // 看视频得红包
             if (cc.zm.videoAd.redPack) {
-                console.log("cocos----获取红包接口");
+                console.log("cocos----获取红包接口",cc.zm.videoAd.redPack);
                 cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.videoAd.redPack).then((res) => {
                     console.log("cocos----获取红包奖励", res);
                     let sendData = {};
@@ -132,12 +132,12 @@ cc.Tools = {
             };
             let data = cc.Tools.createSignData(sendData);
             cc.Tools.sendRequest("pit.v1.PitSvc/Rc", "POST", data).then((res) => {
-                console.log("cocos----Ecpm成功", res.data);
+                console.log("cocos----Ecpm成功", JSON.stringify(res.data));
                 cc.zm.ad = res.data.ad;
+                if(cc.zm.videoAd.redPack){
+                    cc.zm.videoAd.redPack.ad = cc.zm.ad;
+                }
                 resolve();
-            }).catch((res)=>{
-                console.log("cocos----Ecpm失败", res);
-                reject(res);
             })
          })
     },

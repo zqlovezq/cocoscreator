@@ -195,7 +195,7 @@ public class AppActivity extends Cocos2dxActivity {
                 Cocos2dxGLSurfaceView.getInstance().queueEvent(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("chenggong  ==  "+ exes);
+                        System.out.println("cocos wxLoginResult  ==  "+ exes);
                         Cocos2dxJavascriptJavaBridge.evalString(exes);
                     }
                 });
@@ -204,20 +204,20 @@ public class AppActivity extends Cocos2dxActivity {
         Timer timer = new Timer();
         timer.schedule(task, 500);
     }
-    //新增代码(回调函数)返回ecpm
+//    新增代码（回调函数）给玩家奖励
     public static void callJsAdFunction(final Integer value) {
-        System.out.println("Enter the callJsFunction" + value);
+        Log.e(TAG, "callJsAdFunction");
         final String exes = "cc.Tools.adCallBack(\""+ value + "\")";
         TimerTask task = new TimerTask(){
             public void run(){
-                //execute the task
+            //execute the task
                 Cocos2dxGLSurfaceView.getInstance().queueEvent(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("chenggong  ==  "+ exes);
+                @Override
+                public void run() {
+                        System.out.println("cocos cc.Tools.adCallBack  ==  "+ exes);
                         Cocos2dxJavascriptJavaBridge.evalString(exes);
-                    }
-                });
+                     }
+            });
             }
         };
         Timer timer = new Timer();
@@ -389,10 +389,7 @@ public class AppActivity extends Cocos2dxActivity {
                     @Override
                     public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName,int code,String msg) {
                         if(rewardVerify)
-//                            Log.i(TAG, "激励视频发放奖励"+"rewardAmount="+rewardAmount+"------rewardName="+rewardName+"-------code"+code+"--------msg="+msg);
-//                        activity.sendJs("cc.Tools.adCallBack()");
-                        //值为ecpm
-//                        activity.callJsAdFunction(1);
+                            Log.i(TAG, "激励视频发放奖励"+"rewardAmount="+rewardAmount+"------rewardName="+rewardName+"-------code"+code+"--------msg="+msg);
                     }
                     //视频广告跳过回调
                     @Override

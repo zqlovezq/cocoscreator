@@ -1262,7 +1262,7 @@ cc.Class({
   },
   // 看视频得红包
   AwardVideo: function AwardVideo(e) {
-    console.log("cocos----看视频得奖励");
+    console.log("cocos----看视频得红包");
     cc.Tools.showJiliAd();
     var pack = cc.zm.LevelInfo.ever_pass ? 0 : this.redPack;
     var sendData = {
