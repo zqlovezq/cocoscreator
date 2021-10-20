@@ -46,23 +46,28 @@ cc.Class({
         cc.zm.videoAd.clickSign = true;
         // 转盘标记
         cc.zm.videoAd.clickTable = true;
+        cc.Tools.Event.on('getTable', this.getTableFunc, this);
+        cc.Tools.Event.on('getSign', this.getSignFunc, this);
+        cc.Tools.Event.on('getPower', this.getPowerFunc, this);
+        cc.Tools.Event.on('showPop', this.showPopFunc, this);
+        this.popData = null;
         // 增加屏幕视频
         cc.Tools.screenAdapter();
         // 进入主界面打点
-        cc.Tools.dot("enter_main",null)
+        cc.Tools.dot("enter_main")
         // 判断是否是第一次进入游戏 如果第一次进入那么弹出First弹窗
         this.firstLayer = cc.find('Canvas/First');
         this.firstLayer.active = false;
         let _first = cc.sys.localStorage.getItem("first");
         this.canClickFristBtn = false;
         if (!_first) {
-            cc.sys.localStorage.setItem("first", true);
-             // 显示banner广告
-            cc.Tools.showBanner();
+            // 显示banner广告
+            // cc.Tools.showBanner();
             this.scheduleOnce(() => {
                 this.firstLayer.scale = 0;
                 this.firstLayer.active = true;
-                cc.tween(this.firstLayer).to(0.5, { scale: 1 }).delay(3).call(()=>{
+                cc.tween(this.firstLayer).to(0.5, { scale: 1 }).delay(3).call(() => {
+                    cc.sys.localStorage.setItem("first", true);
                     this.canClickFristBtn = true;
                 }).start()
             }, 1)
@@ -90,6 +95,7 @@ cc.Class({
         cc.zm.showShake = true;
         this.countDownTime = 0;
         this.signNumber = 0;
+        this.beginTurn = false;
         this.BGM_ID = cc.audioEngine.play(this.BGM);
         //预加载场景2
         cc.director.preloadScene('Game');
@@ -112,6 +118,24 @@ cc.Class({
         }
         // 获取用户信息
         this.getUserInfo();
+        Date.prototype.Format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "H+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+        // 注册登陆打点
+        let _dotTime = new Date().Format("yyyy-MM-dd HH:mm:ss")
+        cc.Tools.dot("sign_in", { sigsign_in_time: _dotTime})
         // 记录打点的值
         // 签到打点
         this.sign_in_acti = 0;
@@ -131,15 +155,9 @@ cc.Class({
         cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
             this.userInfo = res.data;
             cc.zm.userInfo = this.userInfo
-            console.log("cocos----user info " + JSON.stringify(this.userInfo));
-            // 注册打点
-            cc.Tools.dot("sign_in", { sigsign_in_time: new Date() })
             this.showIndexLayer();
             // 体力是否倒计时
             this.PowerTime()
-
-            // todo test
-            //  cc.Tools.adCallBack();
         })
     },
     PowerTime() {
@@ -177,10 +195,9 @@ cc.Class({
     },
     StartGame() {
         //关闭BGM
-        if(!cc.sys.localStorage.getItem("first")){
+        if (!cc.sys.localStorage.getItem("first")) {
             return;
         }
-        // cc.zm.userInfo.win = true;
         cc.audioEngine.stop(this.BGM_ID);
         //清空关卡数 不清空关卡
         if (this.guide) {
@@ -201,24 +218,24 @@ cc.Class({
             cc.Tools.dot("click", dotData)
 
             cc.zm.LevelInfo = res.data;
-            console.log("cocos----关卡信息=", JSON.stringify(cc.zm.LevelInfo));
             // 判断
             if (cc.zm.userInfo.power <= 0) {
                 // 显示看视频获得体力界面
                 this.showSeeVideolayer();
             } else {
+                cc.Tools.hideTableScreen();
                 cc.director.loadScene("Game");
             }
         });
     },
     showSeeVideolayer() {
-        cc.Tools.showBanner();
+        // cc.Tools.showBanner();
         this.SeeVideolayer.active = true;
     },
     // 看视频得奖励
     seeVideoAward() {
         cc.zm.videoAd.enterGame = false;
-        cc.Tools.showJiliAd();
+        cc.Tools.showJiliAd(1);
         this.SeeVideolayer.active = false;
     },
     // 显示签到界面
@@ -228,7 +245,7 @@ cc.Class({
         cc.Tools.sendRequest("pit.v1.PitSvc/SignInList", "GET", sendData).then((res) => {
             let items = res.data.items;
             // 签到按钮打点
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             this.sign_in_acti++;
             let dotData = {
                 sign_in_acti: this.sign_in_acti,
@@ -245,11 +262,11 @@ cc.Class({
             for (let i = 1; i <= 7; i++) {
                 let dayNode = this.SignLayer.getChildByName("day_" + i);
                 let _data = items[i - 1];
-                if(i===this.signDay){
-                    if(_data.status){
+                if (i === this.signDay) {
+                    if (_data.status) {
                         btnCom.enableAutoGrayEffect = true;
                         btnCom.interactable = false;
-                    }else{
+                    } else {
                         btnCom.interactable = true;
                     }
                 }
@@ -269,7 +286,7 @@ cc.Class({
     showSetLayer() {
         this.SetLayer.active = true;
         // 获取用户信息
-        cc.Tools.showBanner();
+        // cc.Tools.showBanner();
         let nickName = this.SetLayer.getChildByName("nikename").getComponent(cc.Label);
         nickName.string = this.userInfo.nick_name;
         let userId = this.SetLayer.getChildByName("userid").getComponent(cc.Label);
@@ -285,16 +302,16 @@ cc.Class({
     // 显示主界面
     showIndexLayer() {
         // 隐藏banner
-        if(!cc.endCountTime){
+        if (!cc.endCountTime) {
             cc.endCountTime = new Date().getTime();
-        }else{
-            if(cc.endCountTime-cc.beginCountTime>30000){
+        } else {
+            if (cc.endCountTime - cc.beginCountTime > 30000) {
                 // 触发插屏
                 cc.Tools.showTableScreen();
                 cc.beginCountTime = cc.endCountTime;
             }
         }
-        cc.Tools.hideBanner();
+        // cc.Tools.hideBanner();
         // 红包的数量
         cc.find("Canvas/Index/GetMoney/lbl").getComponent(cc.Label).string = this.userInfo.red_pack;
         cc.find("Canvas/Index/Power/lbl").getComponent(cc.Label).string = this.userInfo.power;
@@ -317,7 +334,7 @@ cc.Class({
         this.point.angle = 360;
         let sendData = {};
         cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             this.turntable_acti++;
             let dotData = {
                 sign_in_acti: this.sign_in_acti,
@@ -362,7 +379,7 @@ cc.Class({
         // 获取奖池信息
         let sendData = {};
         cc.Tools.sendRequest("pit.v1.PitSvc/JackPot", "GET", sendData).then((res) => {
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             this.jackpot_acti++;
             let dotData = {
                 sign_in_acti: this.sign_in_acti,
@@ -397,7 +414,7 @@ cc.Class({
         // 现获取七日任务列表
         let sendData = {};
         cc.Tools.sendRequest("pit.v1.PitSvc/Missions", "GET", sendData).then((res) => {
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             // 通过数据初始化界面 状态 0.未领取 1.已领取
             let items = res.data.items;
             let serverDay = res.data.day;
@@ -539,22 +556,17 @@ cc.Class({
                 this.SevenWorkLayer.getChildByName("getLayer").active = true;
                 // 重新刷新
                 this.showSevenWorkLayer();
-                let dotData = {
-                    cash_type: "红包提现",
-                    cash_num: target.value,
-                    cash_times: "",
-                    cash_result: "成功"
-                }
-                console.log("cocos----打点数据", JSON.stringify(dotData))
-                cc.Tools.dot("cash_out", dotData)
+            }).catch((res)=>{
+                cc.Tools.showTips(this.node, res);
             })
         }
     },
     // 显示存钱罐界面
     showGetMoneyLayer() {
         // 打开存钱罐 获取存钱罐的信息
+        console.log("cocos-----刷新存钱罐");
         cc.Tools.sendRequest("pit.v1.PitSvc/SavingPot", "GET", {}).then((res) => {
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             this.bank_acti++;
             let dotData = {
                 sign_in_acti: this.sign_in_acti,
@@ -571,11 +583,16 @@ cc.Class({
             // 先定义当前那个阶段是否可以提取
             this.getMoneyStage = 0;
             let arr = [0.3, 0.5, 1, 2, 5, 10, 20]
-            for (let i = 0; i < data.items.Length; i++) {
+            for (let i = 0; i < data.items.length; i++) {
                 if (data.items[i].times) {
                     this.getMoneyStage = arr[i];
                     break;
                 }
+            }
+            for (let i = 0; i < data.items.length; i++) {
+                let btn = this.GetMonetyLayer.getChildByName("btn_"+(i+1));
+                let lbl = btn.getChildByName("timesLbl").getComponent(cc.Label);
+                lbl.string = data.items[i].times+"次";
             }
             // 初始化存钱罐界面属性
             this.GetMonetyLayer.active = true;
@@ -638,20 +655,19 @@ cc.Class({
                 cc.Tools.showTips(this.node, "请先完成上一个档位提现");
                 return;
             }
+            if(this.choiceBtn.money < this.getMoneyStage){
+                // 不符合条件2 
+                cc.Tools.showTips(this.node, "没有提现次数");
+                return;
+            }
+            if(this.choiceBtn.money>=2){
+                cc.Tools.showTips(this.node, "提现成功,请等待审核");
+                this.showGetMoneyLayer();
+            }
             // 都符合条件像服务器发送请求
             cc.Tools.sendRequest("pit.v1.PitSvc/Exchange", "POST", {}).then((res) => {
-                // 成功提现
-                let dotData = {
-                    cash_type: "元宝提现",
-                    cash_num: this.choiceBtn.money,
-                    cash_times: "",
-                    cash_result: "成功"
-                }
-                console.log("cocos----打点数据", JSON.stringify(dotData))
-                cc.Tools.dot("cash_out", dotData)
                 let layer = target.parent.getChildByName("getLayer");
                 layer.active = true;
-
             })
         }
     },
@@ -689,6 +705,14 @@ cc.Class({
     },
     // 退出登陆
     ExitBackBtn(e) {
+        if (this.firstLayer.active === true) {
+            if (!this.canClickFristBtn) {
+                return;
+            }
+        }
+        if(this.beginTurn){
+            return;
+        }
         e.target.parent.active = false;
         if (this.choiceBtn) {
             this.unSelectBtn(this.choiceBtn);
@@ -696,24 +720,21 @@ cc.Class({
         }
         if (this.TurntableLayer.active === true) {
             this.showTurntableLayer();
-        }
-        if(this.SignLayer.active===true){
+        } else if (this.SignLayer.active === true) {
             this.showSignLayer();
+        } else if(this.GetMonetyLayer.active===true){
+            this.showGetMoneyLayer();
+        } else{
+            // 关闭当前也进入首页 刷新界面
+            this.signNumber = 0;
+            cc.endCountTime = new Date().getTime();
+            this.getUserInfo();
         }
-        if(this.firstLayer.active===true){
-            if(!this.canClickFristBtn){
-                return;
-            }
-        }
-        // 关闭当前也进入首页 刷新界面
-        this.signNumber = 0;
-        this.getUserInfo();
-        cc.endCountTime = new Date().getTime();
     },
     // 点击签到按钮
     clickSignBtn(e) {
         // 签到
-        cc.Tools.showJiliAd();
+        cc.Tools.showJiliAd(3);
     },
     // 点击转盘开始按钮
     clickTurnTableBtn(e) {
@@ -723,7 +744,7 @@ cc.Class({
             // 抽奖倒计时 >=0 代表可以抽奖，<0 取绝对值 倒数秒数
             return;
         }
-        cc.Tools.showJiliAd();
+        cc.Tools.showJiliAd(4);
     },
     createRandm(n, m) {
         m += 1;
@@ -753,74 +774,84 @@ cc.Class({
             if (this.speed <= 5 && this.point.angle <= this.endAngle) {
                 this.beginTurn = false;
                 this.point.angle = this.endAngle;
+                cc.Tools.emitEvent("showPop")
             }
         }
-        // 签到
-        if (!cc.zm.videoAd.clickSign) {
-            console.log("cocos----获取签到奖励");
-            cc.zm.videoAd.clickSign = true;
-            // 实时更新签到界面
-              // 先像服务器发送请求获取物品id
-              let sendData = {
-                "ad": cc.zm.ad
-            }
-            cc.Tools.sendRequest("pit.v1.PitSvc/SignIn", "POST", sendData).then((res) => {
-                let signDay = this.SignLayer.getChildByName("day_" + this.signDay);
-                this.completeBtn(signDay);
-                // data数据 gc奖励元宝 card 0未获得 1开,2心,3矿
-                let arr = ["三元红包", "炸药x1", "药水x1", "500元宝", "8.88元红包", "时钟x1", "18.88元红包"]
-                let data = res.data;
-                this.showPop(arr[this.signDay - 1], AWARD["DAY_" + this.signDay], data.gc, data.card)
-            }).catch((res) => {
-                cc.Tools.showTips(this.node, "今日奖励已领取");
-            });
-        }
-        // 转盘
-        if (!cc.zm.videoAd.clickTable) {
-            cc.zm.videoAd.clickTable = true;
-            // 先像服务器发送请求获取物品id
+    },
+    getPowerFunc(){
+        console.log("cocos--看视频得体力")
+        if (cc.zm.userInfo.power <= 0) {
             let sendData = {
-                "ad": cc.zm.ad
+                ad: cc.zm.ad
             }
-            // 1.体力 10.炸弹 11.时钟 12.石化手册 31.五元红包 32.十元红包
-            let obj = {
-                "1": 60,
-                "10": 240,
-                "11": 180,
-                "12": 120,
-                "31": 360,
-                "32": 300
-            }
-            cc.Tools.sendRequest("pit.v1.PitSvc/Lottery", "POST", sendData).then((res) => {
-                this.endAngle = obj["" + res.data.award];
-                // 开始旋转 初始速度为
-                this.point = this.TurntableLayer.getChildByName("Pointer");
-                this.beginTurn = true;
-                this.point.angle = 360;
-                this.speed = 18;
-                this.value = 1;
-                this.circle = 0;
-                this.scheduleOnce(() => {
-                    let data = res.data;
-                    let award = {
-                        "1": { name: "体力x1", index: AWARD.POWER },
-                        "10": { name: "炸弹x1", index: AWARD.BOOM },
-                        "11": { name: "时钟x1", index: AWARD.LOCK },
-                        "12": { name: "石化手册x1", index: AWARD.SHOUCE },
-                        "31": { name: "五元红包", index: AWARD.RED_5 },
-                        "32": { name: "十元红包", index: AWARD.RED_10 }
-                    }
-                    let _award = award[data.award]
-                    this.showPop(_award.name, _award.index, data.gc, data.card)
-                }, 4.5)
+            cc.Tools.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then((res) => {
+                cc.zm.userInfo.power = res.data.value;
+                if (cc.zm.videoAd.enterGame) {
+                    cc.director.loadScene('Game');
+                }
             });
         }
+    },
+    getSignFunc(){
+        console.log("cocos--看视频签到")
+        let sendData = {
+            "ad": cc.zm.ad
+        }
+        cc.Tools.sendRequest("pit.v1.PitSvc/SignIn", "POST", sendData).then((res) => {
+            let signDay = this.SignLayer.getChildByName("day_" + this.signDay);
+            this.completeBtn(signDay);
+            // data数据 gc奖励元宝 card 0未获得 1开,2心,3矿
+            let arr = ["三元红包", "炸药x1", "药水x1", "500元宝", "8.88元红包", "时钟x1", "18.88元红包"]
+            let data = res.data;
+            this.showPop(arr[this.signDay - 1], AWARD["DAY_" + this.signDay], data.gc, data.card)
+        }).catch((res) => {
+            cc.Tools.showTips(this.node, "今日奖励已领取");
+        });
+    },
+    getTableFunc(){
+        console.log("cocos--看视频大转盘")
+        let sendData = {
+            "ad": cc.zm.ad
+        }
+        // 1.体力 10.炸弹 11.时钟 12.石化手册 31.五元红包 32.十元红包
+        let obj = {
+            "1": 60,
+            "10": 240,
+            "11": 180,
+            "12": 120,
+            "31": 360,
+            "32": 300
+        }
+        cc.Tools.sendRequest("pit.v1.PitSvc/Lottery", "POST", sendData).then((res) => {
+            this.endAngle = obj["" + res.data.award];
+            // 开始旋转 初始速度为
+            this.point = this.TurntableLayer.getChildByName("Pointer");
+            this.beginTurn = true;
+            this.point.angle = 360;
+            this.speed = 18;
+            this.value = 1;
+            this.circle = 0;
+            this.popData = res.data
+        });
+    },
+    showPopFunc(){
+        let data = this.popData;
+        let award = {
+            "1": { name: "体力x1", index: AWARD.POWER },
+            "10": { name: "炸弹x1", index: AWARD.BOOM },
+            "11": { name: "时钟x1", index: AWARD.LOCK },
+            "12": { name: "石化手册x1", index: AWARD.SHOUCE },
+            "31": { name: "五元红包", index: AWARD.RED_5 },
+            "32": { name: "十元红包", index: AWARD.RED_10 }
+        }
+        let _award = award[data.award]
+        this.showPop(_award.name, _award.index, data.gc, data.card)
     },
     // 增加显示弹出获得物品的弹窗
     // 奖品类型 1.体力 10.炸弹 11.时钟 12.石化手册 31.五元红包 32.十元红包
     showPop(goodName, goodNumber, gcNumber, textNumber) {
         this.GetGoodLayer.active = true;
-        cc.Tools.showBanner();
+        // cc.Tools.showBanner();
         let layout = this.GetGoodLayer.getChildByName("layout");
         let icon = this.GetGoodLayer.getChildByName("icon").getComponent(cc.Sprite);
         let text = this.GetGoodLayer.getChildByName("lbl").getComponent(cc.Label);

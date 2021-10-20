@@ -1,4 +1,14 @@
-include ':libcocos2dx',':game', ':instantapp'
+include ':libcocos2dx'
 project(':libcocos2dx').projectDir = new File('/Applications/CocosCreator/Creator/2.4.5/CocosCreator.app/Contents/Resources/cocos2d-x/cocos/platform/android/libcocos2dx')
 include ':kxkg'
 project(':kxkg').projectDir = new File(settingsDir, 'app')
+
+include ':lib-common'
+include ':lib-network'
+include ":lib-ad-sdk"
+include ":lib-share"
+
+project(':lib-common').projectDir = new File("zhima_kotlin_android_lib/lib-common")
+project(':lib-network').projectDir = new File("zhima_kotlin_android_lib/lib-network")
+project(':lib-ad-sdk').projectDir = new File("zhima_kotlin_android_lib/lib-ad-sdk")
+project(':lib-share').projectDir = new File("zhima_kotlin_android_lib/lib-share")

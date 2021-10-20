@@ -110,21 +110,18 @@ cc.Class({
                 prop: 4
             }
             cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then((res) => {
-                console.log("cocos---使用体力成功")
+               
             });
             cc.zm.LevelInfo = res.data;
             // 关闭界面开始游戏
             this.NeedLayer.active = false;
             // 点击开始游戏之前 重新同步一下道具信息
              // 隐藏banner
-            cc.Tools.hideBanner();
+            // cc.Tools.hideBanner();
             this.handleDaoju();
             this.adjusBoomLayout();
             this.ResumeGameLayer();
             // 对关卡进行打点
-            if(cc.zm.LevelInfo.stage<=5){
-                cc.Tools.dot("start_"+cc.zm.LevelInfo.stage,null)
-            }
         });
     },
     hideLotteryLayer() {
@@ -190,6 +187,7 @@ cc.Class({
         this.liquidNumber = 0;
         this.adjusBoomLayout();
         cc.Tools.screenAdapter();
+        cc.zm.videoAd.clickWeapon = true;
         this.ResetInfo();
         this.StartTime();
         this.SetLevel();
@@ -199,6 +197,9 @@ cc.Class({
         this.extarRedPack = 0;
         // 是否新手引导
         this.guideIndex = parseInt(cc.sys.localStorage.getItem("guide"));
+
+        cc.Tools.Event.on('getWeapon', this.getWeaponFunc, this);
+        cc.Tools.Event.on('getRedPackage', this.getRedPackageFunc, this);
         if (this.guideIndex < 4 && this.guideIndex >= 1) {
             this.guide = true;
             // 有新手引导暂停游戏
@@ -209,7 +210,7 @@ cc.Class({
             this.guide = false;
             this.PauseGameLayer();
             cc.find('Canvas/Guide').active = false;
-            cc.Tools.showBanner();
+            // cc.Tools.showBanner();
             this.NeedLayer.active = true;
             let needScore = this.NeedLayer.getChildByName("needScore").getComponent(cc.Label);
             let needLevel = this.NeedLayer.getChildByName("needLevel").getComponent(cc.Label);
@@ -234,16 +235,7 @@ cc.Class({
         }
     },
     LookVideoGetAward() {
-        cc.Tools.showJiliAd();
-        let sendData = {
-            "ad": cc.zm.ad,
-            "weapon": this.LotteryProp
-        }
-        cc.Tools.sendRequest("pit.v1.PitSvc/Lottery2", "POST", sendData).then((res) => {
-            // 炸弹：10 11时钟 13药水
-            this.LotteryAward = res.data.award;
-            this.hideLotteryLayer();
-        });
+        cc.Tools.showJiliAd(5);
     },
     // 使用道具
     handleDaoju() {
@@ -271,7 +263,7 @@ cc.Class({
                         prop: weapon[i].prop
                     }
                     cc.Tools.sendRequest("pit.v1.PitSvc/Prop", "POST", sendDta).then((res) => {
-                        console.log("cocos---使用成功-", data[weapon[i].prop])
+                        
                     });
                 }
             }
@@ -366,7 +358,6 @@ cc.Class({
         let promote = 1;
         ItemAttr[other.node.name] = ItemAttr[other.node.name] || {};
         if (this.liquidNumber) {
-            console.log("cocos----药水效果速度增加10%")
             promote = 1.1
         }
         this.speed = ItemAttr[other.node.name].speed * promote || 10;
@@ -390,7 +381,6 @@ cc.Class({
     StartTime() {
         // 是否存在时钟 存在时钟 this.InitTime+10秒
         if (this.clockNumber) {
-            console.log("cocos----使用时钟成功+10s")
             this.clockNumber = 0;
             this.InitTime += 10;
         }
@@ -414,6 +404,9 @@ cc.Class({
         // this.levelInfo = Level["level15"]
         this.Score.string = cc.zm.LevelInfo.current_score;
         this.Checkpoint.string = `${cc.zm.LevelInfo.stage}`;
+        if(cc.zm.LevelInfo.stage<=5){
+            cc.Tools.dot("start_"+cc.zm.LevelInfo.stage)
+        }
     },
 
     /**
@@ -615,7 +608,6 @@ cc.Class({
                 // 当前是石块 是否有化石手册 如果有 石头的价值提升20% todo
                 let promote = 1;
                 if (this.handbookNumber) {
-                    console.log("cocos----石化手册使用成功石头的价值提升20%")
                     promote = 1.2
                 }
                 for (let i = 0; i < 30; i++) {
@@ -932,7 +924,7 @@ cc.Class({
      */
     ShowMask() {
         //显示弹出框
-        cc.Tools.showBanner();
+        // cc.Tools.showBanner();
         this.Mask.active = true;
         // this.PauseGameLayer()
         let Fail = this.Mask.getChildByName("Fail");
@@ -940,7 +932,7 @@ cc.Class({
         Fail.active = false;
         Success.active = false;
         if(cc.zm.LevelInfo.stage<=5){
-            cc.Tools.dot("end_"+cc.zm.LevelInfo.stage,null)
+            cc.Tools.dot("end_"+cc.zm.LevelInfo.stage)
         }
         if (this.victory === 1) {
             Success.active = true;
@@ -987,8 +979,9 @@ cc.Class({
             }
             let extatAward = Success.getChildByName("layout").getChildByName("extraAward").getComponent(cc.Label);
             if (this.extarRedPack) {
+                let str = this.handleNumber(this.extarRedPack);
                 extatAward.node.parent.active = true;
-                extatAward.string = `+${this.extarRedPack}`;
+                extatAward.string = `+${str}`;
             } else {
                 extatAward.node.parent.active = false;
             }
@@ -1002,7 +995,7 @@ cc.Class({
             }
             let data = cc.Tools.createSignData(sendData);
             cc.Tools.sendRequest("pit.v1.PitSvc/Pass", "POST", data).then((res) => {
-                console.log("cocos----Pass通关成功返回信息", res)
+                
             });
         } else if (this.victory === 2) {
             Fail.active = true;
@@ -1015,6 +1008,17 @@ cc.Class({
         cc.tween(this.Mask).to(0.3, { scale: 1 }).call(() => {
             this.PauseGameLayer();
         }).start()
+    },
+    /**
+     * 处理小数精度问题
+     * @returns 
+     */
+     handleNumber(numb){
+        // 先讲数字转换成字符串
+        let str = ""+numb;
+        let key = str.split(".");
+        let newKey = key[0]+"."+key[1].slice(0,2);
+        return newKey;
     },
     /**
      * 恢复游戏，关闭弹出框
@@ -1058,7 +1062,7 @@ cc.Class({
                                 this.Reload();
                             } else {
                                 // 直接返回主界面
-                                cc.Tools.hideBanner();
+                                // cc.Tools.hideBanner();
                                 cc.endCountTime = new Date().getTime();
                                 cc.director.loadScene('Index');
                             }
@@ -1080,8 +1084,7 @@ cc.Class({
     },
     // 看视频得红包
     AwardVideo(e) {
-        console.log("cocos----看视频得红包");
-        cc.Tools.showJiliAd();
+        cc.Tools.showJiliAd(2);
         let pack = cc.zm.LevelInfo.ever_pass ? 0 : this.redPack;
         let sendData = {
             "red_pack": parseInt((pack + this.extarRedPack) * 100),//红包
@@ -1093,7 +1096,7 @@ cc.Class({
     // 看视频得体力
     seeVideoAward(e) {
         cc.zm.videoAd.enterGame = true;
-        cc.Tools.showJiliAd();
+        cc.Tools.showJiliAd(1);
         let target = e.target
         this.timer && this.unschedule(this.timer);
         target.parent.active = false;
@@ -1138,10 +1141,46 @@ cc.Class({
         this.victory = s;
         this.ShowMask();
     },
-
-    // start () {
-
-    // },
+    getRedPackageFunc(){
+        console.log("cocos--看视频得红包")
+        if (cc.zm.videoAd.redPack) {
+            cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.videoAd.redPack).then((res) => {
+                let sendData = {};
+                cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then((res) => {
+                    cc.zm.userInfo = res.data;
+                    // 如果体力大于0 进入下一关
+                    if (cc.zm.userInfo.power > 0) {
+                        cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then((res) => {
+                            cc.zm.LevelInfo = res.data;
+                            cc.zm.videoAd.redPack = null;
+                            if (cc.zm.LevelInfo.stage < 30) {
+                                cc.director.loadScene('Game');
+                            } else {
+                                // 直接返回主界面
+                                cc.director.loadScene('Index');
+                            }
+                        });
+                    } else {
+                        // 小于0 弹出看视频获得体力的接口
+                        cc.director.loadScene('Index');
+                    }
+                })
+            });
+        }
+    },
+    getWeaponFunc(){
+        // 像服务发送请求看视频得道具
+        console.log("cocos--看视频得道具");
+        let sendData = {
+            "ad": cc.zm.ad,
+            "weapon": this.LotteryProp
+        }
+        cc.Tools.sendRequest("pit.v1.PitSvc/Lottery2", "POST", sendData).then((res) => {
+            // 炸弹：10 11时钟 13药水
+            this.LotteryAward = res.data.award;
+            this.hideLotteryLayer();
+        });
+    },
     update(dt) {
         if (this.pauseGame) {
             return;

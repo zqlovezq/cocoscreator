@@ -11,83 +11,84 @@ cc.Tools = {
   */
   dot: function dot(event, pro) {
     if (cc.sys.isNative) {
-      console.log("cocos----注册打点" + event); // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;)V", event, JSON.stringify(pro));
-
-      jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;Ljava/lang/String;)V", event, JSON.stringify(pro));
+      if (pro) {
+        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;Ljava/lang/String;)V", event, JSON.stringify(pro));
+      } else {
+        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "dot", "(Ljava/lang/String;)V", event);
+      }
     }
+  },
+  getDevice: function getDevice(pram, data) {
+    cc.Tools.DeviceInfo = JSON.parse(data);
   },
 
   /**
    * 看视频回调
+   *  //type 1体力补充 2--过关奖励 3--签到 4--转盘 5--开局增益 6--插屏 7--开屏
    */
-  adCallBack: function adCallBack(ecpm) {
-    console.log("cocos----观看视频回调"); // 获取广告ad之前先用epcr
-    // 看视频得体力
+  adCallBack: function adCallBack(pram) {
+    var _this = this;
 
-    this.getUserEcpm(ecpm).then(function () {
-      console.log("cocos----获取ecpm之后才调用");
+    var _pram = pram.split(",");
 
-      if (cc.zm.userInfo.power <= 0) {
-        console.log("cocos----体力接口");
-        var sendData = {
-          ad: cc.zm.ad
-        };
-        cc.Tools.sendRequest("pit.v1.PitSvc/GrowPower", "POST", sendData).then(function (res) {
-          console.log("cocos----获取体力奖励");
-          cc.zm.userInfo.power = res.data.value;
+    var ecpm = _pram[0];
+    var type = _pram[1];
+    console.log("cocos ecpm=", ecpm);
+    this.getUserEcpm(ecpm, type).then(function () {
+      switch (type) {
+        case "1":
+          // 看视频得体力
+          _this.emitEvent("getPower");
 
-          if (cc.zm.videoAd.enterGame) {
-            cc.director.loadScene('Game');
-          }
-        });
-      } // 看视频得红包
+          break;
 
+        case "2":
+          // 看视频得红包
+          _this.emitEvent("getRedPackage");
 
-      if (cc.zm.videoAd.redPack) {
-        console.log("cocos----获取红包接口", cc.zm.videoAd.redPack);
-        cc.Tools.sendRequest("pit.v1.PitSvc/PassAd", "POST", cc.zm.videoAd.redPack).then(function (res) {
-          console.log("cocos----获取红包奖励", res);
-          var sendData = {};
-          cc.Tools.sendRequest("pit.v1.PitSvc/UserInfo", "GET", sendData).then(function (res) {
-            cc.zm.userInfo = res.data; // 如果体力大于0 进入下一关
+          break;
 
-            if (cc.zm.userInfo.power > 0) {
-              cc.Tools.sendRequest("pit.v1.PitSvc/Stage", "GET", {}).then(function (res) {
-                cc.zm.LevelInfo = res.data;
-                cc.zm.videoAd.redPack = null;
+        case "3":
+          // 看视频签到
+          _this.emitEvent("getSign");
 
-                if (cc.zm.LevelInfo.stage < 30) {
-                  cc.director.loadScene('Game');
-                } else {
-                  // 直接返回主界面
-                  cc.director.loadScene('Index');
-                }
-              });
-            } else {
-              // 小于0 弹出看视频获得体力的接口
-              cc.director.loadScene('Index');
-            }
-          });
-        });
-      }
+          break;
 
-      if (cc.zm.videoAd.clickSign) {
-        console.log("cocos----签到接口");
-        cc.zm.videoAd.clickSign = false;
-      }
+        case "4":
+          // 看视频转盘
+          _this.emitEvent("getTable");
 
-      if (cc.zm.videoAd.clickTable) {
-        console.log("cocos----转盘接口");
-        cc.zm.videoAd.clickTable = false;
+          break;
+
+        case "5":
+          // 看视频得道具
+          _this.emitEvent("getWeapon");
+
+          break;
+
+        case "6":
+          break;
+
+        case "7":
+          break;
+
+        default:
+          break;
       }
     });
   },
+  emitEvent: function emitEvent(event) {
+    cc.Tools.Event.emit(event);
+  },
   // 显示激励视频
-  showJiliAd: function showJiliAd() {
-    console.log("cocos----点击显示激励视频");
+  showJiliAd: function showJiliAd(type) {
+    var data = ["体力补充", "过关奖励", "签到", "转盘", "开局增益"];
+    cc.Tools.dot("ad_show", {
+      ad_scene: data[Number(type) - 1]
+    });
 
     if (cc.sys.isNative) {
-      jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "()V");
+      jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
     }
   },
   // 显示banner
@@ -104,8 +105,6 @@ cc.Tools = {
   },
   // 显示插屏广告
   showTableScreen: function showTableScreen() {
-    console.log("cococ----触发插屏");
-
     if (cc.sys.isNative) {
       jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showTableScreen", "()V");
     }
@@ -118,8 +117,6 @@ cc.Tools = {
   },
   // 微信登陆
   wxLogin: function wxLogin() {
-    console.log("cocos----wxLogin");
-
     if (cc.sys.isNative) {
       jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weixin_login");
     }
@@ -130,36 +127,58 @@ cc.Tools = {
   * @param errCode 
   */
   wxLoginResult: function wxLoginResult(errCode) {
-    console.log("cocos----wxLoginResultcode=" + errCode);
     cc.wxLoginResultcode = errCode;
+    cc.Tools.emitEvent("getCode");
   },
 
   /**
    * 看广告之后刷新一下ecpm
    */
-  getUserEcpm: function getUserEcpm(ecpm) {
-    if (!cc.zm) {
-      return;
-    }
+  getUserEcpm: function getUserEcpm(ecpm, type) {
+    // 获取ecpm之后像服务器发的是ecpm/100
+    var serverEcpm = parseInt(ecpm / 100); // 单价
 
-    console.log("cocos----调用ecpm=", ecpm);
+    var priceEcpm = Number(ecpm / (10 * 10000));
     return new Promise(function (resolve, reject) {
-      var sendData = {
-        "ecpm": parseInt(ecpm),
-        "ts": new Date().getTime() //时间戳
-
-      };
-      var data = cc.Tools.createSignData(sendData);
-      cc.Tools.sendRequest("pit.v1.PitSvc/Rc", "POST", data).then(function (res) {
-        console.log("cocos----Ecpm成功", JSON.stringify(res.data));
-        cc.zm.ad = res.data.ad;
-
-        if (cc.zm.videoAd.redPack) {
-          cc.zm.videoAd.redPack.ad = cc.zm.ad;
-        }
-
+      if (type === "6") {
+        cc.Tools.dot("ad_flow", {
+          ecpm: serverEcpm,
+          ad_price_1: priceEcpm
+        });
         resolve();
-      });
+      } else if (type === "7") {
+        cc.Tools.dot("ad_open_screen", {
+          ecpm: serverEcpm,
+          ad_price_1: priceEcpm
+        });
+        resolve();
+      } else {
+        var sendData = {
+          "ecpm": Number(ecpm) / 100,
+          "ts": new Date().getTime() //时间戳
+
+        };
+        var data = cc.Tools.createSignData(sendData);
+        cc.Tools.sendRequest("pit.v1.PitSvc/Rc", "POST", data).then(function (res) {
+          var data = ["体力补充", "过关奖励", "签到", "转盘", "开局增益"];
+          cc.Tools.dot("ad", {
+            ad_type: "激励视频",
+            ecpm: serverEcpm,
+            ad_price_1: priceEcpm
+          });
+          cc.Tools.dot("ad_start", {
+            ad_scene: data[Number(type) - 1],
+            ecpm: serverEcpm
+          });
+          cc.zm.ad = res.data.ad;
+
+          if (cc.zm.videoAd.redPack) {
+            cc.zm.videoAd.redPack.ad = cc.zm.ad;
+          }
+
+          resolve();
+        });
+      }
     });
   },
 
@@ -249,7 +268,7 @@ cc.Tools = {
       }
 
       xhr.setRequestHeader("Content-Type", "application/json");
-      console.log("cocos----requestURL=", requestURL);
+      console.log("cocos----xhr=", requestURL);
       console.log("cocos----data=", JSON.stringify(data));
 
       xhr.onreadystatechange = function () {
@@ -259,9 +278,10 @@ cc.Tools = {
           var _response = JSON.parse(xhr.response);
 
           if (_response.code === 0) {
+            console.log("cocos----http success");
             resolve(_response);
           } else {
-            console.log("cocos----" + _response.message);
+            console.log("cocos----http fail" + _response.message);
             reject(_response.message);
           }
         }
