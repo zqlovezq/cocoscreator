@@ -158,6 +158,7 @@ export default class Main extends cc.Component {
     initUserInfo() {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
+            cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000) + "元";
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
@@ -193,6 +194,9 @@ export default class Main extends cc.Component {
             }
             this.showSaveCashLayer();
             this.init();
+        }).catch((err)=>{
+            console.log("登陆失败");
+            cc.find("Canvas/lose").active = true;
         })
     }
     /**
@@ -202,6 +206,7 @@ export default class Main extends cc.Component {
     refreshUserInfo(isReload: boolean) {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
+            cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000) + "元";
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
@@ -248,6 +253,9 @@ export default class Main extends cc.Component {
                     _pop.active = false;
                 }).start();
             }
+        }).catch((err)=>{
+            console.log("登陆失败");
+            cc.find("Canvas/lose").active = true;
         })
     }
     /**
