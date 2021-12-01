@@ -175,7 +175,7 @@ cc.Tools = {
      */
     getUserEcpm(ecpm, type) {
         // 获取ecpm之后像服务器发的是ecpm/100
-        let serverEcpm = parseInt(ecpm / 100);
+        let serverEcpm = parseFloat(ecpm / 100);
         // 单价
         let priceEcpm = Number(ecpm / (10 * 10000));
         return new Promise(function (resolve, reject) {

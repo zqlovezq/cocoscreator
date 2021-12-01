@@ -95,6 +95,33 @@
             self.apply(context,params.concat(args));
         }
     }
+     /**
+     * 封装AJAX
+     */
+    const qs = require('qs');
+    export default function ajax(option={}){
+        option =  Object.assign({
+            url:'',
+            method:'post',
+            data:null,
+            success:null
+        },option);
+        option.data = qs.stringify(option.data);//x-www-form-urlencoded
+        let isGET = /^(GET|DELETE|HEAD|OPTIONS)$/i.test(option.method);
+        if(isGET&&option.data){
+            option.url+=`${option.url.includes('?')?'&':'?'}${option.data}`
+            option.data = null;
+        }
+        let xhr = new XMLHttpRequest;
+        xhr.open("post","http://127.0.0.1:8888/user/list");
+        xhr.onreadystatechange = function(){
+            if(/^2\d{2}$/.test(xhr.status)&&xhr.readyState===4){
+                // console.log(xhr.responseText)
+                typeof option.success === "function"?option.success(JSON.parse(xhr.responseText)):null;
+            }
+        }
+        xhr.send(option.data);
+    }
 ```
 ### 稀疏数组和稠密数组
 ## 数据类型检测
@@ -175,3 +202,5 @@
 - Q3:构造函数体中的this是当前类的实例
 - Q4:箭头函数中没有执行主体，所用到的this都是其所处上下文中的this
 - Q5:可以给予Function.prototype上的call/apply/bind去改变this指向
+
+## AJAX的意义在于局部刷新

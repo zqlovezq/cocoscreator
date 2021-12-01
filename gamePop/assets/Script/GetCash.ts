@@ -2,11 +2,14 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GetCash extends cc.Component {
-
     @property(cc.Node)
     item: cc.Node = null;
     @property(cc.Node)
     content: cc.Node = null;
+    onLoad(){
+        let closeBtn = this.node.getChildByName("close_btn");
+        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+    }
     onEnable() {
         this.setLayer();
         cc.Tools.showBanner();
@@ -65,8 +68,6 @@ export default class GetCash extends cc.Component {
         }
     }
     registerEvent() {
-        let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         for(let i=0;i<this.content.children.length;i++){
             let item = this.content.children[i]; 
             let btn = item.getChildByName("btn");
@@ -101,8 +102,8 @@ export default class GetCash extends cc.Component {
         })
     }
     removeEvent() {
-        let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+        // let closeBtn = this.node.getChildByName("close_btn");
+        // closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         for(let i=0;i<this.content.children.length;i++){
             let item = this.content.children[i]; 
             let btn = item.getChildByName("btn");

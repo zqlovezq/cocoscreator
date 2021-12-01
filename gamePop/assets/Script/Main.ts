@@ -301,6 +301,9 @@ export default class Main extends cc.Component {
         let redBtn = this.scoreInfo.getChildByName("icon");
         redBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
         redBtn.on(cc.Node.EventType.TOUCH_END, this.touchRed, this);
+
+        let freshBtn = cc.find("Canvas/lose/fresh_btn")
+        freshBtn.on(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
     showPacket() {
         this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => { })
@@ -316,7 +319,10 @@ export default class Main extends cc.Component {
         spine.off(cc.Node.EventType.TOUCH_END, this.touchSnow, this);
 
         let redBtn = this.scoreInfo.getChildByName("icon");
-        redBtn.off(cc.Node.EventType.TOUCH_END, this.touchRed, this)
+        redBtn.off(cc.Node.EventType.TOUCH_END, this.touchRed, this);
+
+        let freshBtn = cc.find("Canvas/lose/fresh_btn")
+        freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
     touchSnow() {
         cc.Tools.dot("click_snowman")

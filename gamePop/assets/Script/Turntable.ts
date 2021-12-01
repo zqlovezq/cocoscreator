@@ -16,6 +16,8 @@ export default class Turntable extends cc.Component {
         // this.initLayer();
         this.point = this.node.getChildByName("wrap").getChildByName("point");
         cc.Tools.Event.on('getTable', this.getTableFunc, this);
+        let closeBtn = this.node.getChildByName("close_btn");
+        closeBtn.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     onEnable(){
          // 展示banner+插屏
@@ -40,8 +42,6 @@ export default class Turntable extends cc.Component {
         })
     }
     registerEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
         let clickBtn = this.node.getChildByName("click_btn");
         cc.Tools.breatheAnim(clickBtn);
         clickBtn.on(cc.Node.EventType.TOUCH_END,this.clickVideo,this);
@@ -96,8 +96,8 @@ export default class Turntable extends cc.Component {
         });
     }
     removeEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
+        // let closeBtn = this.node.getChildByName("close_btn");
+        // closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
         let clickBtn = this.node.getChildByName("click_btn");
         clickBtn.stopAllActions();
     }
