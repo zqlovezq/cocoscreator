@@ -32,6 +32,7 @@ export default class Main extends cc.Component {
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
+    popSecretLayer:cc.Node = null;
     successSpine: cc.Node = null;
     scoreBar:cc.ProgressBar = null;
     percentBar:cc.ProgressBar = null;
@@ -84,6 +85,7 @@ export default class Main extends cc.Component {
     private startClickTime = 0;
     private isOverGame = false;
     private count = 0;
+    private showSecretTimes = 0;
     onLoad() {
         // 初始化参数
         self = this;
@@ -194,6 +196,14 @@ export default class Main extends cc.Component {
             }
             this.showSaveCashLayer();
             this.init();
+            // 增加一个定时器 一定时间没有看视频 主动弹出视频
+            this.schedule(()=>{
+                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res)=>{
+                    if(res.data.is_show){
+                        cc.Tools.showJiliAd(12);
+                    }
+                })
+            },cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err)=>{
             console.log("登陆失败");
             cc.find("Canvas/lose").active = true;
@@ -271,6 +281,7 @@ export default class Main extends cc.Component {
         cc.resources.preload('Prefab/popDelete', cc.Prefab);
         cc.resources.preload('Prefab/ticket', cc.Prefab);
         cc.resources.preload('Prefab/super', cc.Prefab);
+        cc.resources.preload('Prefab/secretLayer', cc.Prefab);
     }
     loadPrefab(url: string) {
         return new Promise(function (resolve, reject) {
@@ -304,6 +315,8 @@ export default class Main extends cc.Component {
 
         let freshBtn = cc.find("Canvas/lose/fresh_btn")
         freshBtn.on(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
+        let secretBtn = cc.find("Canvas/secret");
+        secretBtn.on(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
     }
     showPacket() {
         this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => { })
@@ -323,6 +336,26 @@ export default class Main extends cc.Component {
 
         let freshBtn = cc.find("Canvas/lose/fresh_btn")
         freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
+
+        let secretBtn = cc.find("Canvas/secret");
+        secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+    }
+    showSecretLayer(){
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        this.showSecretTimes++;
+        if(this.showSecretTimes>=5){
+            this.showSecretTimes = 0;
+            if (!this.popSecretLayer) {
+                this.loadPrefab('Prefab/secretLayer').then((prefab) => {
+                    let layer = cc.instantiate(prefab);
+                    self.popSecretLayer = layer;
+                    self.node.addChild(layer);
+                    self.popSecretLayer.active = true;
+                })
+            } else {
+                this.popSecretLayer.active = true;
+            }
+        }
     }
     touchSnow() {
         cc.Tools.dot("click_snowman")
@@ -590,6 +623,7 @@ export default class Main extends cc.Component {
         this.canClickRed = true;
     }
     touchGround(event: any) {
+        cc.Tools.hideFeedScreen();
         if (this.lock) {
             return
         }
@@ -1082,6 +1116,8 @@ export default class Main extends cc.Component {
         let data = cc.Tools.createSignData(sendData);
         cc.Tools.sendRequest("UpdateLevel", "POST", data).then((res) => {
             console.log("升级成功")
+            // 刷新一下cc.Tools.userInfo.new_free_level_times
+            cc.Tools.userInfo.new_free_level_times = res.data.new_free_level_times;
             cc.Tools.showTips(this.node);
         });
     }

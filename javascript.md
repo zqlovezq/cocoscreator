@@ -203,4 +203,55 @@
 - Q4:箭头函数中没有执行主体，所用到的this都是其所处上下文中的this
 - Q5:可以给予Function.prototype上的call/apply/bind去改变this指向
 
-## AJAX的意义在于局部刷新
+### AJAX的意义在于局部刷新
+### 聊聊你对跨域的理解
+ - 服务器分离：web服务器、数据服务器、图片服务器
+ - 云信息共享：第三方API接口
+ - 有助于分离开发：开发跨域、部署同源
++ 修改本地HOST
++ JSONP（js脚本不存在跨域的问题）get请求不能实现post
++ CORS（cookie）---跨域资源共享
+```javascript
+    //服务器
+    res.header("Access-Control-Allow-Origin",ALLOW_ORIGIN);//允许一个源 或者所有的源 不能携带cookie了
+    res.header("Access-Control-Allow-Credentials",CREDENTIALS);
+    res.header("Access-Control-Allow-Header",HEADERS);
+    res.header("Access-Control-Allow-Methods",METHODS);
+
+    //用代理
+    const path = require("path");
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+    module.exports = {
+        mode:"produciton",
+        entry:"./src/main.js",
+        output:{
+            filename:'main.[hash].min.js',
+            path:path.resolve(__dirname,'build')
+        },
+        devServer:{
+            port:'3000',
+            compress:true,
+            open:true,
+            hot:true,
+            proxy:{
+                '/':{
+                    target:'http://127.0.0.1:3000',
+                    changeOrign:true
+                }
+            }
+        },
+        plugins:[
+            new HtmlWebpackPlugin({
+                template:'./public/index.html',
+                filename:'index.html'
+            })
+        ]
+    }
+```
++ Proxy（代理 原理 服务器跟服务器之间不存在跨域）
+## splice 会造成数组塌陷问题
+### 数组扁平化处理
+***flat() 方法会按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回。***
+> var arr = [1,2,3,[4,5,[6,7,[8]]]]  arr.flat(Infinity)
+***map() 方法创建一个新数组，其结果是该数组中的每个元素是调用一次提供的函数后的返回值。***
+>var arr = [1,2,3,[4,5,[6,7,[8]]]] arr = arr.toString().split(",").map(item=>parseFloat(item));

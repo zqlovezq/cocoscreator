@@ -8,6 +8,7 @@ export default class Ticket extends cc.Component {
     private videoType:number = 0;//视频类型
     onEnable(){
         cc.Tools.emitEvent("time",0);
+        cc.Tools.hideFeedScreen();
         this.registerEvent();
         let wrap = this.node.getChildByName("wrap");
         this.spine = wrap.getChildByName("spine").getComponent("sp.Skeleton");

@@ -3,6 +3,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class PopSuccess extends cc.Component {
     private wrap:cc.Node = null;
+    @property (cc.SpriteFrame)
+    frames = []
     onLoad(){
         this.wrap = this.node.getChildByName("wrap");
         this.registerEvent();
@@ -15,6 +17,7 @@ export default class PopSuccess extends cc.Component {
         this.scheduleOnce(()=>{
             closeBtn.active = true;
         },2)
+        this.wrap.getChildByName("video_btn").getChildByName("icon").getComponent(cc.Sprite).spriteFrame = cc.Tools.userInfo.new_free_level_times>0?this.frames[1]:this.frames[0];
     }
     registerEvent(){
         let closeBtn = this.wrap.getChildByName("close_btn");

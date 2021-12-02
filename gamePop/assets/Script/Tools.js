@@ -33,6 +33,7 @@ cc.Tools = {
                 case "7":
                 case "8":
                 case "10":
+                case "12":
                     // 点我领红包
                     console.log("cocos--视频类型"+type)
                     cc.Tools.sendRequest("AdAward", "POST", {

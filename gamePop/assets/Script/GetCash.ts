@@ -78,6 +78,7 @@ export default class GetCash extends cc.Component {
     }
     touchBtn(e){
         cc.Tools.hideBanner();
+        cc.Tools.showJiliAd(11);
         let target = e.target;
         let id = target.parent.name;
         let sendData = {
@@ -98,7 +99,6 @@ export default class GetCash extends cc.Component {
             ticket.string = cc.Tools.userInfo.amount;
             this.node.getChildByName("cash").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
             cc.Tools.emitEvent("init",false);
-            cc.Tools.showJiliAd(11);
         })
     }
     removeEvent() {

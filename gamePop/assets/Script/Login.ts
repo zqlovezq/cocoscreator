@@ -112,6 +112,7 @@ export default class Login extends cc.Component {
             "android_id": cc.Tools.DeviceInfo.android_id ? cc.Tools.DeviceInfo.android_id : "",
             "code": code
         }
+        cc.sys.localStorage.setItem("channel", cc.Tools.DeviceInfo.channel ? cc.Tools.DeviceInfo.channel : "");
         cc.Tools.sendRequest("register", "POST", data).then((res) => {
             cc.sys.localStorage.setItem("token", res.data.token);
             // 拼接一个打点时间
