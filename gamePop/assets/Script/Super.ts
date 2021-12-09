@@ -21,7 +21,7 @@ export default class Super extends cc.Component {
         closeBtn.active = false;
         this.scheduleOnce(()=>{
             closeBtn.active = true;
-        },2)
+        },1)
         let videoBtn = this.node.getChildByName("video_btn");
         videoBtn.on(cc.Node.EventType.TOUCH_END,this.showVideo,this);
 

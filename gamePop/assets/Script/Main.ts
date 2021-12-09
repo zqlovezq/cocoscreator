@@ -33,7 +33,6 @@ export default class Main extends cc.Component {
     ticketLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
     popSecretLayer:cc.Node = null;
-    successSpine: cc.Node = null;
     scoreBar:cc.ProgressBar = null;
     percentBar:cc.ProgressBar = null;
     @property(cc.Prefab)
@@ -86,6 +85,8 @@ export default class Main extends cc.Component {
     private isOverGame = false;
     private count = 0;
     private showSecretTimes = 0;
+    private clickPos = cc.v3(0,0);
+    private addTicket = 0;
     onLoad() {
         // 初始化参数
         self = this;
@@ -105,7 +106,6 @@ export default class Main extends cc.Component {
         this.cashInfo = this.content.getChildByName("info_layer").getChildByName("cash_info");
         this.levelInfo = this.content.getChildByName("info_layer").getChildByName("level_info");
         this.scoreInfo = this.content.getChildByName("info_layer").getChildByName("score_info");
-        this.successSpine = this.content.getChildByName("info_layer").getChildByName("tips_info").getChildByName("spine");
         this.tipsLayer = this.content.getChildByName("tips_layer");
         this.scoreBar = this.scoreInfo.getChildByName("progress").getComponent(cc.ProgressBar);
         this.percentBar = this.tipsLayer.getChildByName("progress").getComponent(cc.ProgressBar);
@@ -162,7 +162,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
-            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000) + "元";
+            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
             let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
@@ -205,8 +205,13 @@ export default class Main extends cc.Component {
                 })
             },cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err)=>{
-            console.log("登陆失败");
+            console.log("cocos---->登陆失败----",err);
             cc.find("Canvas/lose").active = true;
+            if(err==="token验证失败,请重新登陆"){
+                // 重新登陆
+                cc.director.loadScene('Login');
+                cc.sys.localStorage.setItem("token","");
+            }
         })
     }
     /**
@@ -218,7 +223,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
-            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000) + "元";
+            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
             let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
@@ -634,7 +639,7 @@ export default class Main extends cc.Component {
         let x = event.getLocationX()
         let y = event.getLocationY()
         this.Delete_num = 0
-
+        this.clickPos = cc.v3(x,y);
         if (y > windowSize.height / 2 - 370 - this.vh && y < windowSize.height / 2 + 370 - this.vh) {
             let i = this.ToIJ(x, y).x
             let j = this.ToIJ(x, y).y
@@ -660,6 +665,7 @@ export default class Main extends cc.Component {
         this.ground.on(cc.Node.EventType.TOUCH_START, this.touchGround, this);
         this.curScore = 0;
         this.clickOnce = true;
+        this.addTicket = 0;
         cc.Tools.emitEvent("score", this.curScore);
         this.scoreBar.progress = 0;
         this.level = cc.Tools.userInfo.level;
@@ -939,7 +945,22 @@ export default class Main extends cc.Component {
         }
         this.count = 0;
         this.isOverGame = isOver;
-        this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1)
+        this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
+        if(this.Delete_num<12&&!this.isEnd()){
+            // this.clickPos
+            // 奖券++；
+            let addInfo = this.cashInfo.getChildByName("add_info");
+            this.addTicket+=this.Delete_num;
+            let num = addInfo.getChildByName("num").getComponent(cc.Label);
+            num.string = ""+this.Delete_num;
+            addInfo.stopAllActions();
+            addInfo.opacity = 0;
+            addInfo.y = -40;
+            addInfo.runAction(cc.sequence(cc.fadeIn(0.1),cc.moveBy(0.5,0,40),cc.fadeOut(0.5)));
+            this.showPacketAnim(3, 0.01, 100, this.clickPos, this.cashInfo, () => { 
+                this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount+this.addTicket;
+            })
+        }
     }
     deleteBlockCb() {
         // let count = 0;
@@ -1032,11 +1053,10 @@ export default class Main extends cc.Component {
     }
     setScore(isClear: boolean) {
         if (isClear) {
-            cc.tween(this.successSpine).delay(0.5).call(() => {
+            cc.tween(this.node).delay(0.5).call(() => {
                 this.updateLevel();
             }).start()
             this.scheduleOnce(() => {
-                this.successSpine.active = false;
                 this.showPopSuccessLayer();
             }, 2)
             return;
@@ -1051,11 +1071,10 @@ export default class Main extends cc.Component {
                 }
             }
             if (iskong) {
-                cc.tween(this.successSpine).delay(0.5).call(() => {
+                cc.tween(this.node).delay(0.5).call(() => {
                     this.updateLevel();
                 }).start()
                 this.scheduleOnce(() => {
-                    this.successSpine.active = false;
                     this.showPopSuccessLayer();
                 }, 2)
                 return;
@@ -1104,18 +1123,16 @@ export default class Main extends cc.Component {
         }
     }
     updateLevel() {
-        this.successSpine.active = true;
-        let spine = this.successSpine.getComponent("sp.Skeleton");
-        spine.setAnimation(0, "idle", false);
         // 像服务器发请求过关
         let sendData = {
             "score": this.curScore,
             "ts": new Date().getTime(),//时间戳
             "level": cc.Tools.userInfo.level,
+            "award":this.addTicket,
         };
         let data = cc.Tools.createSignData(sendData);
         cc.Tools.sendRequest("UpdateLevel", "POST", data).then((res) => {
-            console.log("升级成功")
+            console.log("cocos---->升级成功")
             // 刷新一下cc.Tools.userInfo.new_free_level_times
             cc.Tools.userInfo.new_free_level_times = res.data.new_free_level_times;
             cc.Tools.showTips(this.node);

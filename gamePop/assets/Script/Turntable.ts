@@ -65,7 +65,15 @@ export default class Turntable extends cc.Component {
                 this.speed = 18;
                 this.value = 1;
                 this.circle = 0;
-                this.endAngle = posArr[0];
+                let index
+                if(res.data.amount<101){
+                    index = 0;
+                }else if(res.data.amount>=500){
+                    index = 2;
+                }else{
+                    index = 1;
+                }
+                this.endAngle = posArr[index];
             });
         }else{
             if(!this.canClick){

@@ -287,6 +287,7 @@ cc.Tools = {
             let xhr = new XMLHttpRequest();
             let requestURL = "https://api.jiankangzhuan.com/api.Hbxxl/" + url;
             // let requestURL = "http://192.168.3.10:8805/api.Hbxxl/"+url;
+            // type.toUpperCase()转换成大写
             xhr.open(type, requestURL, true);
             if (cc.sys.isNative) {
                 xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");

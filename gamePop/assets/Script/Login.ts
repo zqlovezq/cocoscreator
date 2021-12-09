@@ -18,11 +18,15 @@ export default class Login extends cc.Component {
             if(!wxToken){
                 this.registerEvent();
             }else{
-                cc.director.loadScene('Main');
+                console.log("cocos----->token-----",cc.sys.localStorage.getItem("token"));
+                // todo
+                cc.director.loadScene('Strategy');
+                // cc.director.loadScene('Main');
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozMCwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTYzNzcyMzc4OCwiY2hhbm5lbCI6IndhbGsiLCJkaXN0aW5jdF9pZCI6ImMwZDBlOWZiLWVmN2QtNDU3NS1iMjMxLWVlNGIyZDVlNTQwZSIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCJ9._5MoWt2F_QL_DB4o9AqFIK30u7Y_RPBAyRcA6zSTLjw");
-            cc.director.loadScene('Main');
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1MSwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTYzODQyMzAzNSwiY2hhbm5lbCI6IndhbGsiLCJkaXN0aW5jdF9pZCI6IjNjZmQzMGQxLTUxZmQtNGFhNy04NDY1LTkxYmFiOGZkMzUyZiIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCJ9.9iv0GIlWLmokQgKtTOOB1akIT3xXCP_ToZQLRfQFoE4");
+            // cc.director.loadScene('Main');
+            cc.director.loadScene('Strategy');
         }
     }
     registerEvent(){
@@ -116,7 +120,8 @@ export default class Login extends cc.Component {
         cc.Tools.sendRequest("register", "POST", data).then((res) => {
             cc.sys.localStorage.setItem("token", res.data.token);
             // 拼接一个打点时间
-            cc.director.loadScene('Main');
+            // cc.director.loadScene('Main');
+            cc.director.loadScene('Strategy');
             this.removeEvent();
         })
     }

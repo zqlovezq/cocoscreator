@@ -802,7 +802,7 @@ jarsigner -verbose -keystore /Users/wangziquan/Desktop/sign/jkzaaaa.jks -signedj
 
 ## **Map**和**WeakMap** 把一个值和对象关联起来的时候
 > **===**和**Object** 区别总结 ----那你应该避免使用Object.is，使用===来代替
- - +0===-1（true） Object.is(+0,-0)=false; 
+ - +0===-0（true） Object.is(+0,-0)=false; 
  - NaN===NaN(false)  Object.is(NaN,NaN)=true;
  ## 浮点数精度问题(我们不能直接浮点数进行运算)
  ```
@@ -812,6 +812,95 @@ jarsigner -verbose -keystore /Users/wangziquan/Desktop/sign/jkzaaaa.jks -signedj
     ++i:前置自增：先自加，后运算
  ```
  ## 开发时大多使用后置递减/增
+```javascript
+  /*
+    * 把数字按照下图规律去排列，设1的坐标是（0，0），x方向为右为正，y方向向下为正。
+    * 例如：2的坐标是（1，0），3的坐标是（1，1），7的坐标为（-1，-1）
+    * 请实现函数：
+    * 输入是任意坐标（x，y），输出所对应的数字。
+    * 21 22.。。
+    * 20  7  8  9 10
+    * 19  6  1  2 11
+    * 18  5  4  3 12
+    * 17 16 15 14 13
+    */
+    getKey(x, y) {
+        let obj = {
 
- >  Error while executing process /Users/wangziquan/Library/Android/sdk/ndk/21.4.7075529/ndk-build with arguments {NDK_PROJECT_PATH=null APP_BUILD_SCRIPT=/Users/wangziquan/cocoscreator/pangolin/build/jsb-link/frameworks/runtime-src/proj.android-studio/app/jni/Android.mk NDK_APPLICATION_MK=/Users/wangziquan/cocoscreator/pangolin/build/jsb-link/frameworks/runtime-src/proj.android-studio/app/jni/Application.mk APP_ABI=x86 NDK_ALL_ABIS=x86 NDK_DEBUG=1 APP_PLATFORM=android-21 NDK_OUT=/Users/wangziquan/cocoscreator/pangolin/build/jsb-link/frameworks/runtime-src/proj.android-studio/app/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT=/Users/wangziquan/cocoscreator/pangolin/build/jsb-link/frameworks/runtime-src/proj.android-studio/app/build/intermediates/ndkBuild/debug/lib NDK_TOOLCHAIN_VERSION=clang NDK_MODULE_PATH=/Applications/CocosCreator/Creator/2.4.5/CocosCreator.app/Contents/Resources/cocos2d-x:/Applications/CocosCreator/Creator/2.4.5/CocosCreator.app/Contents/Resources/cocos2d-x/cocos:/Applications/CocosCreator/Creator/2.4.5/CocosCreator.app/Contents/Resources/cocos2d-x/external NDK_DEBUG=1 clean}
-  Android NDK: Your APP_BUILD_SCRIPT points to an unknown file: /Users/wangziquan/cocoscreator/pangolin/build/jsb-link/frameworks/runtime-src/proj.android-studio/app/jni/Android.mk  
+        }
+        let key = x + "+" + y;
+        let dir = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+        let index = 0;
+        // 通过xy的坐标可以获取到整个范围的大小
+        let val = (Math.abs(x) * 2 + 1)>(Math.abs(y) * 2 + 1)?(Math.abs(x) * 2 + 1):(Math.abs(y) * 2 + 1)
+        let total = Math.pow(val,2);
+        let period = 0;
+        let _period = 0;
+        let start = [0, 0];
+        let _start = [0, 0];
+        while (index < total) {
+            if (index === 0) {
+                let _key = "0+0";
+                let val = 1;
+                obj[_key] = val;
+                index++;
+            } else {
+                let _dir = dir[[period]];
+                _start = [start[0] + _dir[0], start[1] + _dir[1]];
+                let _key = _start[0] + "+" + _start[1];
+                if (!obj[_key]) {
+                    start = _start;
+                    obj[_key] = index + 1;
+                    period++;
+                    _period = period
+                    if (period === 4) {
+                        period = 0;
+                    }
+                    index++;
+                } else {
+                    _start = start;
+                    period = _period - 1
+                }
+            }
+        }
+        console.log(obj);
+        return obj[key];
+    }
+
+        /**
+     * 题目一
+     * 定义A：删除字符串A的任意个字符，得到的字符串B称为A的字串
+     * 定义B：英文字典的排序方式，称为字典序，例如：abc<abca<abd<ac
+     * 定义C：将字符串A的所有字串按照字典序排列，排最后的子串称为A的最大字串
+     * 例如：jiangzemin的最大字串是zn
+     * 请实现函数：
+     * 输入是一个字符串A，输出A的最大字串
+    */
+    function maxChild(A){
+    //先选出最大的字母
+    let max = "a";
+    let index = 0;
+    let str = "";
+    while(index<A.length){
+        let max = "a";
+        for(let i = index;i<A.length;i++){
+            let _max = (""+max).charCodeAt();
+            let _new = (""+A[i]).charCodeAt();
+            if(_new>_max){
+                max = A[i];
+            }
+        }
+        for(let i=index;i<A.length;i++){
+            if(A[i]===max){
+                index = i+1;
+                str+=max;
+            }
+        }
+
+    };
+    return str;
+}
+console.log("newArr=",maxChild("jiangzemizn"));
+
+hasOwnProperty是javascript种唯一一个处理属性并且不会遍历原型链的方法。另一种是Object.keys();
+```

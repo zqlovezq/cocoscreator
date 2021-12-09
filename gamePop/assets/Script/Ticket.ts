@@ -75,9 +75,9 @@ export default class Ticket extends cc.Component {
         if(this.videoType===11){
             // 提现成功
             if(cc.Tools.getCash){
-                cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>成功提现</c><color=#F96163>${cc.Tools.getCash}</color><color=#ffffff>元</c></b>`);
+                cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>提现成功</c><color=#F96163>${cc.Tools.getCash}</color><color=#ffffff>元</c></b>`);
             }else{
-                cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>成功提现</c></b>`);
+                cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>提现成功</c></b>`);
             }
         }
         this.scheduleOnce(()=>{

@@ -16,7 +16,7 @@ export default class PopSuccess extends cc.Component {
         closeBtn.active = false;
         this.scheduleOnce(()=>{
             closeBtn.active = true;
-        },2)
+        },1)
         this.wrap.getChildByName("video_btn").getChildByName("icon").getComponent(cc.Sprite).spriteFrame = cc.Tools.userInfo.new_free_level_times>0?this.frames[1]:this.frames[0];
     }
     registerEvent(){

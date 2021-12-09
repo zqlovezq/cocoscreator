@@ -13,6 +13,7 @@ export default class GetCash extends cc.Component {
     onEnable() {
         this.setLayer();
         cc.Tools.showBanner();
+        cc.Tools.showTableScreen();
         cc.Tools.emitEvent("time", 0);
     }
     setLayer() {
@@ -78,6 +79,7 @@ export default class GetCash extends cc.Component {
     }
     touchBtn(e){
         cc.Tools.hideBanner();
+        cc.Tools.hideTableScreen();
         cc.Tools.showJiliAd(11);
         let target = e.target;
         let id = target.parent.name;
@@ -118,6 +120,7 @@ export default class GetCash extends cc.Component {
         this.node.active = false;
         cc.Tools.emitEvent("time", new Date().getTime());
         cc.Tools.hideBanner();
+        cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {
             this.removeEvent();
             cc.Tools.tableTimes++;
