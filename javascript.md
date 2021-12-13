@@ -125,7 +125,31 @@
     /**
      * 用户输入一个字符串，验证是否符合URL网址的格式
      */
-    let reg = /^((http|https|ftp):\/\/)?(([\w-]+\.)+[a-z0-9]+)((\/[^/]*)+)?(\?)?$/i
+    let reg = /^(?:(http|https|ftp):\/\/)?((?:[\w-]+\.)+[a-z0-9]+)((?:\/[^/]*)+)?(\?[^#]+)?(#.+)?$/i
+    console.log(reg.exec(str));
+    /**
+     * 实现图片的懒加载
+     */
+    let $imgBox = $('.imgBox'),
+        $img = $imgBox.children("img"),
+        $window = $(window)
+    $window.on('load scroll',function(){
+        if($img.attr("isLoad")==="true"){
+            // =>之前加载过则不会重新加载
+            return;
+        }
+        let $A = $imgBox.outerHeight()+$imgBox.offset().top,
+            $B = $window.outerHeight()+$window.scrollTop();
+        if($A<=$B){
+            $img.attr('src',$img.attr('data-img'));
+            $img.on("load",function(){
+                //=>加载成功
+                // $img.css("display","block");
+                $img.stop().fadeIn();
+            });
+            $img.attr('isLoad',true);//=>ATTR存储的自定义属性值都是字符串
+        }
+    })
 ```
 ### 稀疏数组和稠密数组
 ## 数据类型检测
@@ -267,3 +291,5 @@
 ### 命令模式---->按照一定到顺序一次执行对象的方法，从而实现整个板块功能的开发
 > 第一步---创建值  第二步---创建变量  第三步----关联在一起
 ***回调函数中的this一般都是window***
+## 贪婪模式--->尽可能多的匹配所搜索的字符串
+## 非贪婪模式-->尽可能少的匹配所搜索的字符串

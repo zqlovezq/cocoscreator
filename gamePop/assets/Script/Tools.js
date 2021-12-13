@@ -273,7 +273,8 @@ cc.Tools = {
         tips.stopAllActions();
         tips.zIndex = 9999;
         tips.y = 145;
-        cc.tween(tips).to(0.1, { opacity: 255 }).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).start()
+        tips.opacity = 255;
+        cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).start()
     },
     /**
      * 

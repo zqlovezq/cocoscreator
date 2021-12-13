@@ -23,6 +23,7 @@ export default class Turntable extends cc.Component {
          // 展示banner+插屏
          cc.Tools.emitEvent("time",0);
          cc.Tools.showBanner();
+         cc.Tools.showTableScreen();
         //  获取抽奖状态
         this.refreshTimes();
     }
@@ -116,6 +117,7 @@ export default class Turntable extends cc.Component {
         this.node.active = false;
         cc.Tools.emitEvent("time",new Date().getTime());
         cc.Tools.hideBanner();
+        cc.Tools.hideTableScreen();
         this.scheduleOnce(()=>{
             this.removeEvent();
             cc.Tools.tableTimes++;

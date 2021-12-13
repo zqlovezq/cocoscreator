@@ -11,6 +11,7 @@ export default class Setting extends cc.Component {
         this.registerEvent();
         cc.Tools.emitEvent("time",0);
         cc.Tools.showBanner();
+        cc.Tools.showTableScreen();
     }
     initLayer(){
         this.userPrivacy = this.node.getChildByName("user_privacy");
@@ -79,6 +80,7 @@ export default class Setting extends cc.Component {
         this.node.active = false;
         cc.Tools.emitEvent("time",new Date().getTime());
         cc.Tools.hideBanner();
+        cc.Tools.hideTableScreen();
         this.scheduleOnce(()=>{
             this.removeEvent();
             cc.Tools.tableTimes++;

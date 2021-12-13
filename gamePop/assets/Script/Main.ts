@@ -32,9 +32,9 @@ export default class Main extends cc.Component {
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
-    popSecretLayer:cc.Node = null;
-    scoreBar:cc.ProgressBar = null;
-    percentBar:cc.ProgressBar = null;
+    popSecretLayer: cc.Node = null;
+    scoreBar: cc.ProgressBar = null;
+    percentBar: cc.ProgressBar = null;
     @property(cc.Prefab)
     packet: cc.Prefab = null;
     @property(cc.Prefab)
@@ -85,7 +85,7 @@ export default class Main extends cc.Component {
     private isOverGame = false;
     private count = 0;
     private showSecretTimes = 0;
-    private clickPos = cc.v3(0,0);
+    private clickPos = cc.v3(0, 0);
     private addTicket = 0;
     onLoad() {
         // 初始化参数
@@ -180,7 +180,7 @@ export default class Main extends cc.Component {
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
             text_1.string = _str[0];
             text_2.string = `/${_str[1]}`
-            this.percentBar.progress = Number(_str[0])/Number(_str[1]);
+            this.percentBar.progress = Number(_str[0]) / Number(_str[1]);
             let pop = this.tipsLayer.getChildByName("pop");
             let _lbl_1 = pop.getChildByName("lbl_1").getComponent(cc.RichText);
             let _lbl_2 = pop.getChildByName("lbl_2").getComponent(cc.RichText);
@@ -194,23 +194,33 @@ export default class Main extends cc.Component {
             } else {
                 btnLayer.getChildByName("btn_4").getChildByName("red").active = false;
             }
+            // 显示冻结红包的进度条
+            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
+            let freezenRate = cc.Tools.userInfo.active_rate.split("|");
+            let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
+            freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
+            freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
+            if (freezenRate[0] === freezenRate[1]) {
+                freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
+            }
             this.showSaveCashLayer();
             this.init();
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
-            this.schedule(()=>{
-                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res)=>{
-                    if(res.data.is_show){
+            this.schedule(() => {
+                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+                    if (res.data.is_show) {
+                        cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                         cc.Tools.showJiliAd(12);
                     }
                 })
-            },cc.Tools.userInfo.ad_show_interval_second)
-        }).catch((err)=>{
-            console.log("cocos---->登陆失败----",err);
+            }, cc.Tools.userInfo.ad_show_interval_second)
+        }).catch((err) => {
+            console.log("cocos---->登陆失败----", err);
             cc.find("Canvas/lose").active = true;
-            if(err==="token验证失败,请重新登陆"){
+            if (err === "token验证失败,请重新登陆") {
                 // 重新登陆
                 cc.director.loadScene('Login');
-                cc.sys.localStorage.setItem("token","");
+                cc.sys.localStorage.setItem("token", "");
             }
         })
     }
@@ -240,7 +250,7 @@ export default class Main extends cc.Component {
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
             text_1.string = _str[0];
             text_2.string = `/${_str[1]}`;
-            this.percentBar.progress = Number(_str[0])/Number(_str[1]);
+            this.percentBar.progress = Number(_str[0]) / Number(_str[1]);
             let pop = this.tipsLayer.getChildByName("pop");
             let _lbl_1 = pop.getChildByName("lbl_1").getComponent(cc.RichText);
             let _lbl_2 = pop.getChildByName("lbl_2").getComponent(cc.RichText);
@@ -255,6 +265,15 @@ export default class Main extends cc.Component {
             } else {
                 btnLayer.getChildByName("btn_4").getChildByName("red").active = false;
             }
+            // 显示冻结红包的进度条
+            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
+            let freezenRate = cc.Tools.userInfo.active_rate.split("|");
+            let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
+            freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
+            freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
+            if (freezenRate[0] === freezenRate[1]) {
+                freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
+            }
             if (isReload) {
                 this.init();
             } else {
@@ -262,13 +281,13 @@ export default class Main extends cc.Component {
                 let _pop = this.content.getChildByName("btn_layer").getChildByName("btn_2").getChildByName("pop");
                 _pop.active = true;
                 let _popLbl = _pop.getChildByName("lbl").getComponent(cc.Label);
-                _popLbl.string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount;
+                _popLbl.string = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount;
                 _pop.stopAllActions();
                 cc.tween(_pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
                     _pop.active = false;
                 }).start();
             }
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log("登陆失败");
             cc.find("Canvas/lose").active = true;
         })
@@ -345,10 +364,10 @@ export default class Main extends cc.Component {
         let secretBtn = cc.find("Canvas/secret");
         secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
     }
-    showSecretLayer(){
+    showSecretLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         this.showSecretTimes++;
-        if(this.showSecretTimes>=5){
+        if (this.showSecretTimes >= 5) {
             this.showSecretTimes = 0;
             if (!this.popSecretLayer) {
                 this.loadPrefab('Prefab/secretLayer').then((prefab) => {
@@ -363,7 +382,8 @@ export default class Main extends cc.Component {
         }
     }
     touchSnow() {
-        cc.Tools.dot("click_snowman")
+        cc.Tools.dot("click_snowman");
+        cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
         cc.Tools.showJiliAd(10);
     }
     // todo
@@ -379,6 +399,7 @@ export default class Main extends cc.Component {
                     cc.Tools.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: 4 });
                 });
             } else {
+                cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                 cc.Tools.showJiliAd(4);
             }
         }
@@ -477,16 +498,32 @@ export default class Main extends cc.Component {
     showUnFreezeLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_icetable")
-        if (!this.unFreezeLayer) {
-            this.loadPrefab('Prefab/unFreeze').then((prefab) => {
-                let layer = cc.instantiate(prefab);
-                self.unFreezeLayer = layer;
-                self.node.addChild(layer);
-                self.unFreezeLayer.active = true;
-            })
-        } else {
-            this.unFreezeLayer.active = true;
-        }
+        // 解冻红包新需求
+        cc.Tools.sendRequest("ActiveInfo", "GET", {}).then((res) => {
+            let msg = cc.find("Canvas/msg");
+            msg.active = true;
+            msg.opacity = 0;
+            let _msg = msg.getChildByName("lbl").getComponent(cc.Label);
+            _msg.string = res.data.tip;
+            msg.stopAllActions();
+            msg.runAction(cc.sequence(cc.fadeIn(0.5), cc.delayTime(1), cc.fadeOut(0.5), cc.callFunc(() => {
+                msg.active = false;
+            })));
+            if (res.data.freeze_amount > 0) {
+                // this.showPacket();
+                cc.Tools.emitEvent("getTicket", { ticket: res.data.freeze_amount, add: 0, type: 1, videoType: 1 });
+            }
+        });
+        // if (!this.unFreezeLayer) {
+        //     this.loadPrefab('Prefab/unFreeze').then((prefab) => {
+        //         let layer = cc.instantiate(prefab);
+        //         self.unFreezeLayer = layer;
+        //         self.node.addChild(layer);
+        //         self.unFreezeLayer.active = true;
+        //     })
+        // } else {
+        //     this.unFreezeLayer.active = true;
+        // }
     }
     /**
      * 存钱罐界面
@@ -595,6 +632,7 @@ export default class Main extends cc.Component {
                 this.clickRedArr = [];
                 this.startClickTime = 0;
                 if (this.clickRedNumber < 6) {
+                    cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                     cc.Tools.showJiliAd(7);
                     return;
                 }
@@ -639,7 +677,7 @@ export default class Main extends cc.Component {
         let x = event.getLocationX()
         let y = event.getLocationY()
         this.Delete_num = 0
-        this.clickPos = cc.v3(x,y);
+        this.clickPos = cc.v3(x, y);
         if (y > windowSize.height / 2 - 370 - this.vh && y < windowSize.height / 2 + 370 - this.vh) {
             let i = this.ToIJ(x, y).x
             let j = this.ToIJ(x, y).y
@@ -946,19 +984,19 @@ export default class Main extends cc.Component {
         this.count = 0;
         this.isOverGame = isOver;
         this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
-        if(this.Delete_num<12&&!this.isEnd()){
+        if (!this.isEnd()) {
             // this.clickPos
             // 奖券++；
             let addInfo = this.cashInfo.getChildByName("add_info");
-            this.addTicket+=this.Delete_num;
+            this.addTicket += this.Delete_num;
             let num = addInfo.getChildByName("num").getComponent(cc.Label);
-            num.string = ""+this.Delete_num;
+            num.string = "" + this.Delete_num;
             addInfo.stopAllActions();
             addInfo.opacity = 0;
             addInfo.y = -40;
-            addInfo.runAction(cc.sequence(cc.fadeIn(0.1),cc.moveBy(0.5,0,40),cc.fadeOut(0.5)));
-            this.showPacketAnim(3, 0.01, 100, this.clickPos, this.cashInfo, () => { 
-                this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount+this.addTicket;
+            addInfo.runAction(cc.sequence(cc.fadeIn(0.1), cc.moveBy(0.5, 0, 40), cc.fadeOut(0.5)));
+            this.showPacketAnim(3, 0.01, 100, this.clickPos, this.cashInfo, () => {
+                this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount + this.addTicket;
             })
         }
     }
@@ -1107,7 +1145,7 @@ export default class Main extends cc.Component {
                 let score = this.targetScore - Math.pow(len, 2) * 10;
                 this.curScore += score;
                 cc.Tools.emitEvent("score", this.curScore);
-                this.scoreBar.progress = this.curScore/1000>1?1:this.curScore/1000;
+                this.scoreBar.progress = this.curScore / 1000 > 1 ? 1 : this.curScore / 1000;
                 this.handleDeleteBlock(true);
             }, 1)
         } else {
@@ -1117,7 +1155,7 @@ export default class Main extends cc.Component {
             this.curScore += score;
             this.goodFunction(this.Delete_num);
             this.scoreInfo.getChildByName("lbl").getComponent(cc.Label).string = `${this.Delete_num}连消${score}分`;
-            this.scoreBar.progress = this.curScore/1000>1?1:this.curScore/1000;
+            this.scoreBar.progress = this.curScore / 1000 > 1 ? 1 : this.curScore / 1000;
             cc.Tools.emitEvent("score", this.curScore);
 
         }
@@ -1128,7 +1166,7 @@ export default class Main extends cc.Component {
             "score": this.curScore,
             "ts": new Date().getTime(),//时间戳
             "level": cc.Tools.userInfo.level,
-            "award":this.addTicket,
+            "award": this.addTicket,
         };
         let data = cc.Tools.createSignData(sendData);
         cc.Tools.sendRequest("UpdateLevel", "POST", data).then((res) => {

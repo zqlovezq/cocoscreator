@@ -21,7 +21,7 @@ export default class GetCash extends cc.Component {
         this.content.destroyAllChildren();
         let ticket = this.node.getChildByName("ticket").getComponent(cc.Label);
         ticket.string = cc.Tools.userInfo.amount;
-        this.node.getChildByName("cash").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
+        this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
         let sendData = {
 
         };
@@ -80,6 +80,7 @@ export default class GetCash extends cc.Component {
     touchBtn(e){
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
+        cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
         cc.Tools.showJiliAd(11);
         let target = e.target;
         let id = target.parent.name;
@@ -88,9 +89,10 @@ export default class GetCash extends cc.Component {
             "ts":new Date().getTime()
         };
         cc.Tools.sendRequest("CashOut", "POST", sendData).then((res) => {
-            console.log("提现成功");
-            let lbl = target.parent.getChildByName("lbl_1").getComponent(cc.Label)
-            cc.Tools.getCash  = lbl.string.replace("元","");
+            console.log("cocos--cashout----提现成功",JSON.stringify(res));
+            // let lbl = target.parent.getChildByName("lbl_1").getComponent(cc.Label)
+            // cc.Tools.getCash  = lbl.string.replace("元","");
+            cc.Tools.getCash = res.data.msg;
             // 刷新整个界面
             let items = res.data.items;
             for(let i=0;i<items.length;i++){
