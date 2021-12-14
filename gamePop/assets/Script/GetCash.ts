@@ -78,6 +78,16 @@ export default class GetCash extends cc.Component {
         }
     }
     touchBtn(e){
+         // 点击加锁
+         if(cc.Tools.lock){
+            cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>点击太频繁</c></b>`);
+            return;
+        }else{
+            cc.Tools.lock = true;
+            setTimeout(()=>{
+                cc.Tools.lock = false;
+            },3000)
+        }
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
         cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);

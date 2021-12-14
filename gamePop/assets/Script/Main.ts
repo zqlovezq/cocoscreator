@@ -208,8 +208,19 @@ export default class Main extends cc.Component {
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
             this.schedule(() => {
                 cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+                    // 点击加锁
+                    if (cc.Tools.lock) {
+                        // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
+                        return;
+                    } else {
+                        cc.Tools.lock = true;
+                        setTimeout(() => {
+                            cc.Tools.lock = false;
+                            console.log("cocos---->AdIntervalShow解锁")
+                        }, 3000)
+                    }
                     if (res.data.is_show) {
-                        cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
+                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                         cc.Tools.showJiliAd(12);
                     }
                 })
@@ -382,13 +393,35 @@ export default class Main extends cc.Component {
         }
     }
     touchSnow() {
+        // 点击加锁
+        if (cc.Tools.lock) {
+            cc.Tools.showTips(this.node, `<b><color=#ffffff>点击太频繁</c></b>`);
+            return;
+        } else {
+            cc.Tools.lock = true;
+            setTimeout(() => {
+                cc.Tools.lock = false;
+                console.log("cocos---->snow解锁")
+            }, 3000)
+        }
         cc.Tools.dot("click_snowman");
-        cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
+        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
         cc.Tools.showJiliAd(10);
     }
     // todo
     touchRed() {
         if (cc.Tools.userInfo.up_level_num_not_get) {
+            // 点击加锁
+            if (cc.Tools.lock) {
+                cc.Tools.showTips(this.node, `<b><color=#ffffff>点击太频繁</c></b>`);
+                return;
+            } else {
+                cc.Tools.lock = true;
+                setTimeout(() => {
+                    cc.Tools.lock = false;
+                    console.log("cocos---->touchRed解锁")
+                }, 3000)
+            }
             cc.Tools.dot("click_clickredbag");
             if (cc.Tools.userInfo.new_free_level_times) {
                 let sendData = {
@@ -399,7 +432,7 @@ export default class Main extends cc.Component {
                     cc.Tools.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: 4 });
                 });
             } else {
-                cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
+                cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                 cc.Tools.showJiliAd(4);
             }
         }
@@ -632,7 +665,7 @@ export default class Main extends cc.Component {
                 this.clickRedArr = [];
                 this.startClickTime = 0;
                 if (this.clickRedNumber < 6) {
-                    cc.Tools.showTips(this.node,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
+                    cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
                     cc.Tools.showJiliAd(7);
                     return;
                 }
@@ -1232,15 +1265,26 @@ export default class Main extends cc.Component {
     }
     // 专属浮球的事件 点击浮球观看视频 之后浮球消失并且清除事件
     clickFloate(e) {
+        // 点击加锁
+        if (cc.Tools.lock) {
+            cc.Tools.showTips(this.node, `<b><color=#ffffff>点击太频繁</c></b>`);
+            return;
+        } else {
+            cc.Tools.lock = true;
+            setTimeout(() => {
+                cc.Tools.lock = false;
+                console.log("cocos---->floate解锁")
+            }, 3000)
+        }
         let target = e.target
         cc.Tools.dot("click_Floatredbag")
         cc.Tools.showJiliAd(2);
-        this.scheduleOnce(() => {
-            target.active = false;
-            // target.off(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
-            // target.destroy();
-            // target = null;
-        }, 1)
+        // this.scheduleOnce(() => {
+        target.active = false;
+        // target.off(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
+        // target.destroy();
+        // target = null;
+        // }, 1)
     }
     // update (dt) {}
     /**
