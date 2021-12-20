@@ -293,3 +293,65 @@
 ***回调函数中的this一般都是window***
 ## 贪婪模式--->尽可能多的匹配所搜索的字符串
 ## 非贪婪模式-->尽可能少的匹配所搜索的字符串
+
+# 三大经典排序算法
+ - 冒泡排序
+ > 让数组的当前项和后一项进行比较，如果当前项比后一项大，则两项交换位置（让大的靠后）即可
+ ```javascript
+    let ary = [12,8,24,16,1];
+    function bubble(ary){
+        for(let i=0;i<ary.length-1;i++){
+            for(let j=0;j<ary.length-1-i;j++){
+                if(ary[j]>ary[j+1]){
+                    let temp = ary[j];
+                    ary[j] = ary[j+1];
+                    ary[j+1] = temp;
+                }
+            }
+        }
+        return ary;
+    }
+ ```
+ - 插入排序
+ ```javascript
+    let ary = [12, 8, 24, 16, 1];
+        function insert(ary) {
+            let handle = [];
+            handle.push(ary[0]);
+            for (let i = 1; i < ary.length; i++) {
+                let A = ary[i];
+                for (let j = handle.length-1; j>=0; j--) {
+                    let B = handle[j];
+                    if(A>B){
+                        handle.splice(j+1,0,A);
+                        break;
+                    }
+                    if(j===0){
+                        handle.unshift(A)
+                    }
+                }
+            }
+            return handle;
+        }
+ ```
+ - 快速排序
+```javascript
+    function quick(ary){
+        if(ary.length<=1){
+            return ary
+        }
+        let middleIndex = kMath.floor(ary.length/2);
+        let middleValue = ary.splice(middleIndex,1)[0];
+        let aryLeft = [],
+            aryRight = [];
+            for(let i=0;i<ary.length;i++){
+                let item = ary[i];
+                item<middleValue?aryLeft.push(item):aryRight.push(item);
+            }
+        return quick(aryLeft).concat(middleValue,quick(aryRight));
+    }
+```
+>选择排序 归并排序 希尔排序 堆排序 计数排序 桶排序 基数排序
+***二叉树 三叉树 红黑树 V8引擎 装饰器***
+> executeInEditMode----已编辑模式运行---@executeInEditMode(true)
+

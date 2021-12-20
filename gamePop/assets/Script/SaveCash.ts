@@ -106,11 +106,6 @@ export default class SaveCash extends cc.Component {
         cc.Tools.emitEvent("init",false);
         this.scheduleOnce(()=>{
             this.removeEvent();
-            cc.Tools.tableTimes++;
-            if(cc.Tools.tableTimes>=5){
-                cc.Tools.tableTimes = 0;
-                cc.Tools.showTableScreen();
-            }
         })
     }
     // update (dt) {}

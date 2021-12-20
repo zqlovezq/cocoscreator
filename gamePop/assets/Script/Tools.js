@@ -17,6 +17,31 @@ cc.Tools = {
         cc.Tools.DeviceInfo = JSON.parse(data);
     },
     /**
+     * 获取当前的存钱罐的钱数
+    */
+    getFreeze() {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setFreeze", "(Ljava/lang/String;Ljava/lang/String;)V", cc.Tools.userInfo.calendar_msg, cc.Tools.userInfo.calendar_timestamp);
+        }
+    },
+    setDistinctId() {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setDistinctId", "(Ljava/lang/String;)V", cc.Tools.userInfo.distinct_id);
+        }
+    },
+    setUserId() {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setUsertId", "(Ljava/lang/String;)V", cc.Tools.userInfo.user_id + "");
+        }
+    },
+      //数数打点
+      shuShuDot() {
+        if (cc.sys.isNative) {
+            console.log("cocos---数数打点");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "startShuShu", "()V");
+        }
+    },
+    /**
      * 看视频回调
      *  //type 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
      */
@@ -35,13 +60,13 @@ cc.Tools = {
                 case "10":
                 case "12":
                     // 点我领红包
-                    console.log("cocos--视频类型"+type)
+                    console.log("cocos--视频类型" + type)
                     cc.Tools.sendRequest("AdAward", "POST", {
                         "ad_id": ad,
                         "ts": new Date().getTime(),//时间戳
                         "type": parseInt(type)
                     }).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.data.amount,add:res.data.add_amount, type: 1 ,videoType:parseInt(type)});
+                        this.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: parseInt(type) });
                     })
                     break;
                 case "3":
@@ -57,7 +82,7 @@ cc.Tools = {
                         "ts": new Date().getTime(),//时间戳
                         "type": parseInt(type)
                     }).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.data.amount, add:res.data.add_amount,type: 2 ,videoType:parseInt(type)});
+                        this.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 2, videoType: parseInt(type) });
                     })
                     break;
                 case "5":
@@ -77,7 +102,7 @@ cc.Tools = {
                         "ts": new Date().getTime(),//时间戳
                         "type": parseInt(type)
                     }).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.data.amount, add:res.data.add_amount,type: 1,videoType:parseInt(type)});
+                        this.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: parseInt(type) });
                     })
                     break;
                 case "11":
@@ -86,7 +111,7 @@ cc.Tools = {
                         "ts": new Date().getTime(),//时间戳
                         "type": parseInt(type)
                     }).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.data.amount,add:res.data.add_amount, type: 1 ,videoType:parseInt(type)});
+                        this.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: parseInt(type) });
                     })
                     break;
                 case "20":
@@ -97,7 +122,7 @@ cc.Tools = {
                     break;
                 case "22":
                     console.log("cocos--信息流")
-                        break;
+                    break;
                 case "23":
                     console.log("cocos--Banner")
                     break;
@@ -142,7 +167,7 @@ cc.Tools = {
     //显示信息流广告
     showFeedScreen(from) {
         if (cc.sys.isNative) {
-            console.log("cocos-----信息流---",from)
+            console.log("cocos-----信息流---", from)
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showFeedScreen", "()V");
         }
     },
@@ -176,7 +201,7 @@ cc.Tools = {
      */
     getUserEcpm(ecpm, type) {
         // 获取ecpm之后像服务器发的是ecpm/100
-        let serverEcpm = parseFloat(ecpm / 100);
+        let serverEcpm = parseInt(ecpm / 100);
         // 单价
         let priceEcpm = Number(ecpm / (10 * 10000));
         return new Promise(function (resolve, reject) {
@@ -188,11 +213,11 @@ cc.Tools = {
                 // 开屏
                 // cc.Tools.dot("ad_open_screen", { ecpm: serverEcpm, ad_price: priceEcpm });
                 resolve();
-            }else if(type==="22"){
+            } else if (type === "22") {
                 // 信息流
                 cc.Tools.dot("ad_nativie", { ecpm: serverEcpm, ad_price: priceEcpm });
                 resolve();
-            } else if(type==="23"){
+            } else if (type === "23") {
                 // 信息流
                 cc.Tools.dot("ad_banner", { ecpm: serverEcpm, ad_price: priceEcpm });
                 resolve();
@@ -259,22 +284,29 @@ cc.Tools = {
      * @param {*} str  显示的tips内容
      */
     showTips(n, str) {
-        let tips = n.getChildByName("Tips");
-        let icon = tips.getChildByName("icon");
-        let lbl = tips.getChildByName("lbl").getChildByName("text");
-        if(str){
-            icon.active = false;
-            lbl.parent.active = true;
-            lbl.getComponent(cc.RichText).string = str;
-        }else{
-            icon.active = true;
-            lbl.parent.active = false;
-        }
-        tips.stopAllActions();
-        tips.zIndex = 9999;
-        tips.y = 145;
-        tips.opacity = 255;
-        cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).start()
+        return new Promise(function (resolve, reject) {
+            let tips = n.getChildByName("Tips");
+            if (!tips) {
+                reject();
+            }
+            let icon = tips.getChildByName("icon");
+            let lbl = tips.getChildByName("lbl").getChildByName("text");
+            if (str) {
+                icon.active = false;
+                lbl.parent.active = true;
+                lbl.getComponent(cc.RichText).string = str;
+            } else {
+                icon.active = true;
+                lbl.parent.active = false;
+            }
+            tips.stopAllActions();
+            tips.zIndex = 9999;
+            tips.y = 145;
+            tips.opacity = 255;
+            cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
+                resolve();
+            }).start()
+        })
     },
     /**
      * 
@@ -302,13 +334,13 @@ cc.Tools = {
             console.log("cocos>>>>>>>>>>>>>>data=", JSON.stringify(data));
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
-                    console.log("cocos>>>>>>>>>>>>>>http res:" + xhr.response);
+                    console.log("cocos>>>>>>>>>>>>>>http res:" + url + "-----------" + xhr.response);
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
                     if (_response.code === 0) {
                         resolve(_response)
                     } else {
-                        console.log("cocos>>>>>>>>>>>>>>http fail" + _response.message);
+                        console.log("cocos>>>>>>>>>>>>>>http fail" + url + "------" + _response.message);
                         reject(_response.message);
                     }
                 }
@@ -379,10 +411,10 @@ cc.Tools = {
     /**
      * 在一个范围内随机
      */
-    createRandom(n,m){
+    createRandom(n, m) {
         ++m;
-        let a = m-n;
-        let num = Math.random()*a+n;
+        let a = m - n;
+        let num = Math.random() * a + n;
         return parseInt(num);
     }
 }

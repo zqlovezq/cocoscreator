@@ -90,8 +90,9 @@ export default class GetCash extends cc.Component {
         }
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
-        cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
-        cc.Tools.showJiliAd(11);
+        cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(()=>{
+            cc.Tools.showJiliAd(11);
+        });
         let target = e.target;
         let id = target.parent.name;
         let sendData = {
@@ -100,8 +101,6 @@ export default class GetCash extends cc.Component {
         };
         cc.Tools.sendRequest("CashOut", "POST", sendData).then((res) => {
             console.log("cocos--cashout----提现成功",JSON.stringify(res));
-            // let lbl = target.parent.getChildByName("lbl_1").getComponent(cc.Label)
-            // cc.Tools.getCash  = lbl.string.replace("元","");
             cc.Tools.getCash = res.data.msg;
             // 刷新整个界面
             let items = res.data.items;
@@ -111,13 +110,12 @@ export default class GetCash extends cc.Component {
             cc.Tools.userInfo.amount = res.data.own_amount;
             let ticket = this.node.getChildByName("ticket").getComponent(cc.Label);
             ticket.string = cc.Tools.userInfo.amount;
-            this.node.getChildByName("cash").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
+            // this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
+            this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
             cc.Tools.emitEvent("init",false);
         })
     }
     removeEvent() {
-        // let closeBtn = this.node.getChildByName("close_btn");
-        // closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         for(let i=0;i<this.content.children.length;i++){
             let item = this.content.children[i]; 
             let btn = item.getChildByName("btn");
@@ -135,11 +133,6 @@ export default class GetCash extends cc.Component {
         cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {
             this.removeEvent();
-            cc.Tools.tableTimes++;
-            if(cc.Tools.tableTimes>=5){
-                cc.Tools.tableTimes = 0;
-                cc.Tools.showTableScreen();
-            }
         })
     }
     // update (dt) {}

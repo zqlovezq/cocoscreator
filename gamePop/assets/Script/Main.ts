@@ -91,8 +91,6 @@ export default class Main extends cc.Component {
         // 初始化参数
         self = this;
         cc.Tools.screenAdapter();
-        // cc.Tools.showTableScreen();
-        cc.Tools.tableTimes = 0;
         cc.Tools.Event.on("init", this.refreshUserInfo, this);
         cc.Tools.Event.on("getTicket", this.showTicketLayer, this);
         cc.Tools.Event.on("time", this.refreshTime, this);
@@ -140,6 +138,15 @@ export default class Main extends cc.Component {
     refreshTime(time: number) {
         this.countTime = time;
     }
+    /**
+     * 初始化数数
+    */
+   initShuShu(){
+        // 数数打点
+        cc.Tools.shuShuDot();
+        cc.Tools.setDistinctId();
+        cc.Tools.setUserId();
+   }
     /**
     * 处理小数精度问题
     * @returns 
@@ -204,6 +211,7 @@ export default class Main extends cc.Component {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
             }
             this.showSaveCashLayer();
+            this.initShuShu();
             this.init();
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
             this.schedule(() => {
@@ -220,8 +228,9 @@ export default class Main extends cc.Component {
                         }, 3000)
                     }
                     if (res.data.is_show) {
-                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
-                        cc.Tools.showJiliAd(12);
+                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                            cc.Tools.showJiliAd(12);
+                        });
                     }
                 })
             }, cc.Tools.userInfo.ad_show_interval_second)
@@ -405,8 +414,9 @@ export default class Main extends cc.Component {
             }, 3000)
         }
         cc.Tools.dot("click_snowman");
-        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
-        cc.Tools.showJiliAd(10);
+        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            cc.Tools.showJiliAd(10);
+        });
     }
     // todo
     touchRed() {
@@ -432,8 +442,9 @@ export default class Main extends cc.Component {
                     cc.Tools.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: 4 });
                 });
             } else {
-                cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
-                cc.Tools.showJiliAd(4);
+                cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                    cc.Tools.showJiliAd(4);
+                });
             }
         }
     }
@@ -528,7 +539,8 @@ export default class Main extends cc.Component {
     /**
     * 解冻红包界面
     */
-    showUnFreezeLayer() {
+    showUnFreezeLayer(e) {
+        let target = e.target;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_icetable")
         // 解冻红包新需求
@@ -545,6 +557,8 @@ export default class Main extends cc.Component {
             if (res.data.freeze_amount > 0) {
                 // this.showPacket();
                 cc.Tools.emitEvent("getTicket", { ticket: res.data.freeze_amount, add: 0, type: 1, videoType: 1 });
+                target.stopAllActions();
+                target.angle = 0;
             }
         });
         // if (!this.unFreezeLayer) {
@@ -665,8 +679,9 @@ export default class Main extends cc.Component {
                 this.clickRedArr = [];
                 this.startClickTime = 0;
                 if (this.clickRedNumber < 6) {
-                    cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`);
-                    cc.Tools.showJiliAd(7);
+                    cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                        cc.Tools.showJiliAd(7);
+                    });
                     return;
                 }
             } else {
@@ -1017,9 +1032,8 @@ export default class Main extends cc.Component {
         this.count = 0;
         this.isOverGame = isOver;
         this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
-        if (!this.isEnd()) {
-            // this.clickPos
-            // 奖券++；
+        if (!isOver) {
+            // 增加金钱特效
             let addInfo = this.cashInfo.getChildByName("add_info");
             this.addTicket += this.Delete_num;
             let num = addInfo.getChildByName("num").getComponent(cc.Label);
@@ -1190,7 +1204,6 @@ export default class Main extends cc.Component {
             this.scoreInfo.getChildByName("lbl").getComponent(cc.Label).string = `${this.Delete_num}连消${score}分`;
             this.scoreBar.progress = this.curScore / 1000 > 1 ? 1 : this.curScore / 1000;
             cc.Tools.emitEvent("score", this.curScore);
-
         }
     }
     updateLevel() {
