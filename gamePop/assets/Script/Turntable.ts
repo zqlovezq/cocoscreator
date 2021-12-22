@@ -56,7 +56,6 @@ export default class Turntable extends cc.Component {
             cc.Tools.lock = true;
             setTimeout(() => {
                 cc.Tools.lock = false;
-                console.log("cocos---->Turntable解锁")
             }, 3000)
         }
         if (this.freeTimes > 0) {
@@ -101,18 +100,19 @@ export default class Turntable extends cc.Component {
     getTableFunc(ad: string) {
         let sendData = {
             "ad_id": ad,
-            "ts": new Date().getTime()
+            "ts": new Date().getTime(),
+            "action":"LuckyLottery"
         };
         let posArr = [360, 60, 120, 180, 240, 300]
-        cc.Tools.sendRequest("LuckyLottery", "POST", sendData).then((res) => {
-            this.ticket = res.data.amount;
-            this.add = res.data.add_amount;
+        cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
+            this.ticket = res.amount;
+            this.add = res.add_amount;
             this.beginTurn = true;
             this.point.angle = 360;
             this.speed = 18;
             this.value = 1;
             this.circle = 0;
-            this.endAngle = posArr[res.data.id - 1];
+            this.endAngle = posArr[res.id - 1];
         });
     }
     removeEvent() {

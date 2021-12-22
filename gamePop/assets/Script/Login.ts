@@ -18,15 +18,26 @@ export default class Login extends cc.Component {
             if(!wxToken){
                 this.registerEvent();
             }else{
-                console.log("cocos----->token-----",cc.sys.localStorage.getItem("token"));
                 // todo
                 // cc.director.loadScene('Strategy');
                 cc.director.loadScene('Main');
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1MSwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTYzODQyMzAzNSwiY2hhbm5lbCI6Im1laXp1IiwiZGlzdGluY3RfaWQiOiIyZTUwNjU5Yi02ODdjLTRhZjktODc3YS02M2YxMjRjYWU1YjciLCJpbWVpIjoiIiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAifQ.Dkzyuz8SWFmn0n3DXebsKKqEEONlVtJSpfqToKjUuhU");
-            cc.director.loadScene('Main');
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMDEsIm9wZW5faWQiOiJvNUNWZTVfSXJGQU5oeDB1bXBELTQ0YzVod1ZnIiwibmlja19uYW1lIjoi5rW355uX6Ii56ZW_Mi4wIiwiZ2VuZGVyIjowLCJhdmF0YXIiOiJodHRwczovL3RoaXJkd3gucWxvZ28uY24vbW1vcGVuL3ZpXzMyL2ZtbUNWeElSU0U5MHVpYXZ0ajZLdFE2UVZ5dU02RE4xdWljMmdpYk5ySkp3aHoySWYybWg2c1lFaWJZcVFvZHppYXpTV25CRUlmZmZRUHNPTnBZeW1RQzB4ZGcvMTMyIiwiY3JlYXRlX3RpbWUiOjE2Mzk1NjAwODUsImNoYW5uZWwiOiJ0YXB0YXAiLCJkaXN0aW5jdF9pZCI6Ijg3ZmQzZDY5LTU0YjYtNDVlZi05YzI3LWIzZTk2Y2EyNjdiNyIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCIsImFuZHJvaWRfaWQiOiI3NmNlZjMxZGU0YTU0Njc0Iiwib2FpZCI6IiJ9.K5qf6ZX27hwvjq6eszxzDyTN_yRXrUhXc_bZ_HBUw5k");
+            // cc.director.loadScene('Main');
             // cc.director.loadScene('Strategy');
+            // 请求一个测试接口
+            // let data = {
+            //     "id":123,
+            //     "ts":new Date().getTime(),
+            //     "action":"Ecpm"
+            // }
+            // cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
+            //     console.log("PipeAction",res);
+            // })
+            //自己加密 自己解密
+            // let _data = cc.Tools.encryptData(data);
+            // cc.Tools.decryptData(_data.data);
         }
     }
     registerEvent(){

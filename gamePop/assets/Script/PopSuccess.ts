@@ -95,7 +95,6 @@ export default class PopSuccess extends cc.Component {
                 cc.Tools.lock = true;
                 setTimeout(() => {
                     cc.Tools.lock = false;
-                    console.log("cocos---->success解锁")
                 }, 3000)
             }
             cc.Tools.showJiliAd(4);

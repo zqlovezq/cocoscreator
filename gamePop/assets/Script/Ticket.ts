@@ -18,7 +18,6 @@ export default class Ticket extends cc.Component {
     // 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
     setTicket(ticket:number,add:number,type:number,videoType:number){
         let _videoTypeArr = ["点我领红包","悬浮红包","转盘红包","升级红包","解冻红包","存钱罐","点我领红包(进度不是100%状态)","超级红包","连续消除","雪人红包","其他不重要的通用接口"]
-        console.log(`cocos----setTicket---ticket=${ticket}----add=${add}-----type=${type}-------videoType=${videoType}`)
         this.ticket = ticket;
         this.type = type;
         this.videoType = videoType;

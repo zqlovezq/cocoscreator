@@ -48,7 +48,6 @@ export default class Strategy extends cc.Component {
         // 获取信息列表
         let sendData = {};
         cc.Tools.sendRequest("post-list", "GET", sendData).then((res) => {
-            // console.log(`字段列表${res}`);
             let listConsultData = res.data.news;
             let listStrategyData = res.data.strategy;
             for (let key of Object.keys(listConsultData)) {
@@ -92,7 +91,6 @@ export default class Strategy extends cc.Component {
                 icon.spriteFrame = new cc.SpriteFrame(texture);
             });
         }).catch((err) => {
-            console.log("cocos---->登陆失败----", err);
             if (err === "token验证失败,请重新登陆") {
                 // 重新登陆
                 cc.director.loadScene('Login');

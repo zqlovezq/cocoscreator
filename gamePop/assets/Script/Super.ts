@@ -45,7 +45,6 @@ export default class Super extends cc.Component {
             cc.Tools.lock = true;
             setTimeout(() => {
                 cc.Tools.lock = false;
-                console.log("cocos---->super解锁");
             }, 3000)
         }
         cc.Tools.dot("click_superredbag");

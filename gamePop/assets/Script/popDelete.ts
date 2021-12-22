@@ -42,7 +42,6 @@ export default class PopDelete extends cc.Component {
         videoBtn.stopAllActions();
     }
     showVideo() {
-        console.log("videoType", this.videoType);
         // 点击加锁
         if (cc.Tools.lock) {
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
@@ -51,7 +50,6 @@ export default class PopDelete extends cc.Component {
             cc.Tools.lock = true;
             setTimeout(() => {
                 cc.Tools.lock = false;
-                console.log("cocos---->delete解锁")
             }, 3000)
         }
         cc.Tools.showJiliAd(this.videoType);

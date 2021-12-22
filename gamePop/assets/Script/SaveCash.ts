@@ -83,7 +83,6 @@ export default class SaveCash extends cc.Component {
             // 像服务器发送请求
             let sendData = {};
             cc.Tools.sendRequest("SubSaving", "POST", sendData).then((res) => {
-                console.log("存钱成功");
                 cc.Tools.userInfo.save_amount = res.data.amount;
                 cc.Tools.userInfo.save_freeze_amount = res.data.freeze_amount;
                 let getBtn = this.node.getChildByName("get_btn");

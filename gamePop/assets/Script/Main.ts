@@ -169,6 +169,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
+            cc.Tools.setLevel();
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
@@ -224,7 +225,6 @@ export default class Main extends cc.Component {
                         cc.Tools.lock = true;
                         setTimeout(() => {
                             cc.Tools.lock = false;
-                            console.log("cocos---->AdIntervalShow解锁")
                         }, 3000)
                     }
                     if (res.data.is_show) {
@@ -235,7 +235,6 @@ export default class Main extends cc.Component {
                 })
             }, cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err) => {
-            console.log("cocos---->登陆失败----", err);
             cc.find("Canvas/lose").active = true;
             if (err === "token验证失败,请重新登陆") {
                 // 重新登陆
@@ -253,6 +252,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
+            cc.Tools.setLevel();
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
@@ -308,7 +308,6 @@ export default class Main extends cc.Component {
                 }).start();
             }
         }).catch((err) => {
-            console.log("登陆失败");
             cc.find("Canvas/lose").active = true;
         })
     }
@@ -410,7 +409,6 @@ export default class Main extends cc.Component {
             cc.Tools.lock = true;
             setTimeout(() => {
                 cc.Tools.lock = false;
-                console.log("cocos---->snow解锁")
             }, 3000)
         }
         cc.Tools.dot("click_snowman");
@@ -429,7 +427,6 @@ export default class Main extends cc.Component {
                 cc.Tools.lock = true;
                 setTimeout(() => {
                     cc.Tools.lock = false;
-                    console.log("cocos---->touchRed解锁")
                 }, 3000)
             }
             cc.Tools.dot("click_clickredbag");
@@ -518,7 +515,6 @@ export default class Main extends cc.Component {
     */
     showTicketLayer(ticketInfo: ticketInfo) {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        console.log("cocos--------ticketInfo", JSON.stringify(ticketInfo));
         if (!this.ticketLayer) {
             this.loadPrefab('Prefab/ticket').then((prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -1216,7 +1212,6 @@ export default class Main extends cc.Component {
         };
         let data = cc.Tools.createSignData(sendData);
         cc.Tools.sendRequest("UpdateLevel", "POST", data).then((res) => {
-            console.log("cocos---->升级成功")
             // 刷新一下cc.Tools.userInfo.new_free_level_times
             cc.Tools.userInfo.new_free_level_times = res.data.new_free_level_times;
             cc.Tools.showTips(this.node);
@@ -1286,7 +1281,6 @@ export default class Main extends cc.Component {
             cc.Tools.lock = true;
             setTimeout(() => {
                 cc.Tools.lock = false;
-                console.log("cocos---->floate解锁")
             }, 3000)
         }
         let target = e.target
@@ -1332,7 +1326,7 @@ export default class Main extends cc.Component {
                     count++
                     if (count == c) {
                         // this.closeView()
-                        console.log("动画完毕")
+                        // console.log("动画完毕")
                     }
                 })
                 .start()
