@@ -47,7 +47,7 @@ export default class Super extends cc.Component {
                 cc.Tools.lock = false;
             }, 3000)
         }
-        cc.Tools.dot("click_superredbag");
+        cc.Tools.dot("click_superredbag_1");
         cc.Tools.showJiliAd(8);
         this.closeLayer();
     }

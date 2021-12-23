@@ -14,6 +14,7 @@ export default class GetCash extends cc.Component {
         this.setLayer();
         cc.Tools.showBanner();
         cc.Tools.showTableScreen();
+        cc.Tools.setAdTimes();
         cc.Tools.emitEvent("time", 0);
     }
     setLayer() {
@@ -95,11 +96,8 @@ export default class GetCash extends cc.Component {
         });
         let target = e.target;
         let id = target.parent.name;
-        // let sendData = {
-        //     "id":parseInt(id),
-        //     "ts":new Date().getTime()
-        // };
         let sendData = {
+            "adTimes": cc.Tools.adTimes,
             "id":parseInt(id),
             "ts": new Date().getTime(),//时间戳
             "action":"CashOut"
@@ -117,19 +115,6 @@ export default class GetCash extends cc.Component {
             this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
             cc.Tools.emitEvent("init",false);
         })
-        // cc.Tools.sendRequest("CashOut", "POST", sendData).then((res) => {
-        //     cc.Tools.getCash = res.data.msg;
-        //     // 刷新整个界面
-        //     let items = res.data.items;
-        //     for(let i=0;i<items.length;i++){
-        //         this.setItem(this.content.getChildByName((i+1)+""),items[i]);
-        //     }
-        //     cc.Tools.userInfo.amount = res.data.own_amount;
-        //     let ticket = this.node.getChildByName("ticket").getComponent(cc.Label);
-        //     ticket.string = cc.Tools.userInfo.amount;
-        //     this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
-        //     cc.Tools.emitEvent("init",false);
-        // })
     }
     removeEvent() {
         for(let i=0;i<this.content.children.length;i++){

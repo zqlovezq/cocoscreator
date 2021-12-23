@@ -1,12 +1,12 @@
-var Pubkey = `-----BEGIN 公钥-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk+89V7vpOj1rG6bTAKYM
-56qmFLwNCBVDJ3MltVVtxVUUByqc5b6u909MmmrLBqS//PWC6zc3wZzU1+ayh8xb
-UAEZuA3EjlPHIaFIVIz04RaW10+1xnby/RQE23tDqsv9a2jv/axjE/27b62nzvCW
-eItu1kNQ3MGdcuqKjke+LKhQ7nWPRCOd/ffVqSuRvG0YfUEkOz/6UpsPr6vrI331
-hWRB4DlYy8qFUmDsyvvExe4NjZWblXCqkEXRRAhi2SQRCl3teGuIHtDUxCskRIDi
-aMD+Qt2Yp+Vvbz6hUiqIWSIH1BoHJer/JOq2/O6X3cmuppU4AdVNgy8Bq236iXvr
-MQIDAQAB
------END 公钥-----`
+var Pubkey = `-----BEGIN RSA Public Key-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6xCn65TInQGUCfo6A7IQ
+Wu5oW1AFqYIRnLlzXMo8DB3ZC5grYf7095NWpFFERnhmCxJySj5NAV9XEubPD/za
+ZKkgV2kKM9zbrivOOVVVn1oA5WXvctply81DGsECzNwwDvOTiehlXHxAA+NPCguQ
+TcviR6W5oYH1f9ymjQy9aeKv2OvZhXm/1RzexXnlh1XzdCJtTBROaST7jI20ifKb
+XG/GRgdJrRdb1yghcNnqYtAVUWZKKx9hBI1hpMoE+9q2xMpcZmMGiu8w/nZTVzd7
+M3N56HWWu3nvYpW9KH6xTpmqKlqCemwx8E3ZEdalGp5djkRPKLJPKZ8swMNDgwu2
+ZQIDAQAB
+-----END RSA Public Key-----`
 cc.Tools = {
     /**
      * @param {*} event 数数打点的事件名称
@@ -24,6 +24,14 @@ cc.Tools = {
     getDevice(pram, data) {
         cc.Tools.DeviceInfo = JSON.parse(data);
     },
+    setAdTimes() {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getAdTimes", "()V");
+        }
+    },
+    getAdTimes(data) {
+        cc.Tools.adTimes = Number(data);
+    },
     /**
      * 获取当前的存钱罐的钱数
     */
@@ -33,43 +41,44 @@ cc.Tools = {
         }
     },
     setDistinctId() {
+        // console.log("cocos-----distinct_id=".cc.Tools.userInfo.distinct_id);
         if (cc.sys.isNative) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setDistinctId", "(Ljava/lang/String;)V", cc.Tools.userInfo.distinct_id);
         }
     },
     setUserId() {
+        // console.log("cocos-----user_id=".cc.Tools.userInfo.user_id);
         if (cc.sys.isNative) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setUsertId", "(Ljava/lang/String;)V", cc.Tools.userInfo.user_id + "");
         }
     },
     setLevel() {
+        // console.log("cocos-----level=",cc.Tools.userInfo.level);
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getLevel", "(Ljava/lang/String;)V", cc.Tools.userInfo.level);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getLevel", "(Ljava/lang/String;)V", cc.Tools.userInfo.level + "");
         }
     },
     //数数打点
     shuShuDot() {
+        // console.log("cocos-----shuShu");
         if (cc.sys.isNative) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "startShuShu", "()V");
         }
     },
-    /**
-     * 看视频回调
-     *  //type 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
-     */
     adCallBack(pram) {
         let _pram = pram.split(",");
         let ecpm = _pram[0];
         let type = _pram[1];
         let sendData = {};
         this.getUserEcpm(ecpm, type).then((ad) => {
-             // 点我领红包
-             sendData = {
+            // 点我领红包
+            sendData = {
                 "ad_id": ad,
                 "ts": new Date().getTime(),//时间戳
                 "type": parseInt(type),
-                "action":"AdAward"
+                "action": "AdAward"
             };
+            console.log("AdAward=", JSON.stringify(sendData));
             switch (type) {
                 case "1":
                 case "2":
@@ -110,18 +119,6 @@ cc.Tools = {
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
-                    break;
-                case "20":
-                    //插屏
-                    break;
-                case "21":
-                    //全屏
-                    break;
-                case "22":
-                    //信息流
-                    break;
-                case "23":
-                    //banner
                     break;
                 default:
                     break;
@@ -197,41 +194,17 @@ cc.Tools = {
     getUserEcpm(ecpm, type) {
         // 获取ecpm之后像服务器发的是ecpm/100
         let serverEcpm = parseInt(ecpm / 100);
-        // 单价
-        let priceEcpm = Number(ecpm / (10 * 10000));
         return new Promise(function (resolve, reject) {
-            if (type === "20") {
-                // 插屏
-                cc.Tools.dot("ad_flow", { ecpm: serverEcpm, ad_price: priceEcpm });
-                resolve();
-            } else if (type === "21") {
-                // 开屏
-                // cc.Tools.dot("ad_open_screen", { ecpm: serverEcpm, ad_price: priceEcpm });
-                resolve();
-            } else if (type === "22") {
-                // 信息流
-                cc.Tools.dot("ad_nativie", { ecpm: serverEcpm, ad_price: priceEcpm });
-                resolve();
-            } else if (type === "23") {
-                // 信息流
-                cc.Tools.dot("ad_banner", { ecpm: serverEcpm, ad_price: priceEcpm });
-                resolve();
-            } else {
-                let sendData = {
-                    "ecpm": serverEcpm,
-                    "ts": new Date().getTime(),//时间戳
-                    "type": parseInt(type),
-                    "action":"Ecpm"
-                };
-                let data = cc.Tools.createSignData(sendData);
-                // // 刷新用户ecpm
-                // cc.Tools.sendRequest("Ecpm", "POST", data).then((res) => {
-                //     resolve(res.data.ad_id);
-                // })
-                cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
-                    resolve(res.ad_id);
-                })
-            }
+            let sendData = {
+                "ecpm": serverEcpm,
+                "ts": new Date().getTime(),//时间戳
+                "type": parseInt(type)
+            };
+            let data = cc.Tools.createSignData(sendData);
+            data.action = "Ecpm"
+            cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
+                resolve(res.ad_id);
+            })
         })
     },
     /**
@@ -311,17 +284,13 @@ cc.Tools = {
     */
     encryptData(data) {
         let encrypt = new JSEncrypt();
-        encrypt.setPublicKey('-----BEGIN 公钥-----' + Pubkey + '-----END 公钥-----');
-        // encrypt.setPublicKey('-----BEGIN 私钥-----' + prikey + '-----END 私钥-----');
+        encrypt.setPublicKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----');
         let str = JSON.stringify(data);
         let encrypted = encrypt.encrypt(str);
-        console.log('加密前数据:%o', str);
-        console.log('加密后数据:%o', encrypted);
         let backData = [];
-        for(let i=0;i<encrypted.length;i+=1000){
-            backData.push(encrypted.slice(i,i+1000));
+        for (let i = 0; i < encrypted.length; i += 1000) {
+            backData.push(encrypted.slice(i, i + 1000));
         }
-        console.log("backData=",backData);
         let obj = {
 
         }
@@ -329,20 +298,15 @@ cc.Tools = {
         return obj;
     },
     decryptData(encryptedData) {
-        //使用私钥解密
-        console.log("encryptedData=",encryptedData);
-        // 解密之后的
         let parseData = "";
-        for(let i=0;i<encryptedData.length;i++){
+        for (let i = 0; i < encryptedData.length; i++) {
             let decrypt = new JSEncrypt();
-            // decrypt.setPrivateKey('-----BEGIN 私钥-----' + prikey + '-----END 私钥-----');
-            decrypt.setPrivateKey('-----BEGIN 公钥-----' + Pubkey + '-----END 公钥-----')
+            decrypt.setPrivateKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----')
             let uncrypted = decrypt.decrypt(encryptedData[i]);
-            console.log("uncrypted==",uncrypted);
-            parseData+=uncrypted;
+            parseData += uncrypted;
         }
-        console.log('解密后数据:%o', parseData);
-        return encryptedData
+        console.log('cocos----解密后数据:%o', parseData);
+        return JSON.parse(parseData)
     },
     /**
      * 
@@ -355,9 +319,6 @@ cc.Tools = {
         return new Promise(function (resolve, reject) {
             let xhr = new XMLHttpRequest();
             let requestURL = "https://api.jiankangzhuan.com/api.Hbxxl/" + url;
-            // let requestURL = "http://192.168.3.10:8805/api.Hbxxl/"+url;        
-            // Ecpm CashOut
-            // type.toUpperCase()转换成大写
             xhr.open(type, requestURL, true);
             if (cc.sys.isNative) {
                 xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
@@ -372,14 +333,14 @@ cc.Tools = {
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
                     // 判断接口是否是加密接口
-                    if(url.indexOf("Action")){
+                    if (url.indexOf("Action") !== -1) {
                         if (_response.code === 0) {
                             //解密
                             resolve(cc.Tools.decryptData(_response.data.data))
                         } else {
                             reject(_response.message);
                         }
-                    }else{
+                    } else {
                         if (_response.code === 0) {
                             resolve(_response)
                         } else {
@@ -391,10 +352,9 @@ cc.Tools = {
             xhr.onerror = function () {
                 reject(new Error(xhr.statusText))
             }
-            if(url.indexOf("Action")){
-                // this.encryptData(data)
+            if (url.indexOf("Action") !== -1) {
                 xhr.send(JSON.stringify(cc.Tools.encryptData(data)));
-            }else{
+            } else {
                 xhr.send(JSON.stringify(data));
             }
         })

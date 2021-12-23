@@ -97,6 +97,7 @@ export default class Main extends cc.Component {
         cc.Tools.Event.on("cash", this.showGetCashLayer, this);
         cc.Tools.Event.on("clickRed", this.canClickRedFunc, this);
         cc.Tools.Event.on("showPacket", this.showPacket, this);
+        cc.Tools.adTimes = 0;
         this.ground = cc.find("Canvas/background");
         this.content = cc.find("Canvas/content");
         this.background = this.ground.getChildByName("blockColour");
@@ -252,7 +253,6 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
-            cc.Tools.setLevel();
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
@@ -295,6 +295,7 @@ export default class Main extends cc.Component {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
             }
             if (isReload) {
+                cc.Tools.setLevel();
                 this.init();
             } else {
                 // 刷新存钱罐显示tips
@@ -411,7 +412,7 @@ export default class Main extends cc.Component {
                 cc.Tools.lock = false;
             }, 3000)
         }
-        cc.Tools.dot("click_snowman");
+        cc.Tools.dot("click_snowman_1");
         cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
             cc.Tools.showJiliAd(10);
         });
@@ -429,7 +430,7 @@ export default class Main extends cc.Component {
                     cc.Tools.lock = false;
                 }, 3000)
             }
-            cc.Tools.dot("click_clickredbag");
+            cc.Tools.dot("click_clickredbag_1");
             if (cc.Tools.userInfo.new_free_level_times) {
                 let sendData = {
                     type: 4,
@@ -538,7 +539,7 @@ export default class Main extends cc.Component {
     showUnFreezeLayer(e) {
         let target = e.target;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        cc.Tools.dot("click_icetable")
+        cc.Tools.dot("click_icetable_1")
         // 解冻红包新需求
         cc.Tools.sendRequest("ActiveInfo", "GET", {}).then((res) => {
             let msg = cc.find("Canvas/msg");
@@ -573,7 +574,7 @@ export default class Main extends cc.Component {
      */
     showSaveCashLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        cc.Tools.dot("click_Piggybank")
+        cc.Tools.dot("click_Piggybank_1")
         if (!this.saveCashLayer) {
             this.loadPrefab('Prefab/saveCash').then((prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -608,7 +609,7 @@ export default class Main extends cc.Component {
      */
     showGetCashLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        cc.Tools.dot("click_cash")
+        cc.Tools.dot("click_cash_1")
         if (!this.getCashLayer) {
             this.loadPrefab('Prefab/getCash').then((prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -625,7 +626,7 @@ export default class Main extends cc.Component {
      */
     showTurntableLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        cc.Tools.dot("click_turntable")
+        cc.Tools.dot("click_turntable_1")
         if (!this.turntableLayer) {
             this.loadPrefab('Prefab/turntable').then((prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -1284,7 +1285,7 @@ export default class Main extends cc.Component {
             }, 3000)
         }
         let target = e.target
-        cc.Tools.dot("click_Floatredbag")
+        cc.Tools.dot("click_Floatredbag_1")
         cc.Tools.showJiliAd(2);
         // this.scheduleOnce(() => {
         target.active = false;
