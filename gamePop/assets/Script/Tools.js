@@ -29,6 +29,12 @@ cc.Tools = {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getAdTimes", "()V");
         }
     },
+    getPermission() {
+        if (cc.sys.isNative) {
+            console.log("cocos----getPermission");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPermission", "()V");
+        }
+    },
     getAdTimes(data) {
         cc.Tools.adTimes = Number(data);
     },

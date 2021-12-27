@@ -558,16 +558,6 @@ export default class Main extends cc.Component {
                 target.angle = 0;
             }
         });
-        // if (!this.unFreezeLayer) {
-        //     this.loadPrefab('Prefab/unFreeze').then((prefab) => {
-        //         let layer = cc.instantiate(prefab);
-        //         self.unFreezeLayer = layer;
-        //         self.node.addChild(layer);
-        //         self.unFreezeLayer.active = true;
-        //     })
-        // } else {
-        //     this.unFreezeLayer.active = true;
-        // }
     }
     /**
      * 存钱罐界面
@@ -939,21 +929,6 @@ export default class Main extends cc.Component {
             let arr = [];
             arr.push(obj);
             this.splitToArr(arr);
-            //delete
-
-            // this.deletePosArr.push(obj)
-            // if (i != 0) {
-            //     this.Touch_block(i - 1, j, k)
-            // }
-            // if (i != 9) {
-            //     this.Touch_block(i + 1, j, k)
-            // }
-            // if (j != 0) {
-            //     this.Touch_block(i, j - 1, k)
-            // }
-            // if (j != 9) {
-            //     this.Touch_block(i, j + 1, k)
-            // }
         }
     }
     // 分成数组
@@ -1030,6 +1005,16 @@ export default class Main extends cc.Component {
         this.isOverGame = isOver;
         this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
         if (!isOver) {
+            //向服务器发送激活
+            let isActive = cc.sys.localStorage.getItem("active");
+            if(!isActive){
+                cc.Tools.sendRequest("UserLive", "POST", {
+                    "ts":new Date().getTime()
+                }).then((res) => {
+                    cc.sys.localStorage.setItem("active",true);
+                    console.log("cocos----激活成功");
+                })
+            }
             // 增加金钱特效
             let addInfo = this.cashInfo.getChildByName("add_info");
             this.addTicket += this.Delete_num;
