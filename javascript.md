@@ -355,3 +355,15 @@
 ***二叉树 三叉树 红黑树 V8引擎 装饰器***
 > executeInEditMode----已编辑模式运行---@executeInEditMode(true)
 
+
+# 热更新
+```javascript
+    //构建时请不要勾选 MD5 Cache，否则会导致热更新无效。
+    //并且应该确保在工程目录的 packages 文件夹里导入 hot-update 编辑器插件（范例工程里已经导入了该插件）
+    Version Generator 来生成 Manifest 文件
+    > node version_generator.js -v 1.0.0 -u http://your-server-address/tutorial-hot-update/remote-assets/ -s native/package/ -d assets/
+    -v 指定 Manifest 文件的主版本号。
+    -u 指定服务器远程包的地址，这个地址需要和最初发布版本中 Manifest 文件的远程包地址一致，否则无法检测到更新。
+    -s 本地原生打包版本的目录相对路径。
+    -d 保存 Manifest 文件的地址。
+```
