@@ -17,13 +17,14 @@ export default class Login extends cc.Component {
         this.userProtocol = this.loginLayer.getChildByName("user_protocol");
         if (cc.sys.isNative) {
             let wxToken =  cc.sys.localStorage.getItem("token");
+            console.log("cocos----token---",wxToken);
             if(!wxToken){
                 this.registerEvent();
             }else{
                 cc.director.loadScene('Main');
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMDEsIm9wZW5faWQiOiJvNUNWZTVfSXJGQU5oeDB1bXBELTQ0YzVod1ZnIiwibmlja19uYW1lIjoi5rW355uX6Ii56ZW_Mi4wIiwiZ2VuZGVyIjowLCJhdmF0YXIiOiJodHRwczovL3RoaXJkd3gucWxvZ28uY24vbW1vcGVuL3ZpXzMyL2ZtbUNWeElSU0U5MHVpYXZ0ajZLdFE2UVZ5dU02RE4xdWljMmdpYk5ySkp3aHoySWYybWg2c1lFaWJZcVFvZHppYXpTV25CRUlmZmZRUHNPTnBZeW1RQzB4ZGcvMTMyIiwiY3JlYXRlX3RpbWUiOjE2Mzk1NjAwODUsImNoYW5uZWwiOiJ0YXB0YXAiLCJkaXN0aW5jdF9pZCI6Ijg3ZmQzZDY5LTU0YjYtNDVlZi05YzI3LWIzZTk2Y2EyNjdiNyIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCIsImFuZHJvaWRfaWQiOiI3NmNlZjMxZGU0YTU0Njc0Iiwib2FpZCI6IiJ9.K5qf6ZX27hwvjq6eszxzDyTN_yRXrUhXc_bZ_HBUw5k");
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjoyNTk2OCwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MTAyMTMyNywiY2hhbm5lbCI6InRhcHRhcCIsImRpc3RpbmN0X2lkIjoiMjg2NTRjMTEtYTE2Yy00ZTI4LThhZGEtNmI2M2FhMTI3MjA1IiwiaW1laSI6Ijg2ODczNDAzNjYxNDg3OCIsIm1hYyI6IjAyOjAwOjAwOjAwOjAwOjAwIiwiYW5kcm9pZF9pZCI6Ijc2Y2VmMzFkZTRhNTQ2NzQiLCJvYWlkIjoiZmVlZjVmYmItY2Y2Yi02NzMyLWJjN2YtNWJmZjc3ZGRkYjc5In0.Dz0Eb9IF7BeO0gQXutb465oV3VvSIrRdCK1TdkfcNqQ");
             cc.director.loadScene('Main');
         }
     }

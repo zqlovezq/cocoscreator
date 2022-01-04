@@ -8,7 +8,7 @@ export default class Ticket extends cc.Component {
     private videoType:number = 0;//视频类型
     onEnable(){
         cc.Tools.emitEvent("time",0);
-        cc.Tools.hideFeedScreen();
+        // cc.Tools.hideFeedScreen();
         this.registerEvent();
         let wrap = this.node.getChildByName("wrap");
         this.spine = wrap.getChildByName("spine").getComponent("sp.Skeleton");
@@ -44,7 +44,7 @@ export default class Ticket extends cc.Component {
             if(add/ticket>1){
                 // 那么当时是倍数
                 critical_icon.active = true;
-                lbl.string = add/ticket+"倍";
+                lbl.string = Math.floor(add/ticket)+"倍";
             }else{
                 add_icon.active = true;
                 lbl.string = Math.floor((add/ticket)*100)+"%";

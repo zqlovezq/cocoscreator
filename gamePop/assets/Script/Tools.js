@@ -21,6 +21,7 @@ cc.Tools = {
             }
         }
     },
+    //像服务器发送请求
     getDevice(pram, data) {
         cc.Tools.DeviceInfo = JSON.parse(data);
     },
@@ -31,7 +32,6 @@ cc.Tools = {
     },
     getPermission() {
         if (cc.sys.isNative) {
-            console.log("cocos----getPermission");
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPermission", "()V");
         }
     },
@@ -84,7 +84,6 @@ cc.Tools = {
                 "type": parseInt(type),
                 "action": "AdAward"
             };
-            console.log("AdAward=", JSON.stringify(sendData));
             switch (type) {
                 case "1":
                 case "2":
@@ -138,6 +137,17 @@ cc.Tools = {
     showJiliAd(type) {
         if (cc.sys.isNative) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
+            // if(cc.Tools.adShowNum>0){
+            //     jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
+            // }else{
+            //     cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
+            // }
+        }
+    },
+    //请求预加载新的广告ID
+    setNewAdId(id){
+        if(cc.sys.isNative){
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;)V", ""+id);
         }
     },
     // 显示banner
@@ -208,9 +218,17 @@ cc.Tools = {
             };
             let data = cc.Tools.createSignData(sendData);
             data.action = "Ecpm"
+            // console.log("cocos----Ecpm----data----",data);
             cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
+                cc.Tools.adShowNum = res.ad_show_num;
+                // cc.Tools.adPosId = res.ad_pos_id;
+                // cc.Tools.setNewAdId(res.ad_pos_id?res.ad_pos_id:"947025026");
+                cc.sys.localStorage.setItem("ad_number",res.ad_show_num)
                 resolve(res.ad_id);
+            }).catch((res)=>{
+                console.log("cocos----Ecpm----bug----",res);
+                cc.Tools.setNewAdId("947553533");
             })
         })
     },
@@ -236,6 +254,7 @@ cc.Tools = {
             strToJiaMi += "&" + key + "=" + data[key];
         }, this);
         strToJiaMi = "token=" + cc.Tools.userInfo.sc1 + strToJiaMi;
+        console.log("cocos----加密串---",strToJiaMi);
         var hex_md5 = require("MD5")
         strToJiaMi = hex_md5(strToJiaMi);
         data.sign = strToJiaMi;
@@ -306,10 +325,12 @@ cc.Tools = {
     },
     decryptData(encryptedData) {
         let parseData = "";
+        // console.log('cocos----解密后数据:', encryptedData.length);
         for (let i = 0; i < encryptedData.length; i++) {
             let decrypt = new JSEncrypt();
             decrypt.setPrivateKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----')
             let uncrypted = decrypt.decrypt(encryptedData[i]);
+            // console.log('cocos----解密后----数据:', uncrypted);
             parseData += uncrypted;
         }
         console.log('cocos----解密后数据:%o', parseData);
@@ -338,9 +359,11 @@ cc.Tools = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
+                    // console.log("cocos-----"+url+"------",xhr.response);
                     let _response = JSON.parse(xhr.response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
+                        console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
                         if (_response.code === 0) {
                             //解密
                             resolve(cc.Tools.decryptData(_response.data.data))

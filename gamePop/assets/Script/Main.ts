@@ -97,6 +97,7 @@ export default class Main extends cc.Component {
         cc.Tools.Event.on("cash", this.showGetCashLayer, this);
         cc.Tools.Event.on("clickRed", this.canClickRedFunc, this);
         cc.Tools.Event.on("showPacket", this.showPacket, this);
+        cc.Tools.Event.on("showTips", this.showTips, this);
         cc.Tools.adTimes = 0;
         this.ground = cc.find("Canvas/background");
         this.content = cc.find("Canvas/content");
@@ -118,6 +119,14 @@ export default class Main extends cc.Component {
         this.initUserInfo();
         // 增加一个计时器
         this.schedule(this.repeatFunc, 7.5);
+        //获取当前的广告次数
+        this.getAdTimes();
+    }
+    getAdTimes(){
+        let sendData = {};
+        cc.Tools.sendRequest("UserStat", "GET", sendData).then((res) => {
+           cc.Tools.adShowNum = res.data.ad_show_num;
+        })
     }
     // 主界面循环function
     repeatFunc() {
@@ -135,6 +144,12 @@ export default class Main extends cc.Component {
         cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
             this.schedule(this.repeatFunc, 5)
         }).start();
+        // 每一次钱数跳一下
+        let tips = this.content.getChildByName("tips_info")
+        let tipsLbl = tips.getChildByName("lbl");
+        tipsLbl.stopAllActions();
+        tipsLbl.y = 0;
+        tipsLbl.runAction(cc.sequence(cc.moveBy(0.2,0,20).easing(cc.easeOut(3.0)),cc.moveBy(0.2,0,-20).easing(cc.easeIn(3.0))))
     }
     refreshTime(time: number) {
         this.countTime = time;
@@ -173,17 +188,10 @@ export default class Main extends cc.Component {
             cc.Tools.setLevel();
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
-            let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
-            let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
-            // let lbl_2 = tips.getChildByName("mask").getChildByName("lbl_2").getComponent(cc.RichText);
-            if (cc.Tools.userInfo.level === 1) {
-                lbl_1.string = "<b><color=#5bc5f5>通关第一关解锁  </c><color=#f55b5b>0.3元</color><color=#5bc5f5>无限次</c><color=#f55b5b>提现</color></b>"
-            } else {
-                let str = cc.Tools.userInfo.level_hint.split("|");
-                lbl_1.string = `<b><color=#5bc5f5>通关第${str[0]}关  </c><color=#f55b5b>+${str[1]}%</color><color=#5bc5f5>额外红包奖励</c></b>`
-                // let _str = cc.Tools.userInfo.num_hint.split("|");
-                // lbl_2.string = `<b><color=#5bc5f5>今日第${_str[0]}个红包  </c><color=#f55b5b>+${_str[1]}%</color><color=#5bc5f5>额外奖励</c></b>`
-            }
+            let tips = this.content.getChildByName("tips_info");
+            let tipsLbl = tips.getChildByName("lbl");
+            let amount = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
+            tipsLbl.getComponent(cc.Label).string = amount>3000?`${this.handleNumber(amount/10000)}元`:`${amount}点券`
             let _str = cc.Tools.userInfo.num_hint.split("|");
             let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
@@ -215,26 +223,34 @@ export default class Main extends cc.Component {
             this.showSaveCashLayer();
             this.initShuShu();
             this.init();
+            //获取当前是星期几
+            let myDate = new Date();
+            let markDay = cc.sys.localStorage.getItem("markDay");
+            console.log("cocos---星期%d",myDate.getDay());
+            if(myDate.getDay()!=markDay){
+                cc.sys.localStorage.setItem("markDay",myDate.getDay());
+                cc.Tools.getFreeze();
+            }
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
-            this.schedule(() => {
-                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
-                    // 点击加锁
-                    if (cc.Tools.lock) {
-                        // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
-                        return;
-                    } else {
-                        cc.Tools.lock = true;
-                        setTimeout(() => {
-                            cc.Tools.lock = false;
-                        }, 3000)
-                    }
-                    if (res.data.is_show) {
-                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-                            cc.Tools.showJiliAd(12);
-                        });
-                    }
-                })
-            }, cc.Tools.userInfo.ad_show_interval_second)
+            // this.schedule(() => {
+            //     cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+            //         // 点击加锁
+            //         if (cc.Tools.lock) {
+            //             // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
+            //             return;
+            //         } else {
+            //             cc.Tools.lock = true;
+            //             setTimeout(() => {
+            //                 cc.Tools.lock = false;
+            //             }, 3000)
+            //         }
+            //         if (res.data.is_show) {
+            //             cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            //                 cc.Tools.showJiliAd(12);
+            //             });
+            //         }
+            //     })
+            // }, cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err) => {
             cc.find("Canvas/lose").active = true;
             if (err === "token验证失败,请重新登陆") {
@@ -255,16 +271,10 @@ export default class Main extends cc.Component {
             cc.Tools.userInfo = res.data;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
-            let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
-            let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
-            // let lbl_2 = tips.getChildByName("mask").getChildByName("lbl_2").getComponent(cc.RichText);
-            if (cc.Tools.userInfo.level === 1) {
-                lbl_1.string = "<b><color=#5bc5f5>通关第一关解锁  </c><color=#f55b5b>0.3元</color><color=#5bc5f5>无限次</c><color=#f55b5b>提现</color></b>"
-            } else {
-                let str = cc.Tools.userInfo.level_hint.split("|");
-                lbl_1.string = `<b><color=#5bc5f5>通关第${str[0]}关  </c><color=#f55b5b>+${str[1]}%</color><color=#5bc5f5>额外红包奖励</c></b>`
-            }
-            // tips
+            let tips = this.content.getChildByName("tips_info")
+            let tipsLbl = tips.getChildByName("lbl");
+            let amount = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
+            tipsLbl.getComponent(cc.Label).string = amount>3000?`${this.handleNumber(amount/10000)}元`:`${amount}点券`
             let _str = cc.Tools.userInfo.num_hint.split("|");
             let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
@@ -701,7 +711,7 @@ export default class Main extends cc.Component {
         this.canClickRed = true;
     }
     touchGround(event: any) {
-        cc.Tools.hideFeedScreen();
+        // cc.Tools.hideFeedScreen();
         if (this.lock) {
             return
         }
@@ -1012,7 +1022,6 @@ export default class Main extends cc.Component {
                     "ts":new Date().getTime()
                 }).then((res) => {
                     cc.sys.localStorage.setItem("active",true);
-                    console.log("cocos----激活成功");
                 })
             }
             // 增加金钱特效
@@ -1244,6 +1253,11 @@ export default class Main extends cc.Component {
         }
         return true;
     }
+    //显示提示信息
+    showTips(msg){
+        console.log("cocos----",msg);
+        cc.Tools.showTips(this.node, `<b><color=#ffffff>${msg}</c></b>`);
+    }
     // 让浮球显示并浮动 点击 看激励视频
     floaterMove() {
         let floaterLayer = this.content.getChildByName("floater_layer");
@@ -1270,8 +1284,10 @@ export default class Main extends cc.Component {
             }, 3000)
         }
         let target = e.target
-        cc.Tools.dot("click_Floatredbag_1")
-        cc.Tools.showJiliAd(2);
+        cc.Tools.dot("click_Floatredbag_1");
+        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            cc.Tools.showJiliAd(2);
+        });
         // this.scheduleOnce(() => {
         target.active = false;
         // target.off(cc.Node.EventType.TOUCH_END, this.clickFloate, this);

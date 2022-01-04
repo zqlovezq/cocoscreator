@@ -31,7 +31,7 @@ export default class SecretLayer extends cc.Component {
         closeBtn.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     closeLayer(){
-        cc.Tools.hideFeedScreen();
+        // cc.Tools.hideFeedScreen();
         this.node.active = false;
         cc.Tools.emitEvent("time",new Date().getTime());
     }

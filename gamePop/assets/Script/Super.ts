@@ -48,7 +48,9 @@ export default class Super extends cc.Component {
             }, 3000)
         }
         cc.Tools.dot("click_superredbag_1");
-        cc.Tools.showJiliAd(8);
+        cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            cc.Tools.showJiliAd(8);
+        });
         this.closeLayer();
     }
     goCashLayer() {

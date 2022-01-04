@@ -90,7 +90,9 @@ export default class Turntable extends cc.Component {
             if (!this.canClick) {
                 return;
             }
-            cc.Tools.showJiliAd(3);
+            cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(()=>{
+                cc.Tools.showJiliAd(3);
+            });
         }
     }
     /**

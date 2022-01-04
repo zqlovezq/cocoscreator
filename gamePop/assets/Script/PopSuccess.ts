@@ -97,7 +97,9 @@ export default class PopSuccess extends cc.Component {
                     cc.Tools.lock = false;
                 }, 3000)
             }
-            cc.Tools.showJiliAd(4);
+            cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                cc.Tools.showJiliAd(4);
+            });
             this.closeLayer();
         }
     }

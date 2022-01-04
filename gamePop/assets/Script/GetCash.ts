@@ -103,6 +103,7 @@ export default class GetCash extends cc.Component {
             "action":"CashOut"
         };
         cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
+            console.log("cocos---提现请求---"+JSON.stringify(res))
             cc.Tools.getCash = res.msg;
             // 刷新整个界面
             let items = res.items;

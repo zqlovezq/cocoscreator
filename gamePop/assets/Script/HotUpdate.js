@@ -15,14 +15,6 @@ cc.Class({
         _canRetry: false,
 
         _storagePath: '',
-
-        login: {
-
-            default: null,
-
-            type: cc.Node
-
-        },
         label: {
 
             default: null,
@@ -36,7 +28,6 @@ cc.Class({
         }
     },
     checkCb(event) {
-        console.log('cocos----Code: ' + event.getEventCode());
         switch (event.getEventCode()) {
 
             case jsb.EventAssetsManager.ERROR_NO_LOCAL_MANIFEST:
@@ -56,13 +47,17 @@ cc.Class({
             case jsb.EventAssetsManager.ALREADY_UP_TO_DATE:
 
                 this.label.string = '已经是最新版本';
-                this.login.active = true;
+                console.log('cocos----已经是最新版本');
+                cc.director.loadScene("Login");
                 break;
 
             case jsb.EventAssetsManager.NEW_VERSION_FOUND:
 
                 this.label.string = '有新版本发现';
+                console.log('cocos----有新版本发现');
                 this.node.opacity = 255;
+                this._updating = false;
+                this.hotUpdate();
                 break;
 
             default:
@@ -72,8 +67,6 @@ cc.Class({
         // this._am.setEventCallback(null);
 
         // this._checkListener = null;
-        this._updating = false;
-        this.hotUpdate();
     },
     updateCb(event) {
 
