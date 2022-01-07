@@ -49,7 +49,6 @@ export default class PopSuccess extends cc.Component {
     onEnable() {
         // cc.Tools.showFeedScreen("success");
         cc.Tools.showBanner();
-        cc.Tools.emitEvent("time", 0);
         let closeBtn = this.wrap.getChildByName("close_btn");
         closeBtn.active = false;
         this.scheduleOnce(() => {
@@ -104,7 +103,6 @@ export default class PopSuccess extends cc.Component {
     closeLayer() {
         cc.Tools.hideBanner();
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         cc.Tools.emitEvent("init", true);
         // this.scheduleOnce(()=>{
         //     this.removeEvent();

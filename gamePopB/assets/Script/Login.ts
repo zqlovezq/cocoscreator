@@ -20,10 +20,10 @@ export default class Login extends cc.Component {
             if(!wxToken){
                 this.registerEvent();
             }else{
-                cc.director.loadScene('Main');
+                this.getAdTimes();
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMDEsIm9wZW5faWQiOiJvNUNWZTVfSXJGQU5oeDB1bXBELTQ0YzVod1ZnIiwibmlja19uYW1lIjoi5rW355uX6Ii56ZW_Mi4wIiwiZ2VuZGVyIjowLCJhdmF0YXIiOiJodHRwczovL3RoaXJkd3gucWxvZ28uY24vbW1vcGVuL3ZpXzMyL2ZtbUNWeElSU0U5MHVpYXZ0ajZLdFE2UVZ5dU02RE4xdWljMmdpYk5ySkp3aHoySWYybWg2c1lFaWJZcVFvZHppYXpTV25CRUlmZmZRUHNPTnBZeW1RQzB4ZGcvMTMyIiwiY3JlYXRlX3RpbWUiOjE2Mzk1NjAwODUsImNoYW5uZWwiOiJ0YXB0YXAiLCJkaXN0aW5jdF9pZCI6Ijg3ZmQzZDY5LTU0YjYtNDVlZi05YzI3LWIzZTk2Y2EyNjdiNyIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCIsImFuZHJvaWRfaWQiOiI3NmNlZjMxZGU0YTU0Njc0Iiwib2FpZCI6IiJ9.K5qf6ZX27hwvjq6eszxzDyTN_yRXrUhXc_bZ_HBUw5k");
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjozNjM2OSwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MTUyNzUyMywiY2hhbm5lbCI6InRvdXRpYW96dHh3OS14eGwiLCJkaXN0aW5jdF9pZCI6IjU2ZTc2OTVmLWU2MGEtNDEzOC1iYzJiLThlOTczZTVjMjY5ZSIsImltZWkiOiI4Njg3MzQwMzY2MTQ4NzgiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCIsImFuZHJvaWRfaWQiOiI3NmNlZjMxZGU0YTU0Njc0Iiwib2FpZCI6ImZlZWY1ZmJiLWNmNmItNjczMi1iYzdmLTViZmY3N2RkZGI3OSJ9.nyqpqwtgWM-n3q8mnO0F0MNELwEC4Yd51mGIuwrAlG8");
             cc.director.loadScene('Main');
         }
     }
@@ -104,6 +104,17 @@ export default class Login extends cc.Component {
             }
         }
     }
+    getAdTimes(){
+        let sendData = {};
+        cc.Tools.sendRequest("UserStat", "GET", sendData).then((res) => {
+           cc.Tools.adShowNum = res.data.ad_show_num;
+           cc.Tools.adPosId = res.data.ad_pos_id;
+           cc.Tools.adDif = res.data.is_need_watch;
+           //然后像android预加载
+           cc.Tools.setNewAdId(cc.Tools.adPosId,cc.Tools.adDif?"true":"false");
+           cc.director.loadScene('Main');
+        })
+    }
     getCode(code:string) {
         // {"channel":"walk","imei":"","android_id":"8bacfc24ece79979","mac":"02:00:00:00:00:00","uid":"3b0fe5ec-050d-46bf-aac6-0dc5aa5889c4","oaid":"fbf75dfb-fffd-7f02-6ef6-f7ffbfad8da6"}
         let data = {
@@ -119,9 +130,10 @@ export default class Login extends cc.Component {
         cc.Tools.sendRequest("register", "POST", data).then((res) => {
             cc.sys.localStorage.setItem("token", res.data.token);
             // 拼接一个打点时间
-            cc.director.loadScene('Main');
+            // cc.director.loadScene('Main');
             // cc.director.loadScene('Strategy');
             this.removeEvent();
+            this.getAdTimes();
         })
     }
 }

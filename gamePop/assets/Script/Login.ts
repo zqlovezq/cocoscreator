@@ -17,16 +17,26 @@ export default class Login extends cc.Component {
         this.userProtocol = this.loginLayer.getChildByName("user_protocol");
         if (cc.sys.isNative) {
             let wxToken =  cc.sys.localStorage.getItem("token");
-            console.log("cocos----token---",wxToken);
             if(!wxToken){
                 this.registerEvent();
             }else{
-                cc.director.loadScene('Main');
+                this.getAdTimes();
             }
         } else {
             cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjoyNTk2OCwib3Blbl9pZCI6Im81Q1ZlNV9JckZBTmh4MHVtcEQtNDRjNWh3VmciLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvZm1tQ1Z4SVJTRTkwdWlhdnRqNkt0UTZRVnl1TTZETjF1aWMyZ2liTnJKSndoejJJZjJtaDZzWUVpYllxUW9kemlhelNXbkJFSWZmZlFQc09OcFl5bVFDMHhkZy8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MTAyMTMyNywiY2hhbm5lbCI6InRhcHRhcCIsImRpc3RpbmN0X2lkIjoiMjg2NTRjMTEtYTE2Yy00ZTI4LThhZGEtNmI2M2FhMTI3MjA1IiwiaW1laSI6Ijg2ODczNDAzNjYxNDg3OCIsIm1hYyI6IjAyOjAwOjAwOjAwOjAwOjAwIiwiYW5kcm9pZF9pZCI6Ijc2Y2VmMzFkZTRhNTQ2NzQiLCJvYWlkIjoiZmVlZjVmYmItY2Y2Yi02NzMyLWJjN2YtNWJmZjc3ZGRkYjc5In0.Dz0Eb9IF7BeO0gQXutb465oV3VvSIrRdCK1TdkfcNqQ");
             cc.director.loadScene('Main');
         }
+    }
+    getAdTimes(){
+        let sendData = {};
+        cc.Tools.sendRequest("UserStat", "GET", sendData).then((res) => {
+           cc.Tools.adShowNum = res.data.ad_show_num;
+           cc.Tools.adPosId = res.data.ad_pos_id;
+           cc.Tools.adDif = res.data.is_need_watch;
+           //然后像android预加载
+           cc.Tools.setNewAdId(cc.Tools.adPosId,cc.Tools.adDif?"true":"false");
+           cc.director.loadScene('Main');
+        })
     }
     registerEvent(){
         this.protect = this.loginLayer.getChildByName("protect");
@@ -119,10 +129,12 @@ export default class Login extends cc.Component {
         cc.sys.localStorage.setItem("channel", cc.Tools.DeviceInfo.channel ? cc.Tools.DeviceInfo.channel : "");
         cc.Tools.sendRequest("register", "POST", data).then((res) => {
             cc.sys.localStorage.setItem("token", res.data.token);
+            console.log("cocos----token---",JSON.stringify(res));
             // 拼接一个打点时间
-            cc.director.loadScene('Main');
+            // cc.director.loadScene('Main');
             // cc.director.loadScene('Strategy');
             this.removeEvent();
+            this.getAdTimes();
         })
     }
 }

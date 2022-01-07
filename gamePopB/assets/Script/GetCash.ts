@@ -15,7 +15,6 @@ export default class GetCash extends cc.Component {
         cc.Tools.showBanner();
         cc.Tools.showTableScreen();
         cc.Tools.setAdTimes();
-        cc.Tools.emitEvent("time", 0);
     }
     setLayer() {
         // 像服务器获取提现信息
@@ -129,7 +128,6 @@ export default class GetCash extends cc.Component {
     }
     closeLayer() {
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {

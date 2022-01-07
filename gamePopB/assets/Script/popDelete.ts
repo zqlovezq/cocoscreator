@@ -11,7 +11,7 @@ export default class PopDelete extends cc.Component {
     }
     onEnable() {
         // 显示信息流
-        cc.Tools.showFeedScreen("delete");
+        cc.Tools.showFeedScreen("kai");
         cc.Tools.emitEvent("time", 0);
         // 3秒钟之后出现关闭按钮
         let closeBtn = this.wrap.getChildByName("close_btn");
@@ -52,11 +52,14 @@ export default class PopDelete extends cc.Component {
                 cc.Tools.lock = false;
             }, 3000)
         }
-        cc.Tools.showJiliAd(this.videoType);
+        // cc.Tools.showJiliAd(this.videoType);
+        cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            cc.Tools.showJiliAd(this.videoType);
+        });
         this.closeLayer();
     }
     closeLayer() {
-        cc.Tools.hideFeedScreen();
+        cc.Tools.showFeedScreen("guan");
         this.node.active = false;
         cc.Tools.emitEvent("time", new Date().getTime());
         if (this.videoType !== 9) {

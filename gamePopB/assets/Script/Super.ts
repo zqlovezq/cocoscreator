@@ -13,7 +13,6 @@ export default class Super extends cc.Component {
         _progress.progress = percent;
         let lbl = progress.getChildByName("lbl").getComponent(cc.Label);
         lbl.string = `${cash}/3000`
-        cc.Tools.emitEvent("time", 0);
     }
     registerEvent() {
         let closeBtn = this.node.getChildByName("close_btn");
@@ -53,7 +52,6 @@ export default class Super extends cc.Component {
     }
     goCashLayer() {
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         this.scheduleOnce(() => {
             this.removeEvent();
             cc.Tools.emitEvent("cash");
@@ -61,7 +59,6 @@ export default class Super extends cc.Component {
     }
     closeLayer() {
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         this.scheduleOnce(() => {
             this.removeEvent();
         })

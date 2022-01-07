@@ -21,6 +21,7 @@ cc.Tools = {
             }
         }
     },
+    //像服务器发送请求
     getDevice(pram, data) {
         cc.Tools.DeviceInfo = JSON.parse(data);
     },
@@ -31,7 +32,6 @@ cc.Tools = {
     },
     getPermission() {
         if (cc.sys.isNative) {
-            console.log("cocos----getPermission");
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPermission", "()V");
         }
     },
@@ -84,7 +84,6 @@ cc.Tools = {
                 "type": parseInt(type),
                 "action": "AdAward"
             };
-            console.log("AdAward=", JSON.stringify(sendData));
             switch (type) {
                 case "1":
                 case "2":
@@ -137,7 +136,18 @@ cc.Tools = {
     // 显示激励视频
     showJiliAd(type) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
+            // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
+            if(cc.Tools.adShowNum>0){
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
+            }else{
+                cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
+            }
+        }
+    },
+    //请求预加载新的广告ID isDif 是否分层
+    setNewAdId(id,isDif){
+        if(cc.sys.isNative){
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", ""+id,isDif);
         }
     },
     // 显示banner
@@ -165,9 +175,9 @@ cc.Tools = {
         }
     },
     //显示信息流广告
-    showFeedScreen(from) {
+    showFeedScreen(isShow) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showFeedScreen", "()V");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V",isShow);
         }
     },
     //隐藏信息流广告
@@ -184,7 +194,7 @@ cc.Tools = {
     // 微信登陆
     wxLogin() {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weix1in_login");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weixin_login");
         }
     },
     /**
@@ -210,7 +220,19 @@ cc.Tools = {
             data.action = "Ecpm"
             cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
+                // console.log("cocos----Ecpm----data----",JSON.stringify(res));
+                cc.Tools.adShowNum = res.ad_show_num;
+                cc.sys.localStorage.setItem("ad_number",res.ad_show_num)
+                if(cc.Tools.adDif){
+                    cc.Tools.adPosId = res.ad_pos_id;
+                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                }
                 resolve(res.ad_id);
+            }).catch((res)=>{
+                console.log("cocos----Ecpm----bug----",res);
+                if(cc.Tools.adDif){
+                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                }
             })
         })
     },
@@ -236,6 +258,7 @@ cc.Tools = {
             strToJiaMi += "&" + key + "=" + data[key];
         }, this);
         strToJiaMi = "token=" + cc.Tools.userInfo.sc1 + strToJiaMi;
+        console.log("cocos----加密串---",strToJiaMi);
         var hex_md5 = require("MD5")
         strToJiaMi = hex_md5(strToJiaMi);
         data.sign = strToJiaMi;
@@ -256,36 +279,41 @@ cc.Tools = {
             canvas.fitWidth = true;
         }
     },
-    /**
+  /**
      * 
      * @param {*} n node节点
      * @param {*} str  显示的tips内容
      */
-    showTips(n, str) {
-        return new Promise(function (resolve, reject) {
-            let tips = n.getChildByName("Tips");
-            if (!tips) {
-                reject();
+   showTips(n, str) {
+    return new Promise(function (resolve, reject) {
+        let tips = n.getChildByName("Tips");
+        if (!tips) {
+            reject();
+        }
+        let icon = tips.getChildByName("icon");
+        let lbl = tips.getChildByName("lbl");
+        if (str) {
+            icon.active = false;
+            lbl.active = true;
+            let text = lbl.getChildByName("layout").getChildByName("text");
+            text.getComponent(cc.RichText).string = str;
+            if(lbl.getChildByName("icon")){
+                let _icon = lbl.getChildByName("icon");
+                _icon.x = lbl.getChildByName("layout").width/2-15
             }
-            let icon = tips.getChildByName("icon");
-            let lbl = tips.getChildByName("lbl").getChildByName("text");
-            if (str) {
-                icon.active = false;
-                lbl.parent.active = true;
-                lbl.getComponent(cc.RichText).string = str;
-            } else {
-                icon.active = true;
-                lbl.parent.active = false;
-            }
-            tips.stopAllActions();
-            tips.zIndex = 9999;
-            tips.y = 145;
-            tips.opacity = 255;
-            cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
-                resolve();
-            }).start()
-        })
-    },
+        } else {
+            icon.active = true;
+            lbl.active = false;
+        }
+        tips.stopAllActions();
+        tips.zIndex = 9999;
+        tips.y = 145;
+        tips.opacity = 255;
+        cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
+            resolve();
+        }).start()
+    })
+},
     /**
      * 接口加密
     */
@@ -306,10 +334,12 @@ cc.Tools = {
     },
     decryptData(encryptedData) {
         let parseData = "";
+        // console.log('cocos----解密后数据:', encryptedData.length);
         for (let i = 0; i < encryptedData.length; i++) {
             let decrypt = new JSEncrypt();
             decrypt.setPrivateKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----')
             let uncrypted = decrypt.decrypt(encryptedData[i]);
+            // console.log('cocos----解密后----数据:', uncrypted);
             parseData += uncrypted;
         }
         console.log('cocos----解密后数据:%o', parseData);
@@ -338,11 +368,13 @@ cc.Tools = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
+                    console.log("cocos-----"+url+"------",xhr.response);
                     let _response = JSON.parse(xhr.response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
                         if (_response.code === 0) {
                             //解密
+                            // console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
                             resolve(cc.Tools.decryptData(_response.data.data))
                         } else {
                             reject(_response.message);
@@ -434,4 +466,7 @@ cc.Tools = {
     }
 }
 cc.Tools.userInfo = {};
+cc.Tools.adShowNum = 3;
+cc.Tools.adPosId = "947025026";
+cc.Tools.adDif = false;
 // cc.Tools.DeviceInfo = {};

@@ -136,18 +136,18 @@ cc.Tools = {
     // 显示激励视频
     showJiliAd(type) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
-            // if(cc.Tools.adShowNum>0){
-            //     jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
-            // }else{
-            //     cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
-            // }
+            // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
+            if(cc.Tools.adShowNum>0){
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
+            }else{
+                cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
+            }
         }
     },
-    //请求预加载新的广告ID
-    setNewAdId(id){
+    //请求预加载新的广告ID isDif 是否分层
+    setNewAdId(id,isDif){
         if(cc.sys.isNative){
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;)V", ""+id);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", ""+id,isDif);
         }
     },
     // 显示banner
@@ -175,9 +175,9 @@ cc.Tools = {
         }
     },
     //显示信息流广告
-    showFeedScreen(from) {
+    showFeedScreen(isShow) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showFeedScreen", "()V");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V",isShow);
         }
     },
     //隐藏信息流广告
@@ -194,7 +194,7 @@ cc.Tools = {
     // 微信登陆
     wxLogin() {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weix1in_login");
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_login", "(Ljava/lang/String;)V", "weixin_login");
         }
     },
     /**
@@ -218,17 +218,21 @@ cc.Tools = {
             };
             let data = cc.Tools.createSignData(sendData);
             data.action = "Ecpm"
-            // console.log("cocos----Ecpm----data----",data);
             cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
+                // console.log("cocos----Ecpm----data----",JSON.stringify(res));
                 cc.Tools.adShowNum = res.ad_show_num;
-                // cc.Tools.adPosId = res.ad_pos_id;
-                // cc.Tools.setNewAdId(res.ad_pos_id?res.ad_pos_id:"947025026");
                 cc.sys.localStorage.setItem("ad_number",res.ad_show_num)
+                if(cc.Tools.adDif){
+                    cc.Tools.adPosId = res.ad_pos_id;
+                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                }
                 resolve(res.ad_id);
             }).catch((res)=>{
                 console.log("cocos----Ecpm----bug----",res);
-                cc.Tools.setNewAdId("947553533");
+                if(cc.Tools.adDif){
+                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                }
             })
         })
     },
@@ -359,13 +363,13 @@ cc.Tools = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
-                    // console.log("cocos-----"+url+"------",xhr.response);
+                    console.log("cocos-----"+url+"------",xhr.response);
                     let _response = JSON.parse(xhr.response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
-                        console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
                         if (_response.code === 0) {
                             //解密
+                            // console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
                             resolve(cc.Tools.decryptData(_response.data.data))
                         } else {
                             reject(_response.message);
@@ -457,4 +461,7 @@ cc.Tools = {
     }
 }
 cc.Tools.userInfo = {};
+cc.Tools.adShowNum = 3;
+cc.Tools.adPosId = "947025026";
+cc.Tools.adDif = false;
 // cc.Tools.DeviceInfo = {};

@@ -9,7 +9,6 @@ export default class Setting extends cc.Component {
     }
     onEnable(){
         this.registerEvent();
-        cc.Tools.emitEvent("time",0);
         cc.Tools.showBanner();
         cc.Tools.showTableScreen();
     }
@@ -23,7 +22,6 @@ export default class Setting extends cc.Component {
         let icon = wrap.getChildByName("icon").getComponent(cc.Sprite);
         var remoteUrl = cc.Tools.userInfo.avatar_url;
         cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture:cc.Texture2D) {
-            // Use texture to create sprite frame
             icon.spriteFrame = new cc.SpriteFrame(texture);
         });
     }
@@ -78,7 +76,6 @@ export default class Setting extends cc.Component {
     }
     closeLayer(){
         this.node.active = false;
-        cc.Tools.emitEvent("time",new Date().getTime());
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
         this.scheduleOnce(()=>{

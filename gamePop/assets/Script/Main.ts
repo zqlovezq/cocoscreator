@@ -119,14 +119,7 @@ export default class Main extends cc.Component {
         this.initUserInfo();
         // 增加一个计时器
         this.schedule(this.repeatFunc, 7.5);
-        //获取当前的广告次数
-        this.getAdTimes();
-    }
-    getAdTimes(){
-        let sendData = {};
-        cc.Tools.sendRequest("UserStat", "GET", sendData).then((res) => {
-           cc.Tools.adShowNum = res.data.ad_show_num;
-        })
+       
     }
     // 主界面循环function
     repeatFunc() {
@@ -229,28 +222,30 @@ export default class Main extends cc.Component {
             console.log("cocos---星期%d",myDate.getDay());
             if(myDate.getDay()!=markDay){
                 cc.sys.localStorage.setItem("markDay",myDate.getDay());
-                cc.Tools.getFreeze();
+                if(cc.Tools.userInfo.calendar_msg&&cc.Tools.userInfo.calendar_timestamp){
+                    cc.Tools.getFreeze();
+                }
             }
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
-            // this.schedule(() => {
-            //     cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
-            //         // 点击加锁
-            //         if (cc.Tools.lock) {
-            //             // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
-            //             return;
-            //         } else {
-            //             cc.Tools.lock = true;
-            //             setTimeout(() => {
-            //                 cc.Tools.lock = false;
-            //             }, 3000)
-            //         }
-            //         if (res.data.is_show) {
-            //             cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-            //                 cc.Tools.showJiliAd(12);
-            //             });
-            //         }
-            //     })
-            // }, cc.Tools.userInfo.ad_show_interval_second)
+            this.schedule(() => {
+                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+                    // 点击加锁
+                    if (cc.Tools.lock) {
+                        // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
+                        return;
+                    } else {
+                        cc.Tools.lock = true;
+                        setTimeout(() => {
+                            cc.Tools.lock = false;
+                        }, 3000)
+                    }
+                    if (res.data.is_show) {
+                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                            cc.Tools.showJiliAd(12);
+                        });
+                    }
+                })
+            }, cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err) => {
             cc.find("Canvas/lose").active = true;
             if (err === "token验证失败,请重新登陆") {
@@ -425,6 +420,7 @@ export default class Main extends cc.Component {
         cc.Tools.dot("click_snowman_1");
         cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
             cc.Tools.showJiliAd(10);
+            // cc.Tools.getUserEcpm(100,10);
         });
     }
     // todo

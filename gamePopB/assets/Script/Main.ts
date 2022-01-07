@@ -20,21 +20,17 @@ export default class Main extends cc.Component {
     ground: cc.Node = null;
     content: cc.Node = null;
     cashInfo: cc.Node = null;
-    levelInfo: cc.Node = null;
+    userInfo: cc.Node = null;
     scoreInfo: cc.Node = null;
-    tipsLayer: cc.Node = null;
+    barrageLayer:cc.Node = null;
     getCashLayer: cc.Node = null;
     settingLayer: cc.Node = null;
     saveCashLayer: cc.Node = null;
-    unFreezeLayer: cc.Node = null;
-    turntableLayer: cc.Node = null;
     popSuccessLayer: cc.Node = null;
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
     popSecretLayer: cc.Node = null;
-    scoreBar: cc.ProgressBar = null;
-    percentBar: cc.ProgressBar = null;
     @property(cc.Prefab)
     packet: cc.Prefab = null;
     @property(cc.Prefab)
@@ -44,11 +40,11 @@ export default class Main extends cc.Component {
     @property(cc.Prefab)
     green: cc.Prefab = null;
     @property(cc.Prefab)
-    pink: cc.Prefab = null;
+    yellow: cc.Prefab = null;
     @property(cc.Prefab)
     blue: cc.Prefab = null;
     @property(cc.Prefab)
-    yellow: cc.Prefab = null;
+    pink: cc.Prefab = null;
     @property(cc.Prefab)
     good: cc.Prefab = null;
     @property(cc.Prefab)
@@ -64,7 +60,9 @@ export default class Main extends cc.Component {
     @property([cc.AudioClip])
     effectAudio = [];
     @property([cc.SpriteFrame])
-    popDeleteType = []
+    popDeleteType = [];
+    @property([cc.SpriteFrame])
+    liziBlock = []
     private a = [];
     private b = [];
     private deletePosArr = [];
@@ -83,61 +81,52 @@ export default class Main extends cc.Component {
     private clickRedArr = [];
     private startClickTime = 0;
     private isOverGame = false;
-    private count = 0;
+    private _count = 0;
     private showSecretTimes = 0;
     private clickPos = cc.v3(0, 0);
     private addTicket = 0;
+    private barrageArr = [];
     onLoad() {
         // 初始化参数
         self = this;
         cc.Tools.screenAdapter();
         cc.Tools.Event.on("init", this.refreshUserInfo, this);
         cc.Tools.Event.on("getTicket", this.showTicketLayer, this);
-        cc.Tools.Event.on("time", this.refreshTime, this);
         cc.Tools.Event.on("cash", this.showGetCashLayer, this);
         cc.Tools.Event.on("clickRed", this.canClickRedFunc, this);
         cc.Tools.Event.on("showPacket", this.showPacket, this);
+        //this.emitEvent("addBarrage", { url: cc.Tools.userInfo.avatar_url, vip: 2, str: "恭喜海盗船长提现0.3元现金" });
+        cc.Tools.Event.on("addBarrage", this.addBarrage, this);
         cc.Tools.adTimes = 0;
         this.ground = cc.find("Canvas/background");
         this.content = cc.find("Canvas/content");
         this.background = this.ground.getChildByName("blockColour");
         this.blockBackground = this.ground.getChildByName("blockNull");
         this.cashInfo = this.content.getChildByName("info_layer").getChildByName("cash_info");
-        this.levelInfo = this.content.getChildByName("info_layer").getChildByName("level_info");
+        this.userInfo = this.content.getChildByName("info_layer").getChildByName("user_info");
         this.scoreInfo = this.content.getChildByName("info_layer").getChildByName("score_info");
-        this.tipsLayer = this.content.getChildByName("tips_layer");
-        this.scoreBar = this.scoreInfo.getChildByName("progress").getComponent(cc.ProgressBar);
-        this.percentBar = this.tipsLayer.getChildByName("progress").getComponent(cc.ProgressBar);
+        this.barrageLayer = this.content.getChildByName("barrage_layer");
         this.countTime = new Date().getTime();
-        // 预加载组建
-        this.preloadPrefab();
-        let isOld = cc.sys.localStorage.getItem("first")
-        if (!isOld) {
-            cc.sys.localStorage.setItem("first", true);
-        }
         this.initUserInfo();
         // 增加一个计时器
-        this.schedule(this.repeatFunc, 7.5);
+        // this.schedule(this.repeatFunc, 7.5);
     }
     // 主界面循环function
     repeatFunc() {
-        // 每5秒检测玩家是否在主界面 并且没有行动
-        let date = new Date().getTime();
-        if (this.countTime && !this.lock) {
-            if (date - this.countTime > 7500) {
-                this.showSuperLayer();
-            }
-        }
-        // 每5秒中滚屏
-        this.unschedule(this.repeatFunc);
-        let pop = this.tipsLayer.getChildByName("pop");
-        pop.stopAllActions();
-        cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
-            this.schedule(this.repeatFunc, 5)
-        }).start();
-    }
-    refreshTime(time: number) {
-        this.countTime = time;
+        // // 每5秒检测玩家是否在主界面 并且没有行动
+        // let date = new Date().getTime();
+        // if (this.countTime && !this.lock) {
+        //     if (date - this.countTime > 7500) {
+        //         this.showSuperLayer();
+        //     }
+        // }
+        // // 每5秒中滚屏
+        // this.unschedule(this.repeatFunc);
+        // let pop = this.tipsLayer.getChildByName("pop");
+        // pop.stopAllActions();
+        // cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
+        //     this.schedule(this.repeatFunc, 5)
+        // }).start();
     }
     /**
      * 初始化数数
@@ -163,64 +152,44 @@ export default class Main extends cc.Component {
             return "0";
         }
     }
+    /**
+     * 初始化头像
+     * @param url:头像url
+     * @param vip:Vip等级
+    */
+    addAvatar(url:string,vip:number){
+        this.loadPrefab('Prefab/avatar').then((prefab:cc.Prefab) => {
+            let avatar = cc.instantiate(prefab);
+            self.userInfo.addChild(avatar);
+            avatar.getComponent("Avatar").setAvatar(url,vip);
+        })
+    }
+     /**
+     * 增加弹幕
+    */
+   addBarrage(url:string,vip:number,str:string){
+    this.loadPrefab('Prefab/barrage').then((prefab:cc.Prefab) => {
+        let barrage = cc.instantiate(prefab);
+        self.barrageLayer.addChild(barrage);
+        let _barrage = barrage.getComponent("Barrage").setBarrage(url,vip,str);
+        self.barrageArr.push(_barrage);
+        barrage.runAction(cc.moveTo(5,1000,0));
+    })
+   }
     // 初始化userInfo
     // 今日第X个红包 +Y%额外奖励
     initUserInfo() {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
-            cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
-            cc.Tools.setLevel();
-            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
-            this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
-            let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
-            let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
-            // let lbl_2 = tips.getChildByName("mask").getChildByName("lbl_2").getComponent(cc.RichText);
-            if (cc.Tools.userInfo.level === 1) {
-                lbl_1.string = "<b><color=#5bc5f5>通关第一关解锁  </c><color=#f55b5b>0.3元</color><color=#5bc5f5>无限次</c><color=#f55b5b>提现</color></b>"
-            } else {
-                let str = cc.Tools.userInfo.level_hint.split("|");
-                lbl_1.string = `<b><color=#5bc5f5>通关第${str[0]}关  </c><color=#f55b5b>+${str[1]}%</color><color=#5bc5f5>额外红包奖励</c></b>`
-                // let _str = cc.Tools.userInfo.num_hint.split("|");
-                // lbl_2.string = `<b><color=#5bc5f5>今日第${_str[0]}个红包  </c><color=#f55b5b>+${_str[1]}%</color><color=#5bc5f5>额外奖励</c></b>`
-            }
-            let _str = cc.Tools.userInfo.num_hint.split("|");
-            let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
-            let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
-            text_1.string = _str[0];
-            text_2.string = `/${_str[1]}`
-            this.percentBar.progress = Number(_str[0]) / Number(_str[1]);
-            let pop = this.tipsLayer.getChildByName("pop");
-            let _lbl_1 = pop.getChildByName("lbl_1").getComponent(cc.RichText);
-            let _lbl_2 = pop.getChildByName("lbl_2").getComponent(cc.RichText);
-            _lbl_1.string = `<b><color=#5bc5f5>第</c><color=#f55b5b>${_str[1]}</color><color=#5bc5f5>个红包</c>`
-            _lbl_2.string = `<b><color=#f55b5b>+${_str[2]}%倍</color><color=#5bc5f5>暴击奖励</c>`
-            let btnLayer = this.content.getChildByName("btn_layer");
-            // 红点
-            if (cc.Tools.userInfo.amount >= 3000) {
-                // 显示红点
-                btnLayer.getChildByName("btn_4").getChildByName("red").active = true;
-            } else {
-                btnLayer.getChildByName("btn_4").getChildByName("red").active = false;
-            }
-            // 显示冻结红包的进度条
-            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
-            let freezenRate = cc.Tools.userInfo.active_rate.split("|");
-            let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
-            freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
-            freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
-            if (freezenRate[0] === freezenRate[1]) {
-                freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
-            }
-            this.showSaveCashLayer();
             this.initShuShu();
             this.init();
+            this.addAvatar(res.data.avatar_url,1);
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
             this.schedule(() => {
                 cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
                     // 点击加锁
                     if (cc.Tools.lock) {
-                        // cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
                         return;
                     } else {
                         cc.Tools.lock = true;
@@ -236,12 +205,12 @@ export default class Main extends cc.Component {
                 })
             }, cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err) => {
-            cc.find("Canvas/lose").active = true;
-            if (err === "token验证失败,请重新登陆") {
-                // 重新登陆
-                cc.director.loadScene('Login');
-                cc.sys.localStorage.setItem("token", "");
-            }
+            // cc.find("Canvas/lose").active = true;
+            // if (err === "token验证失败,请重新登陆") {
+            //     // 重新登陆
+            //     cc.director.loadScene('Login');
+            //     cc.sys.localStorage.setItem("token", "");
+            // }
         })
     }
     /**
@@ -253,63 +222,8 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
-            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
-            this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
-            let tips = this.content.getChildByName("info_layer").getChildByName("tips_info")
-            let lbl_1 = tips.getChildByName("mask").getChildByName("lbl_1").getComponent(cc.RichText);
-            // let lbl_2 = tips.getChildByName("mask").getChildByName("lbl_2").getComponent(cc.RichText);
-            if (cc.Tools.userInfo.level === 1) {
-                lbl_1.string = "<b><color=#5bc5f5>通关第一关解锁  </c><color=#f55b5b>0.3元</color><color=#5bc5f5>无限次</c><color=#f55b5b>提现</color></b>"
-            } else {
-                let str = cc.Tools.userInfo.level_hint.split("|");
-                lbl_1.string = `<b><color=#5bc5f5>通关第${str[0]}关  </c><color=#f55b5b>+${str[1]}%</color><color=#5bc5f5>额外红包奖励</c></b>`
-            }
-            // tips
-            let _str = cc.Tools.userInfo.num_hint.split("|");
-            let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
-            let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
-            text_1.string = _str[0];
-            text_2.string = `/${_str[1]}`;
-            this.percentBar.progress = Number(_str[0]) / Number(_str[1]);
-            let pop = this.tipsLayer.getChildByName("pop");
-            let _lbl_1 = pop.getChildByName("lbl_1").getComponent(cc.RichText);
-            let _lbl_2 = pop.getChildByName("lbl_2").getComponent(cc.RichText);
-            _lbl_1.string = `<b><color=#5bc5f5>第</c><color=#f55b5b>${_str[1]}</color><color=#5bc5f5>个红包</c>`
-            _lbl_2.string = `<b><color=#f55b5b>+${_str[2]}%倍</color><color=#5bc5f5>暴击奖励</c>`
-
-            let btnLayer = this.content.getChildByName("btn_layer");
-            // 红点
-            if (cc.Tools.userInfo.amount >= 3000) {
-                // 显示红点
-                btnLayer.getChildByName("btn_4").getChildByName("red").active = true;
-            } else {
-                btnLayer.getChildByName("btn_4").getChildByName("red").active = false;
-            }
-            // 显示冻结红包的进度条
-            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
-            let freezenRate = cc.Tools.userInfo.active_rate.split("|");
-            let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
-            freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
-            freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
-            if (freezenRate[0] === freezenRate[1]) {
-                freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
-            }
-            if (isReload) {
-                cc.Tools.setLevel();
-                this.init();
-            } else {
-                // 刷新存钱罐显示tips
-                let _pop = this.content.getChildByName("btn_layer").getChildByName("btn_2").getChildByName("pop");
-                _pop.active = true;
-                let _popLbl = _pop.getChildByName("lbl").getComponent(cc.Label);
-                _popLbl.string = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount;
-                _pop.stopAllActions();
-                cc.tween(_pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
-                    _pop.active = false;
-                }).start();
-            }
         }).catch((err) => {
-            cc.find("Canvas/lose").active = true;
+            // cc.find("Canvas/lose").active = true;
         })
     }
     /**
@@ -318,9 +232,7 @@ export default class Main extends cc.Component {
     preloadPrefab() {
         cc.resources.preload('Prefab/getCash', cc.Prefab);
         cc.resources.preload('Prefab/setting', cc.Prefab);
-        cc.resources.preload('Prefab/saveCash', cc.Prefab);
-        cc.resources.preload('Prefab/unFreeze', cc.Prefab);
-        cc.resources.preload('Prefab/turntable', cc.Prefab);
+        cc.resources.preload('Prefab/lottery', cc.Prefab);
         cc.resources.preload('Prefab/popSuccess', cc.Prefab);
         cc.resources.preload('Prefab/popDelete', cc.Prefab);
         cc.resources.preload('Prefab/ticket', cc.Prefab);
@@ -343,46 +255,13 @@ export default class Main extends cc.Component {
         this.registerEvent();
     }
     registerEvent() {
-        // 给几个按钮注册事件
-        let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSaveCashLayer", "showSetLayer", "showGetCashLayer", "showTurntableLayer", "clickRed"]
-        for (let i = 1; i <= 6; i++) {
-            let btn = btnLayer.getChildByName("btn_" + i);
-            btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
-        }
-        let spine = this.node.getChildByName("spine");
-        spine.on(cc.Node.EventType.TOUCH_END, this.touchSnow, this);
-
-        let redBtn = this.scoreInfo.getChildByName("icon");
-        redBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
-        redBtn.on(cc.Node.EventType.TOUCH_END, this.touchRed, this);
-
-        let freshBtn = cc.find("Canvas/lose/fresh_btn")
-        freshBtn.on(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
-        let secretBtn = cc.find("Canvas/secret");
-        secretBtn.on(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+        
     }
     showPacket() {
         this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => { })
     }
     removeEvent() {
-        let btnLayer = this.content.getChildByName("btn_layer");
-        let layerType = ["showUnFreezeLayer", "showSaveCashLayer", "showSetLayer", "showGetCashLayer", "showTurntableLayer", "clickRed"]
-        for (let i = 1; i <= 6; i++) {
-            let btn = btnLayer.getChildByName("btn_" + i);
-            btn.off(cc.Node.EventType.TOUCH_END, this["show" + layerType[i - 1]], this);
-        }
-        let spine = this.node.getChildByName("spine");
-        spine.off(cc.Node.EventType.TOUCH_END, this.touchSnow, this);
-
-        let redBtn = this.scoreInfo.getChildByName("icon");
-        redBtn.off(cc.Node.EventType.TOUCH_END, this.touchRed, this);
-
-        let freshBtn = cc.find("Canvas/lose/fresh_btn")
-        freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
-
-        let secretBtn = cc.find("Canvas/secret");
-        secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+        
     }
     showSecretLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
@@ -390,7 +269,7 @@ export default class Main extends cc.Component {
         if (this.showSecretTimes >= 5) {
             this.showSecretTimes = 0;
             if (!this.popSecretLayer) {
-                this.loadPrefab('Prefab/secretLayer').then((prefab) => {
+                this.loadPrefab('Prefab/secretLayer').then((prefab:cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popSecretLayer = layer;
                     self.node.addChild(layer);
@@ -454,7 +333,7 @@ export default class Main extends cc.Component {
             this.lock = false;
             cc.audioEngine.play(this.effectAudio[4], false, 1);
             if (!this.popSuccessLayer) {
-                this.loadPrefab('Prefab/popSuccess').then((prefab) => {
+                this.loadPrefab('Prefab/popSuccess').then((prefab:cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popSuccessLayer = layer;
                     self.node.addChild(layer);
@@ -476,7 +355,7 @@ export default class Main extends cc.Component {
             this.lock = false;
             cc.audioEngine.play(this.effectAudio[3], false, 1);
             if (!this.popDeleteLayer) {
-                this.loadPrefab('Prefab/popDelete').then((prefab) => {
+                this.loadPrefab('Prefab/popDelete').then((prefab:cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popDeleteLayer = layer;
                     self.node.addChild(layer);
@@ -500,7 +379,7 @@ export default class Main extends cc.Component {
     showSuperLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         if (!this.popSuperLayer) {
-            this.loadPrefab('Prefab/super').then((prefab) => {
+            this.loadPrefab('Prefab/super').then((prefab:cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.popSuperLayer = layer;
                 self.node.addChild(layer);
@@ -517,7 +396,7 @@ export default class Main extends cc.Component {
     showTicketLayer(ticketInfo: ticketInfo) {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         if (!this.ticketLayer) {
-            this.loadPrefab('Prefab/ticket').then((prefab) => {
+            this.loadPrefab('Prefab/ticket').then((prefab:cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.ticketLayer = layer;
                 self.ticketLayer.zIndex = 9999;
@@ -566,7 +445,7 @@ export default class Main extends cc.Component {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_Piggybank_1")
         if (!this.saveCashLayer) {
-            this.loadPrefab('Prefab/saveCash').then((prefab) => {
+            this.loadPrefab('Prefab/saveCash').then((prefab:cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.saveCashLayer = layer;
                 self.node.addChild(layer);
@@ -601,7 +480,7 @@ export default class Main extends cc.Component {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_cash_1")
         if (!this.getCashLayer) {
-            this.loadPrefab('Prefab/getCash').then((prefab) => {
+            this.loadPrefab('Prefab/getCash').then((prefab:cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.getCashLayer = layer;
                 self.node.addChild(layer);
@@ -617,16 +496,16 @@ export default class Main extends cc.Component {
     showTurntableLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_turntable_1")
-        if (!this.turntableLayer) {
-            this.loadPrefab('Prefab/turntable').then((prefab) => {
-                let layer = cc.instantiate(prefab);
-                self.turntableLayer = layer;
-                self.node.addChild(layer);
-                self.turntableLayer.active = true;
-            })
-        } else {
-            this.turntableLayer.active = true;
-        }
+        // if (!this.turntableLayer) {
+        //     this.loadPrefab('Prefab/turntable').then((prefab:cc.Prefab) => {
+        //         let layer = cc.instantiate(prefab);
+        //         self.turntableLayer = layer;
+        //         self.node.addChild(layer);
+        //         self.turntableLayer.active = true;
+        //     })
+        // } else {
+        //     this.turntableLayer.active = true;
+        // }
     }
     // todo
     clickRed(e: any) {
@@ -636,7 +515,7 @@ export default class Main extends cc.Component {
         }
         this.clickRedNumber++;
         let bar = e.target.getChildByName("progress").getChildByName("bar");
-        bar.width = this.clickRedNumber >= 6 ? 21 * 6 : this.clickRedNumber * 21;
+        bar.width = this.clickRedNumber >= 6 ? 16 * 6 : this.clickRedNumber * 16;
         // 当天首次点击
         if (cc.Tools.userInfo.is_day_first_click_award) {
             let sendData = {};
@@ -687,12 +566,12 @@ export default class Main extends cc.Component {
                     cc.Tools.sendRequest("NewAward", "POST", sendData).then((res) => {
                         this.showTicketLayer({ ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: 1 });
                         this.clickRedNumber = 0;
-                        bar.width = this.clickRedNumber >= 6 ? 21 * 6 : this.clickRedNumber * 21;
+                        bar.width = this.clickRedNumber >= 6 ? 16 * 6 : this.clickRedNumber * 16;
                     })
                 } else {
                     this.showPopDeleteLayer(1, 1);
                     this.clickRedNumber = 0;
-                    bar.width = this.clickRedNumber >= 6 ? 21 * 6 : this.clickRedNumber * 21;
+                    bar.width = this.clickRedNumber >= 6 ? 16 * 6 : this.clickRedNumber * 16;
                 }
             });
         }
@@ -705,7 +584,6 @@ export default class Main extends cc.Component {
         if (this.lock) {
             return
         }
-        cc.Tools.emitEvent("time", new Date().getTime());
         cc.audioEngine.play(this.effectAudio[0], false, 1);
         this.countTime = new Date().getTime();
         let windowSize = cc.winSize;
@@ -740,10 +618,7 @@ export default class Main extends cc.Component {
         this.clickOnce = true;
         this.addTicket = 0;
         cc.Tools.emitEvent("score", this.curScore);
-        this.scoreBar.progress = 0;
         this.level = cc.Tools.userInfo.level;
-        this.levelInfo.getChildByName("text").getComponent(cc.Label).string = `关卡：${this.level}`;
-        this.scoreInfo.getChildByName("lbl").getComponent(cc.Label).string = "分数越高，过关红包越大";
         this.background.destroyAllChildren();
         this.blockBackground.destroyAllChildren();
         let blockNullColor = "#38537E";
@@ -774,7 +649,7 @@ export default class Main extends cc.Component {
                         node.setPosition(this.ToXY(i, j))
                         break;
                     case 3:
-                        node = cc.instantiate(this.pink)
+                        node = cc.instantiate(this.yellow)
                         node.parent = this.background || this.node
                         node.setPosition(this.ToXY(i, j))
                         break;
@@ -784,7 +659,7 @@ export default class Main extends cc.Component {
                         node.setPosition(this.ToXY(i, j))
                         break;
                     case 5:
-                        node = cc.instantiate(this.yellow)
+                        node = cc.instantiate(this.pink)
                         node.parent = this.background || this.node
                         node.setPosition(this.ToXY(i, j))
 
@@ -891,19 +766,19 @@ export default class Main extends cc.Component {
             }
         }
 
-        let count = 0
+        let _count = 0
         for (let j = 0; j < 10; j++) {
 
-            if (this.a[9][j] > 0 && count > 0) {
+            if (this.a[9][j] > 0 && _count > 0) {
 
                 for (let i = 0; i < 10; i++) {
                     if (this.a[i][j] > 0) {
                         // cc.tween(this.b[i][j]).by(0.3, { position: cc.v2(-count * 74, 0) }).start();
-                        var action = cc.moveBy(0.3, -count * 74, 0)
+                        var action = cc.moveBy(0.3, -_count * 74, 0)
                         this.b[i][j].runAction(action)
-                        this.a[i][j - count] = this.a[i][j]
+                        this.a[i][j - _count] = this.a[i][j]
                         this.a[i][j] = 0
-                        this.b[i][j - count] = this.b[i][j]
+                        this.b[i][j - _count] = this.b[i][j]
                         this.b[i][j] = null
                     }
 
@@ -911,7 +786,7 @@ export default class Main extends cc.Component {
                 continue
             }
             if (this.a[9][j] == 0) {
-                count++
+                _count++
             }
         }
     }
@@ -1001,7 +876,7 @@ export default class Main extends cc.Component {
             this.lock = false;
             return;
         }
-        this.count = 0;
+        this._count = 0;
         this.isOverGame = isOver;
         this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
         if (!isOver) {
@@ -1031,7 +906,7 @@ export default class Main extends cc.Component {
     }
     deleteBlockCb() {
         // let count = 0;
-        let arr = this.deletePosArr[this.count];
+        let arr = this.deletePosArr[this._count];
         for (let t = 0; t < arr.length; t++) {
             let data = arr[t];
             let i = data.i;
@@ -1041,20 +916,21 @@ export default class Main extends cc.Component {
             node.parent = this.background || this.node
             node.setPosition(this.ToXY(i, j))
             let CustomParticle = node.getComponent(cc.ParticleSystem);
-            let color = this.getColorBlock(k);
-            CustomParticle.startColor = new cc.Color().fromHEX(color);
-            CustomParticle.startColorVar = new cc.Color(0, 0, 0)
-            CustomParticle.endColor = new cc.Color().fromHEX(color);
-            CustomParticle.endColorVar = new cc.Color(0, 0, 0)
+            // let color = this.getColorBlock(k);
+            // CustomParticle.startColor = new cc.Color().fromHEX(color);
+            // CustomParticle.startColorVar = new cc.Color(0, 0, 0)
+            // CustomParticle.endColor = new cc.Color().fromHEX(color);
+            // CustomParticle.endColorVar = new cc.Color(0, 0, 0)
+            CustomParticle.spriteFrame = this.liziBlock[k-1];
             CustomParticle.resetSystem();
 
             this.b[i][j].destroy()
             this.b[i][j] = null
         }
-        if (this.count === this.deletePosArr.length - 1) {
+        if (this._count === this.deletePosArr.length - 1) {
             this.afterDeleteBlock()
         }
-        this.count++;
+        this._count++;
     }
     afterDeleteBlock() {
         this.Delete_block();
@@ -1174,7 +1050,6 @@ export default class Main extends cc.Component {
                 let score = this.targetScore - Math.pow(len, 2) * 10;
                 this.curScore += score;
                 cc.Tools.emitEvent("score", this.curScore);
-                this.scoreBar.progress = this.curScore / 1000 > 1 ? 1 : this.curScore / 1000;
                 this.handleDeleteBlock(true);
             }, 1)
         } else {
@@ -1183,8 +1058,6 @@ export default class Main extends cc.Component {
             let score = Math.pow(len, 2) * 10;
             this.curScore += score;
             this.goodFunction(this.Delete_num);
-            this.scoreInfo.getChildByName("lbl").getComponent(cc.Label).string = `${this.Delete_num}连消${score}分`;
-            this.scoreBar.progress = this.curScore / 1000 > 1 ? 1 : this.curScore / 1000;
             cc.Tools.emitEvent("score", this.curScore);
         }
     }
@@ -1296,7 +1169,7 @@ export default class Main extends cc.Component {
 
         let endP = endNode.getPosition()
         endP = this.node.convertToNodeSpaceAR(endNode.parent.convertToWorldSpaceAR(endP))
-        let count = 0;
+        let _count = 0;
         this.schedule(() => {
             let pre = cc.instantiate(this.packet);
             pre.parent = this.node;
@@ -1309,8 +1182,8 @@ export default class Main extends cc.Component {
                 .to(0.4, { position: cc.v3(endP) })
                 .call(() => {
                     pre.destroy()
-                    count++
-                    if (count == c) {
+                    _count++
+                    if (_count == c) {
                         // this.closeView()
                         // console.log("动画完毕")
                     }

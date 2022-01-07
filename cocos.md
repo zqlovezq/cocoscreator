@@ -769,8 +769,8 @@ function getIndex(arr,num){
   <!-- debug keystore -->
   keytool -list -v -keystore debug.keystore
   生成单个渠道包: ./gradlew clean assembleReleaseChannels -PchannelList=meituan
-生成多个渠道包:  ./gradlew clean assembleReleaseChannels -PchannelList=kuaishou,toutiao
-./gradlew clean assembleReleaseChannels -PchannelList=toutiaoztxw3-xxl,kuaishouztxw01-xxl,kuaishouztxw02-xxl,meizu2
+生成多个渠道包:  ./gradlew clean assembleReleaseChannels -PchannelList=kuaishouztxw05-xxl,kuaishouztxw06-xxl
+./gradlew clean assembleReleaseChannels -PchannelList=toutiaoztxw3-xxl,kuaishouztxw01-xxl,kuaishouztxw03-xxl,kuaishouztxw04-xxl,meizu2
 keytool -exportcert -alias key0 -keypass 123456 -keystore ./jkzaaaa.jks -storepass 123456 | md5sum
 
 keytool -list -rfc -keystore jkzaaaa.jks -storepass 123456
