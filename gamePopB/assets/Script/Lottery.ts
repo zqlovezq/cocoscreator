@@ -12,19 +12,21 @@ export default class Turntable extends cc.Component {
     private canClick = true;
     private freeTimes = 0;
     private add: number = 0;
+    private wrap:cc.Node;
     onLoad() {
         // this.initLayer();
-        this.point = this.node.getChildByName("wrap").getChildByName("point");
-        cc.Tools.Event.on('getTable', this.getTableFunc, this);
-        let closeBtn = this.node.getChildByName("close_btn");
+        // this.point = this.node.getChildByName("wrap").getChildByName("point");
+        // cc.Tools.Event.on('getTable', this.getTableFunc, this);
+        this.wrap = this.node.getChildByName("wrap");
+        let closeBtn = this.wrap.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
     }
     onEnable() {
 
-        cc.Tools.showBanner();
-        cc.Tools.showTableScreen();
+        // cc.Tools.showBanner();
+        // cc.Tools.showTableScreen();
         //  获取抽奖状态
-        this.refreshTimes();
+        // this.refreshTimes();
     }
     // 刷新次数
     refreshTimes() {
@@ -117,8 +119,6 @@ export default class Turntable extends cc.Component {
     removeEvent() {
         // let closeBtn = this.node.getChildByName("close_btn");
         // closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
-        let clickBtn = this.node.getChildByName("click_btn");
-        clickBtn.stopAllActions();
     }
     closeLayer() {
         if (this.beginTurn) {

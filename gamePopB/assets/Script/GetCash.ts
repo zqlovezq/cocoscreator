@@ -6,6 +6,8 @@ export default class GetCash extends cc.Component {
     item: cc.Node = null;
     @property(cc.Node)
     content: cc.Node = null;
+    @property([cc.SpriteFrame])
+    bgSp = [];
     onLoad(){
         let closeBtn = this.node.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
@@ -33,6 +35,8 @@ export default class GetCash extends cc.Component {
                 item.name = ""+items[i].id;
                 this.content.addChild(item);
                 this.setItem(item,items[i]);
+                let bg = item.getChildByName("bg").getComponent(cc.Sprite);
+                bg.spriteFrame = this.bgSp[(i%2)];
             }
             this.registerEvent();
         })

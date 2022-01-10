@@ -355,7 +355,9 @@ cc.Tools = {
     sendRequest: function (url, type, data) {
         return new Promise(function (resolve, reject) {
             let xhr = new XMLHttpRequest();
-            let requestURL = "https://api.jiankangzhuan.com/api.Hbxxl/" + url;
+            // let requestURL = "https://api.jiankangzhuan.com/api.xxrich/" + url;
+            //test todo
+            let requestURL = "http://192.168.110.195:8888/api.xxrich/" + url;
             xhr.open(type, requestURL, true);
             if (cc.sys.isNative) {
                 xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
@@ -368,8 +370,8 @@ cc.Tools = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
-                    console.log("cocos-----"+url+"------",xhr.response);
                     let _response = JSON.parse(xhr.response);
+                    console.log("cocos-----"+url+"------",_response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
                         if (_response.code === 0) {
@@ -469,4 +471,4 @@ cc.Tools.userInfo = {};
 cc.Tools.adShowNum = 3;
 cc.Tools.adPosId = "947025026";
 cc.Tools.adDif = false;
-// cc.Tools.DeviceInfo = {};
+cc.Tools.DeviceInfo = {};

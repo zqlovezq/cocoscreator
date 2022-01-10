@@ -4,6 +4,8 @@ const {ccclass, property} = cc._decorator;
 export default class Setting extends cc.Component {
     private userPrivacy:cc.Node = null;
     private userProtocol:cc.Node = null;
+    @property(cc.Prefab)
+    avatar = null;
     onLoad () {
         this.initLayer();
     }
@@ -19,11 +21,15 @@ export default class Setting extends cc.Component {
         let nickName = wrap.getChildByName("nike_name").getComponent(cc.Label);
         nickName.string = cc.Tools.userInfo.nick_name;
         // icon
-        let icon = wrap.getChildByName("icon").getComponent(cc.Sprite);
-        var remoteUrl = cc.Tools.userInfo.avatar_url;
-        cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture:cc.Texture2D) {
-            icon.spriteFrame = new cc.SpriteFrame(texture);
-        });
+        let icon = wrap.getChildByName("icon");
+        // var remoteUrl = cc.Tools.userInfo.avatar_url;
+        // cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture:cc.Texture2D) {
+        //     icon.spriteFrame = new cc.SpriteFrame(texture);
+        // });
+        let avatar = cc.instantiate(this.avatar);
+        icon.addChild(avatar);
+        avatar.getComponent("Avatar").setAvatar(cc.Tools.userInfo.avatar_url,cc.Tools.userInfo.grade_id);
+        avatar.scale = 1.2
     }
     registerEvent(){
         let closeBtn = this.node.getChildByName("close_btn");

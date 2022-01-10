@@ -868,15 +868,15 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 1,
+      "x": 0,
       "y": 0.5
     },
     "_trs": {
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        40.636,
-        258.046,
+        -120,
+        289.358,
         0,
         0,
         0,
@@ -973,7 +973,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 240,
+      "width": 419,
       "height": 81.9
     },
     "_anchorPoint": {
@@ -985,8 +985,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        28.933,
-        258.325,
+        -120,
+        207,
         0,
         0,
         0,
@@ -1038,10 +1038,10 @@
     "_batchAsBitmap": false,
     "_styleFlags": 0,
     "_underlineHeight": 0,
-    "_N$horizontalAlign": 1,
+    "_N$horizontalAlign": 0,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 0,
+    "_N$overflow": 3,
     "_N$cacheMode": 0,
     "_id": ""
   },
@@ -2337,8 +2337,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55,
-      "height": 56
+      "width": 72,
+      "height": 73
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2390,7 +2390,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "468c08b7-6565-4489-a09c-1172a039c117"
+      "__uuid__": "22327d0c-fbc3-4bf9-bb67-54d83d358683"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -2807,8 +2807,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55,
-      "height": 56
+      "width": 72,
+      "height": 73
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2860,7 +2860,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "468c08b7-6565-4489-a09c-1172a039c117"
+      "__uuid__": "22327d0c-fbc3-4bf9-bb67-54d83d358683"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -2917,6 +2917,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "avatar": {
+      "__uuid__": "516307f5-4c6d-4e21-a34e-e03c483e0560"
+    },
     "_id": ""
   },
   {

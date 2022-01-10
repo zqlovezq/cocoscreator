@@ -22,10 +22,12 @@ export default class Main extends cc.Component {
     cashInfo: cc.Node = null;
     userInfo: cc.Node = null;
     scoreInfo: cc.Node = null;
-    barrageLayer:cc.Node = null;
+    barrageLayer: cc.Node = null;
     getCashLayer: cc.Node = null;
     settingLayer: cc.Node = null;
     saveCashLayer: cc.Node = null;
+    lotteryLayer: cc.Node = null;
+    stealLayer: cc.Node = null;
     popSuccessLayer: cc.Node = null;
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
@@ -88,6 +90,7 @@ export default class Main extends cc.Component {
     private barrageArr = [];
     onLoad() {
         // 初始化参数
+        cc.find("PROFILER-NODE").color = new cc.Color().fromHEX("000000");
         self = this;
         cc.Tools.screenAdapter();
         cc.Tools.Event.on("init", this.refreshUserInfo, this);
@@ -107,6 +110,7 @@ export default class Main extends cc.Component {
         this.scoreInfo = this.content.getChildByName("info_layer").getChildByName("score_info");
         this.barrageLayer = this.content.getChildByName("barrage_layer");
         this.countTime = new Date().getTime();
+        this.preloadPrefab();
         this.initUserInfo();
         // 增加一个计时器
         // this.schedule(this.repeatFunc, 7.5);
@@ -131,12 +135,12 @@ export default class Main extends cc.Component {
     /**
      * 初始化数数
     */
-   initShuShu(){
+    initShuShu() {
         // 数数打点
         cc.Tools.shuShuDot();
         cc.Tools.setDistinctId();
         cc.Tools.setUserId();
-   }
+    }
     /**
     * 处理小数精度问题
     * @returns 
@@ -157,53 +161,53 @@ export default class Main extends cc.Component {
      * @param url:头像url
      * @param vip:Vip等级
     */
-    addAvatar(url:string,vip:number){
-        this.loadPrefab('Prefab/avatar').then((prefab:cc.Prefab) => {
+    addAvatar(url: string, vip: number) {
+        this.loadPrefab('Prefab/avatar').then((prefab: cc.Prefab) => {
             let avatar = cc.instantiate(prefab);
             self.userInfo.addChild(avatar);
-            avatar.getComponent("Avatar").setAvatar(url,vip);
+            avatar.getComponent("Avatar").setAvatar(url, vip);
         })
     }
-     /**
-     * 增加弹幕
-    */
-   addBarrage(url:string,vip:number,str:string){
-    this.loadPrefab('Prefab/barrage').then((prefab:cc.Prefab) => {
-        let barrage = cc.instantiate(prefab);
-        self.barrageLayer.addChild(barrage);
-        let _barrage = barrage.getComponent("Barrage").setBarrage(url,vip,str);
-        self.barrageArr.push(_barrage);
-        barrage.runAction(cc.moveTo(5,1000,0));
-    })
-   }
+    /**
+    * 增加弹幕
+   */
+    addBarrage(url: string, vip: number, str: string) {
+        this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab) => {
+            let barrage = cc.instantiate(prefab);
+            self.barrageLayer.addChild(barrage);
+            let _barrage = barrage.getComponent("Barrage").setBarrage(url, vip, str);
+            self.barrageArr.push(_barrage);
+            barrage.runAction(cc.moveTo(5, 1000, 0));
+        })
+    }
     // 初始化userInfo
-    // 今日第X个红包 +Y%额外奖励
     initUserInfo() {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.Tools.userInfo = res.data;
+            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             this.initShuShu();
             this.init();
-            this.addAvatar(res.data.avatar_url,1);
+            this.addAvatar(res.data.avatar_url, cc.Tools.userInfo.grade_id);
             // 增加一个定时器 一定时间没有看视频 主动弹出视频
-            this.schedule(() => {
-                cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
-                    // 点击加锁
-                    if (cc.Tools.lock) {
-                        return;
-                    } else {
-                        cc.Tools.lock = true;
-                        setTimeout(() => {
-                            cc.Tools.lock = false;
-                        }, 3000)
-                    }
-                    if (res.data.is_show) {
-                        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-                            cc.Tools.showJiliAd(12);
-                        });
-                    }
-                })
-            }, cc.Tools.userInfo.ad_show_interval_second)
+            // this.schedule(() => {
+            //     cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+            //         // 点击加锁
+            //         if (cc.Tools.lock) {
+            //             return;
+            //         } else {
+            //             cc.Tools.lock = true;
+            //             setTimeout(() => {
+            //                 cc.Tools.lock = false;
+            //             }, 3000)
+            //         }
+            //         if (res.data.is_show) {
+            //             cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+            //                 cc.Tools.showJiliAd(12);
+            //             });
+            //         }
+            //     })
+            // }, cc.Tools.userInfo.ad_show_interval_second)
         }).catch((err) => {
             // cc.find("Canvas/lose").active = true;
             // if (err === "token验证失败,请重新登陆") {
@@ -214,14 +218,16 @@ export default class Main extends cc.Component {
         })
     }
     /**
-     * @param cb ----回调函数 
-     * @param arg ----回调参数
+     * @param isReload ----是否加载游戏 
      */
     refreshUserInfo(isReload: boolean) {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
-            cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
+            this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
+            if (isReload) {
+                this.init();
+            }
         }).catch((err) => {
             // cc.find("Canvas/lose").active = true;
         })
@@ -255,13 +261,27 @@ export default class Main extends cc.Component {
         this.registerEvent();
     }
     registerEvent() {
-        
+        let btnLayer = this.content.getChildByName("btn_layer");
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealleLayer", "showLotteryleLayer", "clickRed"]
+        for (let i = 1; i <= 6; i++) {
+            let btn = btnLayer.getChildByName("btn_" + i);
+            btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
+        }
+        let secretBtn = cc.find("Canvas/secret");
+        secretBtn.on(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+    }
+    removeEvent() {
+        let btnLayer = this.content.getChildByName("btn_layer");
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealleLayer", "showLotteryleLayer", "clickRed"]
+        for (let i = 1; i <= 6; i++) {
+            let btn = btnLayer.getChildByName("btn_" + i);
+            btn.off(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
+        }
+        let secretBtn = cc.find("Canvas/secret");
+        secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
     }
     showPacket() {
         this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => { })
-    }
-    removeEvent() {
-        
     }
     showSecretLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
@@ -269,7 +289,7 @@ export default class Main extends cc.Component {
         if (this.showSecretTimes >= 5) {
             this.showSecretTimes = 0;
             if (!this.popSecretLayer) {
-                this.loadPrefab('Prefab/secretLayer').then((prefab:cc.Prefab) => {
+                this.loadPrefab('Prefab/secretLayer').then((prefab: cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popSecretLayer = layer;
                     self.node.addChild(layer);
@@ -280,23 +300,6 @@ export default class Main extends cc.Component {
             }
         }
     }
-    touchSnow() {
-        // 点击加锁
-        if (cc.Tools.lock) {
-            cc.Tools.showTips(this.node, `<b><color=#ffffff>点击太频繁</c></b>`);
-            return;
-        } else {
-            cc.Tools.lock = true;
-            setTimeout(() => {
-                cc.Tools.lock = false;
-            }, 3000)
-        }
-        cc.Tools.dot("click_snowman_1");
-        cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-            cc.Tools.showJiliAd(10);
-        });
-    }
-    // todo
     touchRed() {
         if (cc.Tools.userInfo.up_level_num_not_get) {
             // 点击加锁
@@ -333,7 +336,7 @@ export default class Main extends cc.Component {
             this.lock = false;
             cc.audioEngine.play(this.effectAudio[4], false, 1);
             if (!this.popSuccessLayer) {
-                this.loadPrefab('Prefab/popSuccess').then((prefab:cc.Prefab) => {
+                this.loadPrefab('Prefab/popSuccess').then((prefab: cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popSuccessLayer = layer;
                     self.node.addChild(layer);
@@ -355,7 +358,7 @@ export default class Main extends cc.Component {
             this.lock = false;
             cc.audioEngine.play(this.effectAudio[3], false, 1);
             if (!this.popDeleteLayer) {
-                this.loadPrefab('Prefab/popDelete').then((prefab:cc.Prefab) => {
+                this.loadPrefab('Prefab/popDelete').then((prefab: cc.Prefab) => {
                     let layer = cc.instantiate(prefab);
                     self.popDeleteLayer = layer;
                     self.node.addChild(layer);
@@ -379,7 +382,7 @@ export default class Main extends cc.Component {
     showSuperLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         if (!this.popSuperLayer) {
-            this.loadPrefab('Prefab/super').then((prefab:cc.Prefab) => {
+            this.loadPrefab('Prefab/super').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.popSuperLayer = layer;
                 self.node.addChild(layer);
@@ -396,7 +399,7 @@ export default class Main extends cc.Component {
     showTicketLayer(ticketInfo: ticketInfo) {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         if (!this.ticketLayer) {
-            this.loadPrefab('Prefab/ticket').then((prefab:cc.Prefab) => {
+            this.loadPrefab('Prefab/ticket').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.ticketLayer = layer;
                 self.ticketLayer.zIndex = 9999;
@@ -445,7 +448,7 @@ export default class Main extends cc.Component {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_Piggybank_1")
         if (!this.saveCashLayer) {
-            this.loadPrefab('Prefab/saveCash').then((prefab:cc.Prefab) => {
+            this.loadPrefab('Prefab/saveCash').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.saveCashLayer = layer;
                 self.node.addChild(layer);
@@ -480,7 +483,7 @@ export default class Main extends cc.Component {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_cash_1")
         if (!this.getCashLayer) {
-            this.loadPrefab('Prefab/getCash').then((prefab:cc.Prefab) => {
+            this.loadPrefab('Prefab/getCash').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
                 self.getCashLayer = layer;
                 self.node.addChild(layer);
@@ -493,19 +496,36 @@ export default class Main extends cc.Component {
     /**
      * 转盘界面
      */
-    showTurntableLayer() {
+    showLotteryleLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_turntable_1")
-        // if (!this.turntableLayer) {
-        //     this.loadPrefab('Prefab/turntable').then((prefab:cc.Prefab) => {
-        //         let layer = cc.instantiate(prefab);
-        //         self.turntableLayer = layer;
-        //         self.node.addChild(layer);
-        //         self.turntableLayer.active = true;
-        //     })
-        // } else {
-        //     this.turntableLayer.active = true;
-        // }
+        if (!this.lotteryLayer) {
+            this.loadPrefab('Prefab/lottery').then((prefab: cc.Prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.lotteryLayer = layer;
+                self.node.addChild(layer);
+                self.lotteryLayer.active = true;
+            })
+        } else {
+            this.lotteryLayer.active = true;
+        }
+    }
+    /**
+     * 大乱斗界面
+    */
+    showStealleLayer() {
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        cc.Tools.dot("click_turntable_1")
+        if (!this.stealLayer) {
+            this.loadPrefab('Prefab/steal').then((prefab: cc.Prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.stealLayer = layer;
+                self.node.addChild(layer);
+                self.stealLayer.active = true;
+            })
+        } else {
+            this.stealLayer.active = true;
+        }
     }
     // todo
     clickRed(e: any) {
@@ -609,16 +629,43 @@ export default class Main extends cc.Component {
             }
         }
     }
+    //设置scoreinfo
+    setScoreInfo(score: number) {
+        let scoreNode = this.scoreInfo.getChildByName("score");
+        let scoreLbl = scoreNode.getChildByName("text").getComponent(cc.Label);
+        scoreLbl.string = score + "分";
+        //加进度条 进度条满分6000
+        let progressBar = this.scoreInfo.getChildByName("progress").getComponent(cc.ProgressBar);
+        //进度条大小取值0-1 为一位小数
+        let val = (Math.floor(score * 100 / 6000)) / 100 > 1 ? 1 : (Math.floor(score * 100 / 6000)) / 100;
+        console.log("val=", val);
+        // progressBar.progress = val
+        // scoreNode.x = -150+390*val;
+        cc.tween(progressBar).to(0.1,{progress:val}).start();
+        cc.tween(scoreNode).to(0.1,{x: -150+390*val}).start();
+        //根据score判断星数
+        for (let i = 1; i <= 3; i++) {
+            let star = this.scoreInfo.getChildByName("star_" + i);
+            let activeNode = star.getChildByName("active");
+            let unActiveNode = star.getChildByName("unActive");
+            unActiveNode.active = true;
+            activeNode.active = false;
+            if (score > 3000 * (i - 1)) {
+                activeNode.active = true;
+            }
+        }
+    }
     /**
-     * 初始化场景
+     * 初始化关卡
      */
     init() {
         this.ground.on(cc.Node.EventType.TOUCH_START, this.touchGround, this);
         this.curScore = 0;
         this.clickOnce = true;
         this.addTicket = 0;
-        cc.Tools.emitEvent("score", this.curScore);
-        this.level = cc.Tools.userInfo.level;
+        let levelLbl = this.scoreInfo.getChildByName("text").getComponent(cc.Label);
+        levelLbl.string = `关卡：${cc.Tools.userInfo.level}`
+        this.setScoreInfo(this.curScore);
         this.background.destroyAllChildren();
         this.blockBackground.destroyAllChildren();
         let blockNullColor = "#38537E";
@@ -882,11 +929,11 @@ export default class Main extends cc.Component {
         if (!isOver) {
             //向服务器发送激活
             let isActive = cc.sys.localStorage.getItem("active");
-            if(!isActive){
+            if (!isActive) {
                 cc.Tools.sendRequest("UserLive", "POST", {
-                    "ts":new Date().getTime()
+                    "ts": new Date().getTime()
                 }).then((res) => {
-                    cc.sys.localStorage.setItem("active",true);
+                    cc.sys.localStorage.setItem("active", true);
                     console.log("cocos----激活成功");
                 })
             }
@@ -921,7 +968,7 @@ export default class Main extends cc.Component {
             // CustomParticle.startColorVar = new cc.Color(0, 0, 0)
             // CustomParticle.endColor = new cc.Color().fromHEX(color);
             // CustomParticle.endColorVar = new cc.Color(0, 0, 0)
-            CustomParticle.spriteFrame = this.liziBlock[k-1];
+            CustomParticle.spriteFrame = this.liziBlock[k - 1];
             CustomParticle.resetSystem();
 
             this.b[i][j].destroy()
@@ -1049,7 +1096,7 @@ export default class Main extends cc.Component {
                 let len = this.Delete_num - 1;
                 let score = this.targetScore - Math.pow(len, 2) * 10;
                 this.curScore += score;
-                cc.Tools.emitEvent("score", this.curScore);
+                this.setScoreInfo(this.curScore);
                 this.handleDeleteBlock(true);
             }, 1)
         } else {
@@ -1057,8 +1104,8 @@ export default class Main extends cc.Component {
             let len = this.Delete_num - 1
             let score = Math.pow(len, 2) * 10;
             this.curScore += score;
+            this.setScoreInfo(this.curScore);
             this.goodFunction(this.Delete_num);
-            cc.Tools.emitEvent("score", this.curScore);
         }
     }
     updateLevel() {
