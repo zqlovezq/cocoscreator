@@ -59,6 +59,7 @@ export default class Super extends cc.Component {
     }
     closeLayer() {
         this.node.active = false;
+        cc.Tools.emitEvent("init",false);
         this.scheduleOnce(() => {
             this.removeEvent();
         })

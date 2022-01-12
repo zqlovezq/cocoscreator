@@ -85,12 +85,12 @@ cc.Tools = {
                 "action": "AdAward"
             };
             switch (type) {
-                case "1":
-                case "2":
-                case "7":
-                case "8":
-                case "10":
-                case "12":
+                case "1"://点我领红包
+                case "2"://悬浮红包
+                case "7"://点我领红包
+                case "8"://超级红包
+                case "10"://雪人红包
+                case "12"://定时器红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
@@ -99,6 +99,11 @@ cc.Tools = {
                     // 看视频转盘
                     this.emitEvent("getTable", ad);
                     break;
+                case "13"://偷能量
+                case "14"://复仇
+                case "16"://宝箱
+                case "17"://签到
+                case "15"://存钱罐解冻
                 case "4":
                     // 升级红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
@@ -137,17 +142,17 @@ cc.Tools = {
     showJiliAd(type) {
         if (cc.sys.isNative) {
             // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
-            if(cc.Tools.adShowNum>0){
-                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
-            }else{
-                cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
+            if (cc.Tools.adShowNum > 0) {
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);
+            } else {
+                cc.Tools.emitEvent("showTips", "今天观看视频次数已经达到上限");
             }
         }
     },
     //请求预加载新的广告ID isDif 是否分层
-    setNewAdId(id,isDif){
-        if(cc.sys.isNative){
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", ""+id,isDif);
+    setNewAdId(id, isDif) {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", "" + id, isDif);
         }
     },
     // 显示banner
@@ -177,7 +182,7 @@ cc.Tools = {
     //显示信息流广告
     showFeedScreen(isShow) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V",isShow);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V", isShow);
         }
     },
     //隐藏信息流广告
@@ -222,16 +227,16 @@ cc.Tools = {
                 cc.Tools.reminderMsg = res.msg;
                 // console.log("cocos----Ecpm----data----",JSON.stringify(res));
                 cc.Tools.adShowNum = res.ad_show_num;
-                cc.sys.localStorage.setItem("ad_number",res.ad_show_num)
-                if(cc.Tools.adDif){
+                cc.sys.localStorage.setItem("ad_number", res.ad_show_num)
+                if (cc.Tools.adDif) {
                     cc.Tools.adPosId = res.ad_pos_id;
-                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
                 }
                 resolve(res.ad_id);
-            }).catch((res)=>{
-                console.log("cocos----Ecpm----bug----",res);
-                if(cc.Tools.adDif){
-                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+            }).catch((res) => {
+                console.log("cocos----Ecpm----bug----", res);
+                if (cc.Tools.adDif) {
+                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
                 }
             })
         })
@@ -258,7 +263,7 @@ cc.Tools = {
             strToJiaMi += "&" + key + "=" + data[key];
         }, this);
         strToJiaMi = "token=" + cc.Tools.userInfo.sc1 + strToJiaMi;
-        console.log("cocos----加密串---",strToJiaMi);
+        console.log("cocos----加密串---", strToJiaMi);
         var hex_md5 = require("MD5")
         strToJiaMi = hex_md5(strToJiaMi);
         data.sign = strToJiaMi;
@@ -279,41 +284,41 @@ cc.Tools = {
             canvas.fitWidth = true;
         }
     },
-  /**
-     * 
-     * @param {*} n node节点
-     * @param {*} str  显示的tips内容
-     */
-   showTips(n, str) {
-    return new Promise(function (resolve, reject) {
-        let tips = n.getChildByName("Tips");
-        if (!tips) {
-            reject();
-        }
-        let icon = tips.getChildByName("icon");
-        let lbl = tips.getChildByName("lbl");
-        if (str) {
-            icon.active = false;
-            lbl.active = true;
-            let text = lbl.getChildByName("layout").getChildByName("text");
-            text.getComponent(cc.RichText).string = str;
-            if(lbl.getChildByName("icon")){
-                let _icon = lbl.getChildByName("icon");
-                _icon.x = lbl.getChildByName("layout").width/2-15
+    /**
+       * 
+       * @param {*} n node节点
+       * @param {*} str  显示的tips内容
+       */
+    showTips(n, str) {
+        return new Promise(function (resolve, reject) {
+            let tips = n.getChildByName("Tips");
+            if (!tips) {
+                reject();
             }
-        } else {
-            icon.active = true;
-            lbl.active = false;
-        }
-        tips.stopAllActions();
-        tips.zIndex = 9999;
-        tips.y = 145;
-        tips.opacity = 255;
-        cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
-            resolve();
-        }).start()
-    })
-},
+            let icon = tips.getChildByName("icon");
+            let lbl = tips.getChildByName("lbl");
+            if (str) {
+                icon.active = false;
+                lbl.active = true;
+                let text = lbl.getChildByName("layout").getChildByName("text");
+                text.getComponent(cc.RichText).string = str;
+                if (lbl.getChildByName("icon")) {
+                    let _icon = lbl.getChildByName("icon");
+                    _icon.x = lbl.getChildByName("layout").width / 2 - 15
+                }
+            } else {
+                icon.active = true;
+                lbl.active = false;
+            }
+            tips.stopAllActions();
+            tips.zIndex = 9999;
+            tips.y = 145;
+            tips.opacity = 255;
+            cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
+                resolve();
+            }).start()
+        })
+    },
     /**
      * 接口加密
     */
@@ -371,7 +376,7 @@ cc.Tools = {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
-                    console.log("cocos-----"+url+"------",_response);
+                    console.log("cocos-----" + url + "------", _response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
                         if (_response.code === 0) {
@@ -435,13 +440,13 @@ cc.Tools = {
      * 
      * @param {动画节点} btn 
      */
-    popAnim(btn) {
+    popAnim(btn, y) {
         btn.stopAllActions();
         let pos = btn.getPosition(cc.v2());
-        let action1 = cc.moveTo(1, pos.x, pos.y + 10);
-        let action2 = cc.moveTo(1, pos.x, 0);
-        let action3 = cc.moveTo(1, pos.x, pos.y - 10);
-        let action4 = cc.moveTo(1, pos.x, 0);
+        let action1 = cc.moveTo(1, pos.x, pos.y + y);
+        let action2 = cc.moveTo(1, pos.x, pos.y);
+        let action3 = cc.moveTo(1, pos.x, pos.y - y);
+        let action4 = cc.moveTo(1, pos.x, pos.y);
         let ac = [];
         ac.push(action1, action2, action3, action4);
         let action = cc.sequence(ac)
@@ -465,6 +470,16 @@ cc.Tools = {
         let a = m - n;
         let num = Math.random() * a + n;
         return parseInt(num);
+    },
+    /**
+     * 将秒数转成时间
+    */
+    changeTime(count) {
+        let hour = Math.floor(count / 3600);
+        let minute = Math.floor((count - 3600 * hour) / 60);
+        let second = count - hour * 3600 - 60 * minute;
+        console.log(`${hour}时+${minute}分+${second}秒`);
+        return hour > 0 ? hour + "时" : "" + minute > 0 ? minute + "分" : "" + second > 0 ? second + "秒" : "";
     }
 }
 cc.Tools.userInfo = {};

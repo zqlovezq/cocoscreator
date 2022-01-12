@@ -21,5 +21,6 @@ export default class SecretLayer extends cc.Component {
     }
     closeLayer(){
         this.node.active = false;
+        cc.Tools.emitEvent("init",false);
     }
 }

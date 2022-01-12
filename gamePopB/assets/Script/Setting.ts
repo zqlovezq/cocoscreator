@@ -82,6 +82,7 @@ export default class Setting extends cc.Component {
     }
     closeLayer(){
         this.node.active = false;
+        cc.Tools.emitEvent("init",false);
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
         this.scheduleOnce(()=>{

@@ -61,7 +61,7 @@ export default class PopDelete extends cc.Component {
     closeLayer() {
         cc.Tools.showFeedScreen("guan");
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
+        cc.Tools.emitEvent("init",false);
         if (this.videoType !== 9) {
             cc.Tools.emitEvent("clickRed");
         }

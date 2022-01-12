@@ -28,24 +28,36 @@ export default class Barrage extends cc.Component {
      * @param vip:弹幕的vip等级
      * @param str:弹幕
     */
-    setBarrage(iconUrl: string, vip: number,str:string){
-        console.log("barrage this ",this);
+    setBarrage(info:any){
+        if(!info){
+            return;
+        }
+        let userInfo = info.user;
+        let referInfo = info.refer_user;
+        let str = "";
         let avatar = cc.instantiate(this.avatar);
-        this.node.addChild(avatar);
-        avatar.getComponent("Avatar").setAvatar(iconUrl,vip);
+        this.node.getChildByName("avatar").addChild(avatar);
+        avatar.getComponent("Avatar").setAvatar(userInfo.avatar,userInfo.grade_id);
         avatar.scale = 0.8
         let layout = this.node.getChildByName("layout").getComponent(cc.Sprite);
-        layout.spriteFrame = this.kuang[vip];
+        layout.spriteFrame = this.kuang[userInfo.grade_id];
         let text = layout.node.getChildByName("text").getComponent(cc.Label);
-        text.string = str;
-        for(let i=1;i<3;i++){
-            let star = this.node.getChildByName("star_"+i).getComponent(cc.Sprite);
-            star.spriteFrame = this.star[vip];
-            star.node.x = layout.node.width-150;
+        if(info.action==="steal"){
+            str = `${userInfo.user_name}偷取了${referInfo.user_name}${info.data}红包券`
+        }else if(info.action === "cash"){
+            str = `${userInfo.user_name}提取了${info.data/100}元红包`
         }
+        text.string = str;
         this.node.x = 1000;
-        return this.node;
-        // this.node.runAction(cc.moveTo(5,-1000,0));
+        this.node.getChildByName("layout").getComponent(cc.Layout).updateLayout();
+        this.scheduleOnce(()=>{
+            console.log("延时执行");
+            for(let i=1;i<3;i++){
+                let star = this.node.getChildByName("star_"+i).getComponent(cc.Sprite);
+                star.spriteFrame = this.star[userInfo.grade_id];
+                star.node.x = layout.node.width-150;
+            }
+        },0.1)
     }
     // update (dt) {}
 }

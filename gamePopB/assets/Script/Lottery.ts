@@ -2,164 +2,84 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Turntable extends cc.Component {
-    private beginTurn: boolean = false;
-    private speed: number = 18;
-    private point: cc.Node = null;
-    private circle: number = 0;
-    private value: number = 1;
-    private endAngle: number = 0;
-    private ticket: number = 0;
-    private canClick = true;
-    private freeTimes = 0;
-    private add: number = 0;
     private wrap:cc.Node;
     onLoad() {
-        // this.initLayer();
-        // this.point = this.node.getChildByName("wrap").getChildByName("point");
-        // cc.Tools.Event.on('getTable', this.getTableFunc, this);
         this.wrap = this.node.getChildByName("wrap");
         let closeBtn = this.wrap.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+        this.registerEvent();
     }
     onEnable() {
-
-        // cc.Tools.showBanner();
-        // cc.Tools.showTableScreen();
-        //  获取抽奖状态
-        // this.refreshTimes();
-    }
-    // 刷新次数
-    refreshTimes() {
-        let sendData = {};
-        cc.Tools.sendRequest("LuckyLotteryStatus", "GET", sendData).then((res) => {
-            let data = res.data
-            let lbl = this.node.getChildByName("click_btn").getChildByName("lbl_2").getComponent(cc.Label);
-            if (data.free_times) {
-                lbl.string = `免费：${data.free_times}次`
-            } else {
-                lbl.string = `剩余：${data.max_times - data.used_times}次`
-            }
-            this.freeTimes = data.free_times;
-            this.registerEvent();
-        })
+        cc.Tools.showBanner();
+        cc.Tools.showTableScreen();
+        // 显示进度条
+        let cash = this.wrap.getChildByName("cash");
+        let _cash = (Math.floor(cc.Tools.userInfo.amount/100))/100;
+        cash.getChildByName("cash").getComponent(cc.Label).string = `${_cash}元`;
+        let progressBar = cash.getChildByName("progress_bar").getComponent(cc.ProgressBar);
+        progressBar.progress = cc.Tools.userInfo.amount/3000>1?1:cc.Tools.userInfo.amount/3000;
     }
     registerEvent() {
-        let clickBtn = this.node.getChildByName("click_btn");
-        cc.Tools.breatheAnim(clickBtn);
-        clickBtn.on(cc.Node.EventType.TOUCH_END, this.clickVideo, this);
-    }
-    clickVideo() {
-        // 点击加锁
-        if (cc.Tools.lock) {
-            cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
-            return;
-        } else {
-            cc.Tools.lock = true;
-            setTimeout(() => {
-                cc.Tools.lock = false;
-            }, 3000)
+        let cash = this.wrap.getChildByName("cash");
+        let getBtn = cash.getChildByName("btn");
+        if(cc.Tools.userInfo.amount/3000>1){
+            cc.Tools.breatheAnim(getBtn);
         }
-        if (this.freeTimes > 0) {
-            let sendData = {
-                type: 3,
-                ts: new Date().getTime()
-            };
-            cc.Tools.sendRequest("NewAward", "POST", sendData).then((res) => {
-                this.freeTimes--;
-                let lbl = this.node.getChildByName("click_btn").getChildByName("lbl_2").getComponent(cc.Label);
-                lbl.string = `免费：${this.freeTimes}次`
-                // 转盘转动
-                let posArr = [360, 60, 120, 180, 240, 300];
-                this.ticket = res.data.amount;
-                this.add = res.data.add_amount;
-                this.beginTurn = true;
-                this.point.angle = 360;
-                this.speed = 18;
-                this.value = 1;
-                this.circle = 0;
-                let index
-                if (res.data.amount < 101) {
-                    index = 0;
-                } else if (res.data.amount >= 500) {
-                    index = 2;
-                } else {
-                    index = 1;
-                }
-                this.endAngle = posArr[index];
-            });
-        } else {
-            if (!this.canClick) {
-                return;
-            }
-            cc.Tools.showJiliAd(3);
-        }
+        getBtn.on(cc.Node.EventType.TOUCH_END, this.goCashLayer, this);
+        //点击normal按钮
+        let normal = this.wrap.getChildByName("normal").getChildByName("icon");
+        normal.on(cc.Node.EventType.TOUCH_END, this.clickNormal, this)
+        let special = this.wrap.getChildByName("special").getChildByName("icon");
+        special.on(cc.Node.EventType.TOUCH_END, this.clickSpecial, this)
     }
-    /**
-     * 
-     * @param ad 广告ad
-     */
-    getTableFunc(ad: string) {
-        let sendData = {
-            "ad_id": ad,
-            "ts": new Date().getTime(),
-            "action":"LuckyLottery"
-        };
-        let posArr = [360, 60, 120, 180, 240, 300]
-        cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-            this.ticket = res.amount;
-            this.add = res.add_amount;
-            this.beginTurn = true;
-            this.point.angle = 360;
-            this.speed = 18;
-            this.value = 1;
-            this.circle = 0;
-            this.endAngle = posArr[res.id - 1];
-        });
+    clickNormal(e){
+        let target = e.target;
+        let light = target.parent.getChildByName("light");
+        let anim = target.getComponent(cc.Animation);
+        anim.play();
+        anim.on('finished',function(e){
+            console.log("宝箱打开");
+            light.active = true;
+            light.angle = 0;
+            cc.tween(light).to(1,{angle:-360}).call(()=>{
+                anim.setCurrentTime(0,"normal");
+                light.active = false;
+                light.angle = 0;
+            }).start()
+        })
     }
-    removeEvent() {
-        // let closeBtn = this.node.getChildByName("close_btn");
-        // closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
+    clickSpecial(e){
+        let target = e.target;
+        let light = target.parent.getChildByName("light");
+        let anim = target.getComponent(cc.Animation);
+        anim.play();
+        anim.on('finished',function(e){
+            console.log("宝箱打开");
+            light.active = true;
+            light.angle = 0;
+            cc.tween(light).to(1,{angle:-360}).call(()=>{
+                anim.setCurrentTime(0,"special");
+                light.active = false;
+                light.angle = 0;
+            }).start()
+        })
+    }
+    goCashLayer() {
+        this.node.active = false;
+        this.scheduleOnce(() => {
+            this.removeEvent();
+            cc.Tools.emitEvent("cash");
+        })
+    }
+    removeEvent(){
+
     }
     closeLayer() {
-        if (this.beginTurn) {
-            return;
-        }
         this.node.active = false;
         cc.Tools.hideBanner();
         cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {
             this.removeEvent();
         })
-    }
-    update(dt) {
-        if (this.beginTurn) {
-            // 开始旋转
-            this.canClick = false;
-            this.point.angle -= this.speed;
-            if (this.point.angle <= 0) {
-                this.point.angle = 360;
-                this.circle++;
-
-                if (this.circle % 2 === 0) {
-                    // 条件达成 表示转了两圈
-                    this.speed -= this.value;
-                    if (this.value === 4.5) {
-                        this.value = 4.5;
-                    } else {
-                        this.value += 1.5;
-                    }
-                }
-            }
-            if (this.speed <= 5 && this.point.angle <= this.endAngle) {
-                this.point.angle = this.endAngle;
-                this.beginTurn = false;
-                this.scheduleOnce(() => {
-                    this.canClick = true;
-                    let info = { ticket: this.ticket, add: this.add, type: 2, videoType: 3 }
-                    cc.Tools.emitEvent("getTicket", info);
-                    this.refreshTimes();
-                }, 0.5)
-            }
-        }
     }
 }

@@ -20,18 +20,19 @@ export default class Avatar extends cc.Component {
     @property(cc.Material)
     circle: cc.Material = null;
     onLoad() {
-        console.log("onLoad");
         self = this;
     }
     start() {
     }
     setAvatar(iconUrl: string, vip: number) {
         var remoteUrl = iconUrl;
-        cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture: cc.Texture2D) {
-            texture.packable= false;
-            let frame = new cc.SpriteFrame(texture);
-            self.icon.spriteFrame = frame;
-        });
+        if(iconUrl){
+            cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture: cc.Texture2D) {
+                texture.packable= false;
+                let frame = new cc.SpriteFrame(texture);
+                self.icon.spriteFrame = frame;
+            });
+        }
         self.vipKuangSp.spriteFrame = self.vipKuang[vip];
         self.huangSp.spriteFrame = self.huang[vip];
         self.levelSp.spriteFrame = self.level[vip];

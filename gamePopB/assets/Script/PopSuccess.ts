@@ -6,15 +6,25 @@ export default class PopSuccess extends cc.Component {
     private item: cc.Node = null;
     private content: cc.Node = null;
     private len = 0;
-    @property(cc.SpriteFrame)
-    frames = []
+    @property(cc.Prefab)
+    avatar: null;
     onLoad() {
         this.wrap = this.node.getChildByName("wrap");
         this.item = this.node.getChildByName("item");
         this.content = this.wrap.getChildByName("scroll").getChildByName("mask").getChildByName("content");
         this.registerEvent();
+    }
+    onEnable() {
+        // cc.Tools.showFeedScreen("success");
+        cc.Tools.showBanner();
+        let closeBtn = this.wrap.getChildByName("close_btn");
+        closeBtn.active = false;
+        this.scheduleOnce(() => {
+            closeBtn.active = true;
+        }, 1)
         // 获取信息列表
         let sendData = {};
+        this.content.destroyAllChildren();
         cc.Tools.sendRequest("CashOutUserList", "GET", sendData).then((res) => {
             //  console.log(res.data);
             let itemData = res.data.items;
@@ -25,40 +35,35 @@ export default class PopSuccess extends cc.Component {
                 item.active = true;
                 this.content.addChild(item);
                 let info = item.getChildByName("info").getComponent(cc.Label);
-                let userName = item.getChildByName("user_name").getComponent(cc.Label);
+                let userName = item.getChildByName("layout").getChildByName("user_name").getComponent(cc.Label);
                 let time = item.getChildByName("time").getComponent(cc.Label);
-                let cash = item.getChildByName("bg_1").getChildByName("cash").getComponent(cc.Label);
-                let icon = item.getChildByName("mask").getChildByName("icon").getComponent(cc.Sprite);
-                info.string = `成功获得了${element.amount/100}元现金，微信打款已到账`;
+                let cash = item.getChildByName("layout").getChildByName("cash_layer").getChildByName("cash").getComponent(cc.Label);
+                info.string = `成功获得了${element.amount / 100}元现金，微信打款已到账`;
                 userName.string = element.user_name;
                 time.string = element.time_label;
-                cash.string = `已提现${element.amount/100}元`;
-                this.loadSprite(element.avatar, icon);
+                cash.string = `已提现${element.amount / 100}元`;
+                let _avatarNode = item.getChildByName("avatar");
+                let avatar = cc.instantiate(this.avatar);
+                _avatarNode.addChild(avatar);
+                avatar.getComponent("Avatar").setAvatar(element.avatar, element.grade_id || 0);
             });
-            this.content.stopAllActions();
-            this.content.y = 0;
-            let action = cc.sequence(cc.delayTime(2), cc.moveBy(0.5, 0, 180));
-            cc.tween(this.content).repeat(this.len - 2, action).start();
+            if(this.len>2){
+                this.content.stopAllActions();
+                this.content.y = 0;
+                let action = cc.sequence(cc.delayTime(2), cc.moveBy(0.5, 0, 180));
+                cc.tween(this.content).repeat(this.len - 2, action).start();
+            }
         })
     }
-    loadSprite(url, icon) {
-        cc.assetManager.loadRemote(url, { ext: '.png' }, function (err, texture: cc.Texture2D) {
-            icon.spriteFrame = new cc.SpriteFrame(texture);
-        });
-    }
-    onEnable() {
-        // cc.Tools.showFeedScreen("success");
-        cc.Tools.showBanner();
-        let closeBtn = this.wrap.getChildByName("close_btn");
-        closeBtn.active = false;
-        this.scheduleOnce(() => {
-            closeBtn.active = true;
-        }, 1)
-        this.content.stopAllActions();
-        this.content.y = 0;
-        let action = cc.sequence(cc.delayTime(2), cc.moveBy(0.5, 0, 180));
-        cc.tween(this.content).repeat(this.len - 2, action).start();
-        this.wrap.getChildByName("video_btn").getChildByName("icon").getComponent(cc.Sprite).spriteFrame = cc.Tools.userInfo.new_free_level_times > 0 ? this.frames[1] : this.frames[0];
+    setStar(num:number){
+        for(let i=1;i<=3;i++){
+            let star = this.wrap.getChildByName("star_"+i);
+            let select = star.getChildByName("select");
+            select.active = false;
+            if(num>=i){
+                select.active = true;
+            }
+        }
     }
     registerEvent() {
         let closeBtn = this.wrap.getChildByName("close_btn");

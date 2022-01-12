@@ -88,6 +88,10 @@ export default class Main extends cc.Component {
     private clickPos = cc.v3(0, 0);
     private addTicket = 0;
     private barrageArr = [];
+    private barrage:cc.Node;
+    private barrageSpeed = 2;
+    private barrageMove = false;
+    private barrageLock = false;
     onLoad() {
         // 初始化参数
         cc.find("PROFILER-NODE").color = new cc.Color().fromHEX("000000");
@@ -98,8 +102,6 @@ export default class Main extends cc.Component {
         cc.Tools.Event.on("cash", this.showGetCashLayer, this);
         cc.Tools.Event.on("clickRed", this.canClickRedFunc, this);
         cc.Tools.Event.on("showPacket", this.showPacket, this);
-        //this.emitEvent("addBarrage", { url: cc.Tools.userInfo.avatar_url, vip: 2, str: "恭喜海盗船长提现0.3元现金" });
-        cc.Tools.Event.on("addBarrage", this.addBarrage, this);
         cc.Tools.adTimes = 0;
         this.ground = cc.find("Canvas/background");
         this.content = cc.find("Canvas/content");
@@ -108,29 +110,53 @@ export default class Main extends cc.Component {
         this.cashInfo = this.content.getChildByName("info_layer").getChildByName("cash_info");
         this.userInfo = this.content.getChildByName("info_layer").getChildByName("user_info");
         this.scoreInfo = this.content.getChildByName("info_layer").getChildByName("score_info");
-        this.barrageLayer = this.content.getChildByName("barrage_layer");
+        this.barrageLayer = this.node.getChildByName("barrage_layer");
         this.countTime = new Date().getTime();
         this.preloadPrefab();
         this.initUserInfo();
+        //请求弹幕数据
+        // this.getBarrageInfo();
+        //创建一个弹幕
+        this.scheduleOnce(()=>{
+            this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab)=>{
+                let barrage = cc.instantiate(prefab);
+                self.barrageLayer.addChild(barrage);
+                barrage.x = 1000;
+                this.barrage = barrage;
+                this.getBarrageInfo(true);
+            })
+        },2)
         // 增加一个计时器
-        // this.schedule(this.repeatFunc, 7.5);
+        // this.schedule(this.repeatFunc, 120);
     }
-    // 主界面循环function
-    repeatFunc() {
-        // // 每5秒检测玩家是否在主界面 并且没有行动
-        // let date = new Date().getTime();
-        // if (this.countTime && !this.lock) {
-        //     if (date - this.countTime > 7500) {
-        //         this.showSuperLayer();
-        //     }
-        // }
-        // // 每5秒中滚屏
-        // this.unschedule(this.repeatFunc);
-        // let pop = this.tipsLayer.getChildByName("pop");
-        // pop.stopAllActions();
-        // cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
-        //     this.schedule(this.repeatFunc, 5)
-        // }).start();
+    //获取弹幕信息
+    getBarrageInfo(isFirst:boolean){
+        cc.Tools.sendRequest("Trend", "GET", {}).then((res) => {
+            let items = res.data.items;
+            self.barrageArr = [...self.barrageArr,...items];
+            console.log("self.barrageArr",self.barrageArr);
+            if(isFirst){
+                this.barrageMove = true;
+                let data = self.barrageArr.shift();
+                this.barrage.getComponent("Barrage").setBarrage(data)
+            }
+            this.barrageLock = false;
+        }).catch((err) => {
+            console.log("cocos----弹幕err--" + err);
+        })
+    }
+    update(dt){
+        if(this.barrageMove){
+            this.barrage.x-=this.barrageSpeed;
+            if(this.barrage.x<-1000){
+                let data = self.barrageArr.shift();
+                this.barrage.getComponent("Barrage").setBarrage(data);
+            }
+            if(this.barrageArr.length<=0&&!this.barrageLock){
+                this.barrageLock = true;
+                this.getBarrageInfo(false);
+            }
+        }
     }
     /**
      * 初始化数数
@@ -168,18 +194,6 @@ export default class Main extends cc.Component {
             avatar.getComponent("Avatar").setAvatar(url, vip);
         })
     }
-    /**
-    * 增加弹幕
-   */
-    addBarrage(url: string, vip: number, str: string) {
-        this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab) => {
-            let barrage = cc.instantiate(prefab);
-            self.barrageLayer.addChild(barrage);
-            let _barrage = barrage.getComponent("Barrage").setBarrage(url, vip, str);
-            self.barrageArr.push(_barrage);
-            barrage.runAction(cc.moveTo(5, 1000, 0));
-        })
-    }
     // 初始化userInfo
     initUserInfo() {
         let sendData = {};
@@ -189,25 +203,15 @@ export default class Main extends cc.Component {
             this.initShuShu();
             this.init();
             this.addAvatar(res.data.avatar_url, cc.Tools.userInfo.grade_id);
-            // 增加一个定时器 一定时间没有看视频 主动弹出视频
-            // this.schedule(() => {
-            //     cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
-            //         // 点击加锁
-            //         if (cc.Tools.lock) {
-            //             return;
-            //         } else {
-            //             cc.Tools.lock = true;
-            //             setTimeout(() => {
-            //                 cc.Tools.lock = false;
-            //             }, 3000)
-            //         }
-            //         if (res.data.is_show) {
-            //             cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-            //                 cc.Tools.showJiliAd(12);
-            //             });
-            //         }
-            //     })
-            // }, cc.Tools.userInfo.ad_show_interval_second)
+            // 显示冻结红包的进度条
+            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
+            let freezenRate = cc.Tools.userInfo.active_rate.split("|");
+            let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
+            freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
+            freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
+            if (freezenRate[0] === freezenRate[1]) {
+                freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
+            }
         }).catch((err) => {
             // cc.find("Canvas/lose").active = true;
             // if (err === "token验证失败,请重新登陆") {
@@ -262,7 +266,7 @@ export default class Main extends cc.Component {
     }
     registerEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealleLayer", "showLotteryleLayer", "clickRed"]
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed"]
         for (let i = 1; i <= 6; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
@@ -272,7 +276,7 @@ export default class Main extends cc.Component {
     }
     removeEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealleLayer", "showLotteryleLayer", "clickRed"]
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed"]
         for (let i = 1; i <= 6; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.off(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
@@ -340,7 +344,17 @@ export default class Main extends cc.Component {
                     let layer = cc.instantiate(prefab);
                     self.popSuccessLayer = layer;
                     self.node.addChild(layer);
+                    let js = self.popSuccessLayer.getComponent("PopSuccess");
+                    let num ;
+                    if(this.curScore>6000){
+                        num = 3
+                    }else if(this.curScore<6000&&this.curScore>3000){
+                        num = 2
+                    }else{
+                        num = 1
+                    }
                     self.popSuccessLayer.active = true;
+                    js.setStar(num)
                 })
             } else {
                 this.popSuccessLayer.active = true;
@@ -513,7 +527,7 @@ export default class Main extends cc.Component {
     /**
      * 大乱斗界面
     */
-    showStealleLayer() {
+    showStealLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_turntable_1")
         if (!this.stealLayer) {
@@ -638,11 +652,10 @@ export default class Main extends cc.Component {
         let progressBar = this.scoreInfo.getChildByName("progress").getComponent(cc.ProgressBar);
         //进度条大小取值0-1 为一位小数
         let val = (Math.floor(score * 100 / 6000)) / 100 > 1 ? 1 : (Math.floor(score * 100 / 6000)) / 100;
-        console.log("val=", val);
         // progressBar.progress = val
         // scoreNode.x = -150+390*val;
-        cc.tween(progressBar).to(0.1,{progress:val}).start();
-        cc.tween(scoreNode).to(0.1,{x: -150+390*val}).start();
+        cc.tween(progressBar).to(0.1, { progress: val }).start();
+        cc.tween(scoreNode).to(0.1, { x: -150 + 390 * val }).start();
         //根据score判断星数
         for (let i = 1; i <= 3; i++) {
             let star = this.scoreInfo.getChildByName("star_" + i);
@@ -1173,7 +1186,7 @@ export default class Main extends cc.Component {
         for (let i = 1; i <= 3; i++) {
             let floater = floaterLayer.getChildByName("floater_" + i);
             floater.active = true;
-            cc.Tools.popAnim(floater);
+            cc.Tools.popAnim(floater, 10);
             floater.on(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
         }
     }
