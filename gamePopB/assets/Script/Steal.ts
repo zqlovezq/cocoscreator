@@ -24,10 +24,17 @@ export default class Steal extends cc.Component {
         let closeBtn = this.node.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         let down = this.wrap.getChildByName("down");
+        let up = this.wrap.getChildByName("up");
         for (let i = 1; i <= 5; i++) {
             let floater = down.getChildByName("red_" + i);
-            cc.Tools.popAnim(floater, 20);
+            cc.Tools.popAnim(floater, 10);
         }
+
+        for (let t = 1; t <= 3; t++) {
+            let _itemNode = up.getChildByName("item_" + t);
+            cc.Tools.popAnim(_itemNode, 20);
+        }
+
         let btn = down.getChildByName("btn");
         btn.on(cc.Node.EventType.TOUCH_END, this.getCash, this);
     }
@@ -100,7 +107,15 @@ export default class Steal extends cc.Component {
                 let _avatarNode = _itemNode.getChildByName("avatar");
                 let avatar = cc.instantiate(this.avatar);
                 _avatarNode.addChild(avatar);
-                avatar.getComponent("Avatar").setAvatar(itemData.avatar, itemData.grade_id || 0);
+                avatar.scale = 1.2;
+                //加载头像
+                let avatarJs = avatar.getComponent("Avatar");
+                avatarJs.loadUrl(itemData.avatar).then((res)=>{
+                    console.log("图片加载成功",res);
+                    avatarJs.setAvatar(res,itemData.grade_id || 0)
+                }).catch(err=>{
+                    console.log("图片加载"+err);
+                })
                 let _cashNode = _itemNode.getChildByName("cash").getComponent(cc.Label);
                 _cashNode.string = itemData.save_amount || 0;
             }

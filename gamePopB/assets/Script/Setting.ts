@@ -28,7 +28,13 @@ export default class Setting extends cc.Component {
         // });
         let avatar = cc.instantiate(this.avatar);
         icon.addChild(avatar);
-        avatar.getComponent("Avatar").setAvatar(cc.Tools.userInfo.avatar_url,cc.Tools.userInfo.grade_id);
+        let avatarJs = avatar.getComponent("Avatar");
+                avatarJs.loadUrl(cc.Tools.userInfo.avatar_url).then((res)=>{
+                    console.log("图片加载成功",res);
+                    avatarJs.setAvatar(res,cc.Tools.userInfo.grade_id || 0)
+                }).catch(err=>{
+                    console.log("图片加载"+err);
+                })
         avatar.scale = 1.2
     }
     registerEvent(){

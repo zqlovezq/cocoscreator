@@ -7,7 +7,7 @@ export default class PopSuccess extends cc.Component {
     private content: cc.Node = null;
     private len = 0;
     @property(cc.Prefab)
-    avatar: null;
+    avatar:cc.Prefab = null;
     onLoad() {
         this.wrap = this.node.getChildByName("wrap");
         this.item = this.node.getChildByName("item");
@@ -22,38 +22,38 @@ export default class PopSuccess extends cc.Component {
         this.scheduleOnce(() => {
             closeBtn.active = true;
         }, 1)
-        // 获取信息列表
-        let sendData = {};
-        this.content.destroyAllChildren();
-        cc.Tools.sendRequest("CashOutUserList", "GET", sendData).then((res) => {
-            //  console.log(res.data);
-            let itemData = res.data.items;
-            this.len = itemData.length;
-            itemData.forEach(element => {
-                //  console.log(element);
-                let item = cc.instantiate(this.item);
-                item.active = true;
-                this.content.addChild(item);
-                let info = item.getChildByName("info").getComponent(cc.Label);
-                let userName = item.getChildByName("layout").getChildByName("user_name").getComponent(cc.Label);
-                let time = item.getChildByName("time").getComponent(cc.Label);
-                let cash = item.getChildByName("layout").getChildByName("cash_layer").getChildByName("cash").getComponent(cc.Label);
-                info.string = `成功获得了${element.amount / 100}元现金，微信打款已到账`;
-                userName.string = element.user_name;
-                time.string = element.time_label;
-                cash.string = `已提现${element.amount / 100}元`;
-                let _avatarNode = item.getChildByName("avatar");
-                let avatar = cc.instantiate(this.avatar);
-                _avatarNode.addChild(avatar);
-                avatar.getComponent("Avatar").setAvatar(element.avatar, element.grade_id || 0);
-            });
-            if(this.len>2){
-                this.content.stopAllActions();
-                this.content.y = 0;
-                let action = cc.sequence(cc.delayTime(2), cc.moveBy(0.5, 0, 180));
-                cc.tween(this.content).repeat(this.len - 2, action).start();
-            }
-        })
+        // // 获取信息列表
+        // let sendData = {};
+        // this.content.destroyAllChildren();
+        // cc.Tools.sendRequest("CashOutUserList", "GET", sendData).then((res) => {
+        //     //  console.log(res.data);
+        //     let itemData = res.data.items;
+        //     this.len = itemData.length;
+        //     itemData.forEach(element => {
+        //         //  console.log(element);
+        //         let item = cc.instantiate(this.item);
+        //         item.active = true;
+        //         this.content.addChild(item);
+        //         let info = item.getChildByName("info").getComponent(cc.Label);
+        //         let userName = item.getChildByName("layout").getChildByName("user_name").getComponent(cc.Label);
+        //         let time = item.getChildByName("time").getComponent(cc.Label);
+        //         let cash = item.getChildByName("layout").getChildByName("cash_layer").getChildByName("cash").getComponent(cc.Label);
+        //         info.string = `成功获得了${element.amount / 100}元现金，微信打款已到账`;
+        //         userName.string = element.user_name;
+        //         time.string = element.time_label;
+        //         cash.string = `已提现${element.amount / 100}元`;
+        //         let _avatarNode = item.getChildByName("avatar");
+        //         let avatar = cc.instantiate(this.avatar);
+        //         _avatarNode.addChild(avatar);
+        //         avatar.getComponent("Avatar").setAvatar(element.avatar, element.grade_id || 0);
+        //     });
+        //     if(this.len>2){
+        //         this.content.stopAllActions();
+        //         this.content.y = 0;
+        //         let action = cc.sequence(cc.delayTime(2), cc.moveBy(0.5, 0, 180));
+        //         cc.tween(this.content).repeat(this.len - 2, action).start();
+        //     }
+        // })
     }
     setStar(num:number){
         for(let i=1;i<=3;i++){
@@ -62,6 +62,8 @@ export default class PopSuccess extends cc.Component {
             select.active = false;
             if(num>=i){
                 select.active = true;
+                select.scale=3;
+                cc.tween(select).to(0.2*i,{scale:1}).start();
             }
         }
     }

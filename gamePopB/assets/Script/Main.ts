@@ -28,6 +28,7 @@ export default class Main extends cc.Component {
     saveCashLayer: cc.Node = null;
     lotteryLayer: cc.Node = null;
     stealLayer: cc.Node = null;
+    signLayer: cc.Node = null;
     popSuccessLayer: cc.Node = null;
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
@@ -125,7 +126,7 @@ export default class Main extends cc.Component {
                 this.barrage = barrage;
                 this.getBarrageInfo(true);
             })
-        },2)
+        },1)
         // 增加一个计时器
         // this.schedule(this.repeatFunc, 120);
     }
@@ -191,7 +192,10 @@ export default class Main extends cc.Component {
         this.loadPrefab('Prefab/avatar').then((prefab: cc.Prefab) => {
             let avatar = cc.instantiate(prefab);
             self.userInfo.addChild(avatar);
-            avatar.getComponent("Avatar").setAvatar(url, vip);
+            let avatarJs = avatar.getComponent("Avatar");
+            avatarJs.loadUrl(url).then((res)=>{
+                avatarJs.setAvatar(res,vip)
+            })
         })
     }
     // 初始化userInfo
@@ -228,6 +232,7 @@ export default class Main extends cc.Component {
         let sendData = {};
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.Tools.userInfo = res.data;
+            this.barrageMove = true;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             if (isReload) {
                 this.init();
@@ -247,6 +252,7 @@ export default class Main extends cc.Component {
         cc.resources.preload('Prefab/popDelete', cc.Prefab);
         cc.resources.preload('Prefab/ticket', cc.Prefab);
         cc.resources.preload('Prefab/super', cc.Prefab);
+        cc.resources.preload('Prefab/sign', cc.Prefab);
         cc.resources.preload('Prefab/secretLayer', cc.Prefab);
     }
     loadPrefab(url: string) {
@@ -266,8 +272,8 @@ export default class Main extends cc.Component {
     }
     registerEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed"]
-        for (let i = 1; i <= 6; i++) {
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed","showSignLayer"]
+        for (let i = 1; i <= 7; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
         }
@@ -338,6 +344,7 @@ export default class Main extends cc.Component {
     showPopSuccessLayer() {
         this.scheduleOnce(() => {
             this.lock = false;
+            this.barrageMove = false;
             cc.audioEngine.play(this.effectAudio[4], false, 1);
             if (!this.popSuccessLayer) {
                 this.loadPrefab('Prefab/popSuccess').then((prefab: cc.Prefab) => {
@@ -370,6 +377,7 @@ export default class Main extends cc.Component {
     showPopDeleteLayer(type: number, videoType: number) {
         this.scheduleOnce(() => {
             this.lock = false;
+            this.barrageMove = false;
             cc.audioEngine.play(this.effectAudio[3], false, 1);
             if (!this.popDeleteLayer) {
                 this.loadPrefab('Prefab/popDelete').then((prefab: cc.Prefab) => {
@@ -391,10 +399,28 @@ export default class Main extends cc.Component {
         }, 0.5)
     }
     /**
+     * 签到奖励
+     */
+     showSignLayer() {
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        this.barrageMove = false;
+        if (!this.signLayer) {
+            this.loadPrefab('Prefab/sign').then((prefab: cc.Prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.signLayer = layer;
+                self.node.addChild(layer);
+                self.signLayer.active = true;
+            })
+        } else {
+            this.signLayer.active = true;
+        }
+    }
+    /**
      * 超级红包界面
      */
     showSuperLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
+        this.barrageMove = false;
         if (!this.popSuperLayer) {
             this.loadPrefab('Prefab/super').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -478,6 +504,7 @@ export default class Main extends cc.Component {
     * 设置界面
     */
     showSetLayer() {
+        this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         if (!this.settingLayer) {
             this.loadPrefab('Prefab/setting').then((prefab) => {
@@ -494,6 +521,7 @@ export default class Main extends cc.Component {
      * 提现界面
      */
     showGetCashLayer() {
+        this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_cash_1")
         if (!this.getCashLayer) {
@@ -511,6 +539,7 @@ export default class Main extends cc.Component {
      * 转盘界面
      */
     showLotteryleLayer() {
+        this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_turntable_1")
         if (!this.lotteryLayer) {
@@ -528,6 +557,7 @@ export default class Main extends cc.Component {
      * 大乱斗界面
     */
     showStealLayer() {
+        this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         cc.Tools.dot("click_turntable_1")
         if (!this.stealLayer) {

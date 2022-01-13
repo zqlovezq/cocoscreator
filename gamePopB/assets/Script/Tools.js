@@ -104,28 +104,24 @@ cc.Tools = {
                 case "16"://宝箱
                 case "17"://签到
                 case "15"://存钱罐解冻
-                case "4":
+                case "4"://升级红包
                     // 升级红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
                     })
                     break;
-                case "5":
-                    // 解冻红包
+                case "5"://解冻红包
                     this.emitEvent("freeze", ad);
                     break;
-                case "6":
-                    // 存钱罐
+                case "6":// 存钱罐
                     this.emitEvent("saveCash", ad);
                     break;
-                case "9":
-                    //消除红包
+                case "9"://消除红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
                     break;
-                case "11":
-                    //提现视频
+                case "11"://提现视频
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
@@ -376,7 +372,7 @@ cc.Tools = {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
-                    console.log("cocos-----" + url + "------", _response);
+                    console.log("cocos-----" + url + "------", xhr.response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
                         if (_response.code === 0) {
@@ -443,14 +439,17 @@ cc.Tools = {
     popAnim(btn, y) {
         btn.stopAllActions();
         let pos = btn.getPosition(cc.v2());
-        let action1 = cc.moveTo(1, pos.x, pos.y + y);
+        //随机一个两位数小数
+        let rdm = cc.Tools.createRandom(0,y);
+        let action1 = cc.moveTo(1, pos.x, pos.y + rdm+5);
         let action2 = cc.moveTo(1, pos.x, pos.y);
-        let action3 = cc.moveTo(1, pos.x, pos.y - y);
+        let action3 = cc.moveTo(1, pos.x, pos.y - rdm-5);
         let action4 = cc.moveTo(1, pos.x, pos.y);
         let ac = [];
         ac.push(action1, action2, action3, action4);
         let action = cc.sequence(ac)
         cc.tween(btn)
+            .delay(Math.random())
             .repeatForever(action)
             .start()
     },

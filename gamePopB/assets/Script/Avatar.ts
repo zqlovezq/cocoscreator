@@ -1,5 +1,4 @@
 const { ccclass, property } = cc._decorator;
-var self: any = null;
 @ccclass
 export default class Avatar extends cc.Component {
 
@@ -10,8 +9,6 @@ export default class Avatar extends cc.Component {
     @property([cc.SpriteFrame])
     level = [];
     @property(cc.Sprite)
-    icon: cc.Sprite = null;
-    @property(cc.Sprite)
     vipKuangSp: cc.Sprite = null;
     @property(cc.Sprite)
     huangSp: cc.Sprite = null;
@@ -19,23 +16,27 @@ export default class Avatar extends cc.Component {
     levelSp: cc.Sprite = null;
     @property(cc.Material)
     circle: cc.Material = null;
-    onLoad() {
-        self = this;
+    setAvatar(sp: cc.SpriteFrame, vip: number) {
+        this.vipKuangSp.spriteFrame = this.vipKuang[vip];
+        this.huangSp.spriteFrame = this.huang[vip];
+        this.levelSp.spriteFrame = this.level[vip];
+        let icon = this.node.getChildByName("icon").getComponent(cc.Sprite);
+        icon.spriteFrame = sp;
+        console.log("加载的图片的url="+sp.getTexture().nativeUrl);
     }
-    start() {
-    }
-    setAvatar(iconUrl: string, vip: number) {
-        var remoteUrl = iconUrl;
-        if(iconUrl){
-            cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture: cc.Texture2D) {
-                texture.packable= false;
-                let frame = new cc.SpriteFrame(texture);
-                self.icon.spriteFrame = frame;
+    loadUrl(url: string) {
+        return new Promise(function (resolve, reject) {
+            cc.assetManager.loadRemote(url, { ext: '.png' }, function (err, texture: cc.Texture2D) {
+                if (err) {
+                    console.log("加载头像失败---"+url+"----", err);
+                    reject("头像加载失败");
+                } else {
+                    texture.packable = false;
+                    let frame = new cc.SpriteFrame(texture);
+                    resolve(frame);
+                }
             });
-        }
-        self.vipKuangSp.spriteFrame = self.vipKuang[vip];
-        self.huangSp.spriteFrame = self.huang[vip];
-        self.levelSp.spriteFrame = self.level[vip];
+        })
     }
     // update (dt) {}
 }
