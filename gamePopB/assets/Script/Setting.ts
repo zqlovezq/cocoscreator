@@ -4,8 +4,6 @@ const {ccclass, property} = cc._decorator;
 export default class Setting extends cc.Component {
     private userPrivacy:cc.Node = null;
     private userProtocol:cc.Node = null;
-    @property(cc.Prefab)
-    avatar = null;
     onLoad () {
         this.initLayer();
     }
@@ -22,15 +20,10 @@ export default class Setting extends cc.Component {
         nickName.string = cc.Tools.userInfo.nick_name;
         // icon
         let icon = wrap.getChildByName("icon");
-        // var remoteUrl = cc.Tools.userInfo.avatar_url;
-        // cc.assetManager.loadRemote(remoteUrl, { ext: '.png' }, function (err, texture:cc.Texture2D) {
-        //     icon.spriteFrame = new cc.SpriteFrame(texture);
-        // });
-        let avatar = cc.instantiate(this.avatar);
-        icon.addChild(avatar);
+        let avatar = icon.getChildByName("avatar");
         let avatarJs = avatar.getComponent("Avatar");
                 avatarJs.loadUrl(cc.Tools.userInfo.avatar_url).then((res)=>{
-                    console.log("图片加载成功",res);
+                    // console.log("图片加载成功",res);
                     avatarJs.setAvatar(res,cc.Tools.userInfo.grade_id || 0)
                 }).catch(err=>{
                     console.log("图片加载"+err);

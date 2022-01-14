@@ -2,11 +2,14 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Turntable extends cc.Component {
-    private wrap:cc.Node;
+    private wrap:cc.Node = null;
+    private canClick = true;
+    private clickBtn = 0;
     onLoad() {
         this.wrap = this.node.getChildByName("wrap");
         let closeBtn = this.wrap.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+        cc.Tools.Event.on("openBox", this.openBoxFunc, this);
         this.registerEvent();
     }
     onEnable() {
@@ -27,41 +30,75 @@ export default class Turntable extends cc.Component {
         }
         getBtn.on(cc.Node.EventType.TOUCH_END, this.goCashLayer, this);
         //点击normal按钮
-        let normal = this.wrap.getChildByName("normal").getChildByName("icon");
+        let normal = this.wrap.getChildByName("normal");
         normal.on(cc.Node.EventType.TOUCH_END, this.clickNormal, this)
-        let special = this.wrap.getChildByName("special").getChildByName("icon");
+        let special = this.wrap.getChildByName("special");
         special.on(cc.Node.EventType.TOUCH_END, this.clickSpecial, this)
     }
     clickNormal(e){
-        let target = e.target;
-        let light = target.parent.getChildByName("light");
-        let anim = target.getComponent(cc.Animation);
-        anim.play();
-        anim.on('finished',function(e){
-            console.log("宝箱打开");
-            light.active = true;
-            light.angle = 0;
-            cc.tween(light).to(1,{angle:-360}).call(()=>{
-                anim.setCurrentTime(0,"normal");
-                light.active = false;
+        if(this.canClick){
+            let self = this;
+            let target = e.target;
+            this.clickBtn = 1;
+            let light = target.getChildByName("light");
+            let anim = target.getChildByName("icon").getComponent(cc.Animation);
+            anim.play();
+            anim.on('finished',function(e){
+                console.log("宝箱打开");
+                light.active = true;
                 light.angle = 0;
-            }).start()
-        })
+                cc.tween(light).to(1,{angle:-360}).call(()=>{
+                    anim.setCurrentTime(0,"normal");
+                    light.active = false;
+                    light.angle = 0;
+                    cc.Tools.showTips(self.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                        // cc.Tools.showJiliAd(16);
+                        cc.Tools.adCallBack("100,16")
+                    });
+                }).start()
+            })
+        }
     }
     clickSpecial(e){
-        let target = e.target;
-        let light = target.parent.getChildByName("light");
-        let anim = target.getComponent(cc.Animation);
-        anim.play();
-        anim.on('finished',function(e){
-            console.log("宝箱打开");
-            light.active = true;
-            light.angle = 0;
-            cc.tween(light).to(1,{angle:-360}).call(()=>{
-                anim.setCurrentTime(0,"special");
-                light.active = false;
+        if(this.canClick){
+            let target = e.target;
+            let self = this;
+            this.clickBtn = 10;
+            let light = target.getChildByName("light");
+            let anim = target.getChildByName("icon").getComponent(cc.Animation);
+            anim.play();
+            anim.on('finished',function(e){
+                console.log("宝箱打开");
+                light.active = true;
                 light.angle = 0;
-            }).start()
+                cc.tween(light).to(1,{angle:-360}).call(()=>{
+                    anim.setCurrentTime(0,"special");
+                    light.active = false;
+                    light.angle = 0;
+                    cc.Tools.showTips(self.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                        // cc.Tools.showJiliAd(16);
+                        cc.Tools.adCallBack("100,16")
+                    });
+                }).start()
+            })
+        }
+    }
+    openBoxFunc(ad_id){
+        //像服务器发送请求
+        let sendData = {
+            "ad_id":ad_id,
+            "ts": new Date().getTime(),//时间戳
+            "ctype":  this.clickBtn,
+            "action": "OpenBox"
+        };
+        console.log("openbox---"+JSON.stringify(sendData));
+        cc.Tools.sendRequest("PipeOpenTreasureReq", "POST", sendData).then((res) => {
+            console.log("点击宝箱返回信息",res);
+            if(this.clickBtn===1){
+                cc.Tools.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: 16 });
+            }else if(this.clickBtn===10){
+                cc.Tools.emitEvent("getTenTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: 16 });
+            }
         })
     }
     goCashLayer() {

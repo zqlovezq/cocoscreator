@@ -35,14 +35,12 @@ export default class Barrage extends cc.Component {
         let userInfo = info.user;
         let referInfo = info.refer_user;
         let str = "";
-        let avatar = cc.instantiate(this.avatar);
-        this.node.getChildByName("avatar").addChild(avatar);
-        // avatar.getComponent("Avatar").setAvatar(userInfo.avatar,userInfo.grade_id);
+        let avatar = this.node.getChildByName("avatar")
         let avatarJs = avatar.getComponent("Avatar");
         avatarJs.loadUrl(userInfo.avatar).then((res) => {
             avatarJs.setAvatar(res, userInfo.grade_id)
         })
-        avatar.scale = 0.8
+        avatar.scale = 0.8;
         let layout = this.node.getChildByName("layout").getComponent(cc.Sprite);
         layout.spriteFrame = this.kuang[userInfo.grade_id];
         let text = layout.node.getChildByName("text").getComponent(cc.Label);

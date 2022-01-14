@@ -99,16 +99,21 @@ cc.Tools = {
                     // 看视频转盘
                     this.emitEvent("getTable", ad);
                     break;
-                case "13"://偷能量
-                case "14"://复仇
-                case "16"://宝箱
                 case "17"://签到
                 case "15"://存钱罐解冻
                 case "4"://升级红包
-                    // 升级红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
                     })
+                    break;
+                case "16"://宝箱
+                    this.emitEvent("openBox", ad);
+                    break;
+                case "14"://复仇
+                    this.emitEvent("revenge", ad);
+                    break;
+                case "13"://偷能量
+                    this.emitEvent("steal", ad);
                     break;
                 case "5"://解冻红包
                     this.emitEvent("freeze", ad);
@@ -300,7 +305,9 @@ cc.Tools = {
                 text.getComponent(cc.RichText).string = str;
                 if (lbl.getChildByName("icon")) {
                     let _icon = lbl.getChildByName("icon");
-                    _icon.x = lbl.getChildByName("layout").width / 2 - 15
+                    cc.tween(_icon).delay(0.05).call(() => {
+                        _icon.x = lbl.getChildByName("layout").width / 2 - 15
+                    }).start();
                 }
             } else {
                 icon.active = true;
@@ -372,9 +379,9 @@ cc.Tools = {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
-                    console.log("cocos-----" + url + "------", xhr.response);
+                    // console.log("cocos-----" + url + "------", xhr.response);
                     // 判断接口是否是加密接口
-                    if (url.indexOf("Action") !== -1) {
+                    if (data.action) {
                         if (_response.code === 0) {
                             //解密
                             // console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
@@ -394,7 +401,7 @@ cc.Tools = {
             xhr.onerror = function () {
                 reject(new Error(xhr.statusText))
             }
-            if (url.indexOf("Action") !== -1) {
+            if (data.action) {
                 xhr.send(JSON.stringify(cc.Tools.encryptData(data)));
             } else {
                 xhr.send(JSON.stringify(data));
@@ -440,10 +447,10 @@ cc.Tools = {
         btn.stopAllActions();
         let pos = btn.getPosition(cc.v2());
         //随机一个两位数小数
-        let rdm = cc.Tools.createRandom(0,y);
-        let action1 = cc.moveTo(1, pos.x, pos.y + rdm+5);
+        let rdm = cc.Tools.createRandom(0, y);
+        let action1 = cc.moveTo(1, pos.x, pos.y + rdm + 5);
         let action2 = cc.moveTo(1, pos.x, pos.y);
-        let action3 = cc.moveTo(1, pos.x, pos.y - rdm-5);
+        let action3 = cc.moveTo(1, pos.x, pos.y - rdm - 5);
         let action4 = cc.moveTo(1, pos.x, pos.y);
         let ac = [];
         ac.push(action1, action2, action3, action4);

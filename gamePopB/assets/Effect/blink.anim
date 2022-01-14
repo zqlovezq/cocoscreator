@@ -1,0 +1,125 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "blink",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 3.75,
+  "sample": 20,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "star_1": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 255
+            },
+            {
+              "frame": 0.5,
+              "value": 255
+            },
+            {
+              "frame": 0.75,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "star_2": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.75,
+              "value": 0
+            },
+            {
+              "frame": 1,
+              "value": 255
+            },
+            {
+              "frame": 1.25,
+              "value": 255
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "star_3": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 1.5,
+              "value": 0
+            },
+            {
+              "frame": 1.75,
+              "value": 255
+            },
+            {
+              "frame": 2,
+              "value": 255
+            },
+            {
+              "frame": 2.25,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "star_4": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 2.25,
+              "value": 0
+            },
+            {
+              "frame": 2.5,
+              "value": 255
+            },
+            {
+              "frame": 2.75,
+              "value": 255
+            },
+            {
+              "frame": 3,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "star_5": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 3,
+              "value": 0
+            },
+            {
+              "frame": 3.25,
+              "value": 255
+            },
+            {
+              "frame": 3.5,
+              "value": 255
+            },
+            {
+              "frame": 3.75,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

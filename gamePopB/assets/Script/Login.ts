@@ -9,6 +9,10 @@ export default class Login extends cc.Component {
     private loginLayer:cc.Node = null;
     start() {
         cc.Tools.screenAdapter();
+        cc.find("PROFILER-NODE").active = false;
+        // if(cc.sys.isNative){
+            // vConsole?vConsole.$dom.hidden=true:""
+        // }
         cc.Tools.Event = new cc.EventTarget();
         this.loginLayer = this.node.getChildByName("login");
         cc.Tools.breatheAnim(this.loginLayer.getChildByName("login_btn"));

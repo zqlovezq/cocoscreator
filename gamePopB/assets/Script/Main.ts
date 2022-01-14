@@ -32,6 +32,7 @@ export default class Main extends cc.Component {
     popSuccessLayer: cc.Node = null;
     popDeleteLayer: cc.Node = null;
     ticketLayer: cc.Node = null;
+    ticketTenLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
     popSecretLayer: cc.Node = null;
     @property(cc.Prefab)
@@ -89,13 +90,13 @@ export default class Main extends cc.Component {
     private clickPos = cc.v3(0, 0);
     private addTicket = 0;
     private barrageArr = [];
-    private barrage:cc.Node;
+    private barrage: cc.Node;
     private barrageSpeed = 2;
     private barrageMove = false;
     private barrageLock = false;
     onLoad() {
         // 初始化参数
-        cc.find("PROFILER-NODE").color = new cc.Color().fromHEX("000000");
+        cc.find("PROFILER-NODE").active = false;
         self = this;
         cc.Tools.screenAdapter();
         cc.Tools.Event.on("init", this.refreshUserInfo, this);
@@ -103,6 +104,7 @@ export default class Main extends cc.Component {
         cc.Tools.Event.on("cash", this.showGetCashLayer, this);
         cc.Tools.Event.on("clickRed", this.canClickRedFunc, this);
         cc.Tools.Event.on("showPacket", this.showPacket, this);
+        cc.Tools.Event.on("getTenTicket", this.showTenTicketLayer, this);
         cc.Tools.adTimes = 0;
         this.ground = cc.find("Canvas/background");
         this.content = cc.find("Canvas/content");
@@ -115,28 +117,33 @@ export default class Main extends cc.Component {
         this.countTime = new Date().getTime();
         this.preloadPrefab();
         this.initUserInfo();
+
+        let box = this.scoreInfo.getChildByName("box");
+        cc.Tools.breatheAnim(box);
+        box.on(cc.Node.EventType.TOUCH_END,()=>{
+            this.showPopDeleteLayer(1, 1);
+        },this)
+        // box
         //请求弹幕数据
         // this.getBarrageInfo();
         //创建一个弹幕
-        this.scheduleOnce(()=>{
-            this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab)=>{
+        this.scheduleOnce(() => {
+            this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab) => {
                 let barrage = cc.instantiate(prefab);
                 self.barrageLayer.addChild(barrage);
                 barrage.x = 1000;
                 this.barrage = barrage;
                 this.getBarrageInfo(true);
             })
-        },1)
-        // 增加一个计时器
-        // this.schedule(this.repeatFunc, 120);
+        }, 1)
     }
     //获取弹幕信息
-    getBarrageInfo(isFirst:boolean){
+    getBarrageInfo(isFirst: boolean) {
         cc.Tools.sendRequest("Trend", "GET", {}).then((res) => {
             let items = res.data.items;
-            self.barrageArr = [...self.barrageArr,...items];
-            console.log("self.barrageArr",self.barrageArr);
-            if(isFirst){
+            self.barrageArr = [...self.barrageArr, ...items];
+            console.log("self.barrageArr", self.barrageArr);
+            if (isFirst) {
                 this.barrageMove = true;
                 let data = self.barrageArr.shift();
                 this.barrage.getComponent("Barrage").setBarrage(data)
@@ -146,16 +153,22 @@ export default class Main extends cc.Component {
             console.log("cocos----弹幕err--" + err);
         })
     }
-    update(dt){
-        if(this.barrageMove){
-            this.barrage.x-=this.barrageSpeed;
-            if(this.barrage.x<-1000){
+    update(dt) {
+        if (this.barrageMove) {
+            let box = this.scoreInfo.getChildByName("box");
+            this.barrage.x -= this.barrageSpeed;
+            if (this.barrage.x < -1000) {
                 let data = self.barrageArr.shift();
                 this.barrage.getComponent("Barrage").setBarrage(data);
             }
-            if(this.barrageArr.length<=0&&!this.barrageLock){
+            if (this.barrageArr.length <= 0 && !this.barrageLock) {
                 this.barrageLock = true;
                 this.getBarrageInfo(false);
+            }
+            if (box.x < 700) {
+                box.x += 1;
+            }else{
+                box.x=-700;
             }
         }
     }
@@ -189,14 +202,10 @@ export default class Main extends cc.Component {
      * @param vip:Vip等级
     */
     addAvatar(url: string, vip: number) {
-        this.loadPrefab('Prefab/avatar').then((prefab: cc.Prefab) => {
-            let avatar = cc.instantiate(prefab);
-            self.userInfo.addChild(avatar);
-            let avatarJs = avatar.getComponent("Avatar");
-            avatarJs.loadUrl(url).then((res)=>{
-                avatarJs.setAvatar(res,vip)
+        let avatarJs = self.userInfo.getChildByName("avatar").getComponent("Avatar");
+            avatarJs.loadUrl(url).then((res) => {
+                avatarJs.setAvatar(res, vip)
             })
-        })
     }
     // 初始化userInfo
     initUserInfo() {
@@ -204,6 +213,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.Tools.userInfo = res.data;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
+            this.userInfo.getChildByName("user_name").getComponent(cc.Label).string = res.data.nick_name;
             this.initShuShu();
             this.init();
             this.addAvatar(res.data.avatar_url, cc.Tools.userInfo.grade_id);
@@ -272,7 +282,7 @@ export default class Main extends cc.Component {
     }
     registerEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed","showSignLayer"]
+        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed", "showSignLayer"]
         for (let i = 1; i <= 7; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
@@ -352,12 +362,12 @@ export default class Main extends cc.Component {
                     self.popSuccessLayer = layer;
                     self.node.addChild(layer);
                     let js = self.popSuccessLayer.getComponent("PopSuccess");
-                    let num ;
-                    if(this.curScore>6000){
+                    let num;
+                    if (this.curScore > 6000) {
                         num = 3
-                    }else if(this.curScore<6000&&this.curScore>3000){
+                    } else if (this.curScore < 6000 && this.curScore > 3000) {
                         num = 2
-                    }else{
+                    } else {
                         num = 1
                     }
                     self.popSuccessLayer.active = true;
@@ -401,7 +411,7 @@ export default class Main extends cc.Component {
     /**
      * 签到奖励
      */
-     showSignLayer() {
+    showSignLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         this.barrageMove = false;
         if (!this.signLayer) {
@@ -454,6 +464,27 @@ export default class Main extends cc.Component {
             ticketJs.setTicket(ticketInfo.ticket, ticketInfo.add, ticketInfo.type, ticketInfo.videoType)
         }
         // this.refreshUserInfo(false);
+    }
+    /**
+     * 
+    */
+    showTenTicketLayer(ticketInfo: ticketInfo) {
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        if (!this.ticketTenLayer) {
+            this.loadPrefab('Prefab/tenTicket').then((prefab: cc.Prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.ticketTenLayer = layer;
+                self.ticketTenLayer.zIndex = 9999;
+                self.node.addChild(layer);
+                self.ticketTenLayer.active = true;
+                let ticketJs = this.ticketTenLayer.getComponent("TenTicket");
+                ticketJs.setTicket(ticketInfo.ticket, ticketInfo.add, ticketInfo.type, ticketInfo.videoType)
+            })
+        } else {
+            this.ticketTenLayer.active = true;
+            let ticketJs = this.ticketTenLayer.getComponent("TenTicket");
+            ticketJs.setTicket(ticketInfo.ticket, ticketInfo.add, ticketInfo.type, ticketInfo.videoType)
+        }
     }
     /**
     * 解冻红包界面

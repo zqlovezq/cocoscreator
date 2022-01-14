@@ -2,21 +2,14 @@ const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class Ticket extends cc.Component {
-    private spine = null;
     private ticket:number = 0;
     private type:number = 0;//来自哪一级界面
     private videoType:number = 0;//视频类型
     onEnable(){
-        cc.Tools.hideFeedScreen();
         this.registerEvent();
-        let wrap = this.node.getChildByName("wrap");
-        this.spine = wrap.getChildByName("spine").getComponent("sp.Skeleton");
-        this.spine.setAnimation(0,"open",false);
-        this.spine.addAnimation(0,"idle",true);
     }
     // 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
     setTicket(ticket:number,add:number,type:number,videoType:number){
-        let _videoTypeArr = ["点我领红包","悬浮红包","转盘红包","升级红包","解冻红包","存钱罐","点我领红包(进度不是100%状态)","超级红包","连续消除","雪人红包","其他不重要的通用接口"]
         this.ticket = ticket;
         this.type = type;
         this.videoType = videoType;
@@ -66,7 +59,6 @@ export default class Ticket extends cc.Component {
     closeLayer(){
         // this.setTicket(300,900,4,7);
         this.node.active = false;
-        this.spine.clearTracks();
         if(this.type===1){
             cc.Tools.emitEvent("clickRed");
         }
@@ -84,7 +76,9 @@ export default class Ticket extends cc.Component {
         }
         this.scheduleOnce(()=>{
             this.removeEvent();
-            cc.Tools.emitEvent("showPacket");
+            // if(this.videoType!==16){
+            //     cc.Tools.emitEvent("showPacket");
+            // }
             cc.Tools.emitEvent("init",false);
         })
     }
