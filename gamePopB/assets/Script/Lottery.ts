@@ -21,6 +21,7 @@ export default class Turntable extends cc.Component {
         cash.getChildByName("cash").getComponent(cc.Label).string = `${_cash}元`;
         let progressBar = cash.getChildByName("progress_bar").getComponent(cc.ProgressBar);
         progressBar.progress = cc.Tools.userInfo.amount/3000>1?1:cc.Tools.userInfo.amount/3000;
+        this.wrap.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount
     }
     registerEvent() {
         let cash = this.wrap.getChildByName("cash");
@@ -34,6 +35,10 @@ export default class Turntable extends cc.Component {
         normal.on(cc.Node.EventType.TOUCH_END, this.clickNormal, this)
         let special = this.wrap.getChildByName("special");
         special.on(cc.Node.EventType.TOUCH_END, this.clickSpecial, this)
+        let normalBtn = this.wrap.getChildByName("normal").getChildByName("btn");
+        normalBtn.on(cc.Node.EventType.TOUCH_END, this.clickNormal, this)
+        let specialBtn = this.wrap.getChildByName("special").getChildByName("btn");
+        specialBtn.on(cc.Node.EventType.TOUCH_END, this.clickSpecial, this)
     }
     clickNormal(e){
         if(this.canClick){
@@ -83,7 +88,7 @@ export default class Turntable extends cc.Component {
             })
         }
     }
-    openBoxFunc(ad_id){
+    openBoxFunc(ad_id:string){
         //像服务器发送请求
         let sendData = {
             "ad_id":ad_id,

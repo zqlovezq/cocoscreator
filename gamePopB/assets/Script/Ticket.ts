@@ -69,6 +69,8 @@ export default class Ticket extends cc.Component {
             }else{
                 cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>${cc.Tools.getCash}</c></b>`);
             }
+        }else if(this.videoType===17){
+            cc.Tools.emitEvent("refreshSignList");
         }else{
             if(cc.Tools.reminderMsg){
                 cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>${cc.Tools.reminderMsg}</c></b>`);
@@ -76,9 +78,7 @@ export default class Ticket extends cc.Component {
         }
         this.scheduleOnce(()=>{
             this.removeEvent();
-            // if(this.videoType!==16){
-            //     cc.Tools.emitEvent("showPacket");
-            // }
+            cc.Tools.emitEvent("showPacket",this.videoType);
             cc.Tools.emitEvent("init",false);
         })
     }

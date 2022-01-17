@@ -1,17 +1,7 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Steal extends cc.Component {
-
-    @property(cc.Label)
-    label: cc.Label = null;
     @property(cc.Node)
     revenge: cc.Node = null;
     @property(cc.Node)
@@ -72,7 +62,6 @@ export default class Steal extends cc.Component {
     setLayer() {
         this.setRevengeList();
         this.setUserLayer();
-        // this.registerRevengeEvent();
         this.registerUserEvent();
         let down = this.wrap.getChildByName("down");
         let cash = down.getChildByName("cash").getComponent(cc.Label);
@@ -121,6 +110,9 @@ export default class Steal extends cc.Component {
                     _cashNode.string = item.amount;
                     //btn
                     let btn = _itemNode.getChildByName("btn");
+                    if(item.is_revenge){
+                        cc.Tools.setButtonGary(btn);
+                    }
                     btn["user_id"] = item.user_id;
                     btn["revenge_id"] = item.id;
                     if(i===items.length-1){

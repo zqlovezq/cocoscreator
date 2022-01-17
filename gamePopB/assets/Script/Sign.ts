@@ -20,8 +20,13 @@ export default class NewClass extends cc.Component {
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         let videoBtn = this.wrap.getChildByName("get_btn");
         videoBtn.on(cc.Node.EventType.TOUCH_END, this.showVideo, this)
+        cc.Tools.Event.on("refreshSignList", this.getSignList, this);
     }
     onEnable(){
+        this.getSignList();
+    }
+    //获取签到列表
+    getSignList(){
         cc.Tools.sendRequest("SignList", "GET", {}).then((res) => {
             let items = res.data.items;
             this.singDay = res.data.last_num;
@@ -55,9 +60,6 @@ export default class NewClass extends cc.Component {
                 //
             }
         }
-    }
-    start () {
-
     }
     showVideo(e) {
         // 点击加锁

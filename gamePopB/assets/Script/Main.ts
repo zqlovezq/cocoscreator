@@ -26,7 +26,9 @@ export default class Main extends cc.Component {
     getCashLayer: cc.Node = null;
     settingLayer: cc.Node = null;
     saveCashLayer: cc.Node = null;
+    @property(cc.Node)
     lotteryLayer: cc.Node = null;
+    @property(cc.Node)
     stealLayer: cc.Node = null;
     signLayer: cc.Node = null;
     popSuccessLayer: cc.Node = null;
@@ -120,9 +122,9 @@ export default class Main extends cc.Component {
 
         let box = this.scoreInfo.getChildByName("box");
         cc.Tools.breatheAnim(box);
-        box.on(cc.Node.EventType.TOUCH_END,()=>{
+        box.on(cc.Node.EventType.TOUCH_END, () => {
             this.showPopDeleteLayer(1, 1);
-        },this)
+        }, this)
         // box
         //请求弹幕数据
         // this.getBarrageInfo();
@@ -167,8 +169,8 @@ export default class Main extends cc.Component {
             }
             if (box.x < 700) {
                 box.x += 1;
-            }else{
-                box.x=-700;
+            } else {
+                box.x = -700;
             }
         }
     }
@@ -203,9 +205,9 @@ export default class Main extends cc.Component {
     */
     addAvatar(url: string, vip: number) {
         let avatarJs = self.userInfo.getChildByName("avatar").getComponent("Avatar");
-            avatarJs.loadUrl(url).then((res) => {
-                avatarJs.setAvatar(res, vip)
-            })
+        avatarJs.loadUrl(url).then((res) => {
+            avatarJs.setAvatar(res, vip)
+        })
     }
     // 初始化userInfo
     initUserInfo() {
@@ -249,6 +251,11 @@ export default class Main extends cc.Component {
             }
         }).catch((err) => {
             // cc.find("Canvas/lose").active = true;
+            // if (err === "token验证失败,请重新登陆") {
+            //     // 重新登陆
+            //     cc.director.loadScene('Login');
+            //     cc.sys.localStorage.setItem("token", "");
+            // }
         })
     }
     /**
@@ -289,6 +296,9 @@ export default class Main extends cc.Component {
         }
         let secretBtn = cc.find("Canvas/secret");
         secretBtn.on(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+
+        let freshBtn = cc.find("Canvas/lose/fresh_btn")
+        freshBtn.on(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
     removeEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
@@ -298,10 +308,30 @@ export default class Main extends cc.Component {
             btn.off(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
         }
         let secretBtn = cc.find("Canvas/secret");
-        secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this)
+        secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this);
+        let freshBtn = cc.find("Canvas/lose/fresh_btn")
+        freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
-    showPacket() {
-        this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => { })
+    showPacket(videoType: number) {
+        let self = this;
+        this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => {
+            console.log("当前看的视频类型是=", videoType);
+            if (videoType === 16) {
+                let lottery = self.lotteryLayer;
+                let sendData = {};
+                cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
+                    cc.Tools.userInfo = res.data;
+                    lottery.getChildByName("wrap").getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount
+                }).catch((err) => {
+                    cc.find("Canvas/lose").active = true;
+                    if (err === "token验证失败,请重新登陆") {
+                        // 重新登陆
+                        cc.director.loadScene('Login');
+                        cc.sys.localStorage.setItem("token", "");
+                    }
+                })
+            }
+        })
     }
     showSecretLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);

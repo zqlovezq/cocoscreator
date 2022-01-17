@@ -99,9 +99,13 @@ cc.Tools = {
                     // 看视频转盘
                     this.emitEvent("getTable", ad);
                     break;
-                case "17"://签到
                 case "15"://存钱罐解冻
                 case "4"://升级红包
+                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
+                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
+                    })
+                    break;
+                case "17"://签到
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
                     })
