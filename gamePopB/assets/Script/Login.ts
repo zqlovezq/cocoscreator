@@ -9,10 +9,6 @@ export default class Login extends cc.Component {
     private loginLayer:cc.Node = null;
     start() {
         cc.Tools.screenAdapter();
-        cc.find("PROFILER-NODE").active = false;
-        // if(cc.sys.isNative){
-            // vConsole?vConsole.$dom.hidden=true:""
-        // }
         cc.Tools.Event = new cc.EventTarget();
         this.loginLayer = this.node.getChildByName("login");
         cc.Tools.breatheAnim(this.loginLayer.getChildByName("login_btn"));
@@ -21,14 +17,16 @@ export default class Login extends cc.Component {
         this.userProtocol = this.loginLayer.getChildByName("user_protocol");
         if (cc.sys.isNative) {
             let wxToken =  cc.sys.localStorage.getItem("token");
+            console.log("cocos---token=",wxToken);
             if(!wxToken){
                 this.registerEvent();
             }else{
                 this.getAdTimes();
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjoyODE1LCJvcGVuX2lkIjoibzVDVmU1N2lHc0ZWeWFvZGIxUGdEbkVpenl6dyIsIm5pY2tfbmFtZSI6IueIseaDheeahOeyieaPkOexs-mcsiIsImdlbmRlciI6MCwiYXZhdGFyIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi82YmRzOXU4V1pXcEFHUDFTSWY1bGx1YlZYd3ZzSUhQSzgxdXRNNUIwWldIV1RpYmNpYzhTaWNVenRIaWJidXRJaWF1Z3k0VlJETmY2SWpQdThZaWFLQmRjdjdIQS8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MDI0NzQ1MCwiY2hhbm5lbCI6InRvdXRpYW96dHh3NC14eGwiLCJkaXN0aW5jdF9pZCI6IiIsImltZWkiOiIiLCJtYWMiOiIwMjowMDowMDowMDowMDowMCIsImFuZHJvaWRfaWQiOiIzNmQ1MDU5NTBmMTVhY2M0Iiwib2FpZCI6ImE1NmIzN2Q0NzMxMDlmNWMifQ.7mnATwAdVDc-FHXoAj1BtbhIJLtD3jI2B5meaz6Zq90");
-            cc.director.loadScene('Main');
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjozLCJvcGVuX2lkIjoib2psZHU2VkplVWwwY1U1WU4xdUhxM2k3SFB5USIsIm5pY2tfbmFtZSI6Iua1t-ebl-iIuemVvzIuMCIsImdlbmRlciI6MCwiYXZhdGFyIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9uaWFIZFZpY0ZzTE9kcEg3a0oxVHBpYVY5M2liaEpKOHVucEs3VkM4aHhGOWxVaWFrSGhPaWFic2lhUzFJaWFzY1haTUh4aWI2VUx0V05YdnNia25BS3NUWlpIY3FRdy8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MjU2MzI2MiwiY2hhbm5lbCI6Imt1YWlzaG91IiwiZGlzdGluY3RfaWQiOiJkNTdkOTcwYi02MWFjLTQwYTktYWU5OS0wYTU5YTZiYjhiOTAiLCJpbWVpIjoiODY4NzM0MDM2NjE0ODc4IiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAiLCJhbmRyb2lkX2lkIjoiNzZjZWYzMWRlNGE1NDY3NCIsIm9haWQiOiJmZWVmNWZiYi1jZjZiLTY3MzItYmM3Zi01YmZmNzdkZGRiNzkifQ.JHOmCh4GTpdGp-sC1bYWsawCkho-706BpHKcogUV4GA");
+            // cc.director.loadScene('Main');
+            this.getAdTimes();
         }
     }
     registerEvent(){
@@ -111,11 +109,12 @@ export default class Login extends cc.Component {
     getAdTimes(){
         let sendData = {};
         cc.Tools.sendRequest("UserStat", "GET", sendData).then((res) => {
-           cc.Tools.adShowNum = res.data.ad_show_num;
-           cc.Tools.adPosId = res.data.ad_pos_id;
-           cc.Tools.adDif = res.data.is_need_watch;
+           cc.Tools.ad.adShowNum = res.data.ad_show_num;
+           cc.Tools.ad.adPosId = res.data.ad_pos_id;
+           cc.Tools.ad.adDif = res.data.is_need_watch;
+           cc.Tools.treasure = res.data.treasure;
            //然后像android预加载
-           cc.Tools.setNewAdId(cc.Tools.adPosId,cc.Tools.adDif?"true":"false");
+           cc.Tools.setNewAdId(cc.Tools.ad.adPosId,cc.Tools.ad.adDif?"true":"false");
            cc.director.loadScene('Main');
         })
     }

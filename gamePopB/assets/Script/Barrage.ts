@@ -43,11 +43,13 @@ export default class Barrage extends cc.Component {
         avatar.scale = 0.8;
         let layout = this.node.getChildByName("layout").getComponent(cc.Sprite);
         layout.spriteFrame = this.kuang[userInfo.grade_id];
-        let text = layout.node.getChildByName("text").getComponent(cc.Label);
+        let text = layout.node.getChildByName("text").getComponent(cc.RichText);
         if (info.action === "steal") {
-            str = `${userInfo.user_name}偷取了${referInfo.user_name}${info.data}红包券`
+            str = `<color=#CC9CFF>${userInfo.user_name}</c>偷取了<color=#CC9CFF>${referInfo.user_name}</c>的<color=#FF80AA>${info.data}</c>红包券`
         } else if (info.action === "cash") {
-            str = `${userInfo.user_name}提取了${info.data / 100}元红包`
+            str = `${userInfo.user_name}提取了</c><color=#FF80AA>${info.data / 100}</c>元红包`
+        }else if(info.action === "tip"){
+            str = `<color=#FF80AA>${info.data}</c>`
         }
         text.string = str;
         this.node.x = 1000;

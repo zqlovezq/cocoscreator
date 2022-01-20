@@ -8,6 +8,8 @@ export default class GetCash extends cc.Component {
     content: cc.Node = null;
     @property([cc.SpriteFrame])
     bgSp = [];
+    @property([cc.SpriteFrame])
+    btnSp = [];
     onLoad(){
         let closeBtn = this.node.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
@@ -37,6 +39,8 @@ export default class GetCash extends cc.Component {
                 this.setItem(item,items[i]);
                 let bg = item.getChildByName("bg").getComponent(cc.Sprite);
                 bg.spriteFrame = this.bgSp[(i%2)];
+                let btn = item.getChildByName("btn").getComponent(cc.Sprite);
+                btn.spriteFrame = this.btnSp[(i%2)];
             }
             this.registerEvent();
         })
@@ -66,11 +70,11 @@ export default class GetCash extends cc.Component {
         lbl_1.string = `${data.amount/100}元`;
         let lbl_2 = item.getChildByName("lbl_2").getComponent(cc.Label);
         lbl_2.string = `消耗${data.cash_ticket}红包券`;
-        if(data.status===false){
-            let btn = item.getChildByName("btn")
-            cc.Tools.setButtonGary(btn)
-            this.closeBtnEvent(btn);
-        }
+        // if(data.status===false){
+        //     let btn = item.getChildByName("btn")
+        //     cc.Tools.setButtonGary(btn)
+        //     // this.closeBtnEvent(btn);
+        // }
     }
     registerEvent() {
         for(let i=0;i<this.content.children.length;i++){

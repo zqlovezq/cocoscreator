@@ -5,6 +5,8 @@ export default class Ticket extends cc.Component {
     private ticket:number = 0;
     private type:number = 0;//来自哪一级界面
     private videoType:number = 0;//视频类型
+    @property([cc.SpriteFrame])
+    title=[];
     onEnable(){
         this.registerEvent();
     }
@@ -13,26 +15,23 @@ export default class Ticket extends cc.Component {
         this.ticket = ticket;
         this.type = type;
         this.videoType = videoType;
-        let ticketLbl = this.node.getChildByName("ticketLbl").getComponent(cc.Label);
-        ticketLbl.string = `红包券X${ticket}`
-        let addLbl = this.node.getChildByName("addLbl");
-        let effect = this.node.getChildByName("effect");
-        if(add===0){
-            addLbl.active = false;
-            effect.active = false;
-        }else{
-            addLbl.active = true;
-            effect.active = true;
-        }
-        let critical_icon = effect.getChildByName("critical_icon");
-        let add_icon = effect.getChildByName("add_icon");
-        let lbl = effect.getChildByName("lbl").getComponent(cc.Label);
-        critical_icon.active = false;
-        add_icon.active = false;
-        effect.scale = 4;
-        effect.stopAllActions();
-        cc.tween(effect).delay(0.1).to(0.4,{scale:0.7}).to(0.2,{scale:1}).start();
-        if(add!==0){
+        //判断当前是否是暴击 加成红包
+        if(add){
+            let _special = this.node.getChildByName("special");
+            _special.active = true;
+            let ticketLbl = _special.getChildByName("ticketLbl").getComponent(cc.Label);
+            ticketLbl.string = `红包券X${ticket}`
+            let addLbl = _special.getChildByName("addLbl");
+            addLbl.getComponent(cc.Label).string = `${add}`
+            let effect = _special.getChildByName("effect");
+            let critical_icon = _special.getChildByName("critical_icon");
+            let add_icon = _special.getChildByName("add_icon");
+            let lbl = effect.getChildByName("lbl").getComponent(cc.Label);
+            critical_icon.active = false;
+            add_icon.active = false;
+            effect.scale = 4;
+            effect.stopAllActions();
+            cc.tween(effect).delay(0.1).to(0.4,{scale:0.7}).to(0.2,{scale:1}).start();
             if(add/ticket>1){
                 // 那么当时是倍数
                 critical_icon.active = true;
@@ -41,10 +40,16 @@ export default class Ticket extends cc.Component {
                 add_icon.active = true;
                 lbl.string = Math.floor((add/ticket)*100)+"%";
             }
-            if(add){
-                addLbl.getComponent(cc.Label).string = `${add}`
+        }else{
+            let _normal = this.node.getChildByName("normal");
+            _normal.active = true;
+            let ticketLbl = _normal.getChildByName("ticketLbl").getComponent(cc.Label);
+            ticketLbl.string = `红包券X${ticket}`
+            let title = _normal.getChildByName("title").getComponent(cc.Sprite);
+            if(videoType===13){
+                title.spriteFrame = this.title[1]
             }else{
-                addLbl.active = false;
+                title.spriteFrame = this.title[0]
             }
         }
     }
@@ -79,7 +84,9 @@ export default class Ticket extends cc.Component {
         this.scheduleOnce(()=>{
             this.removeEvent();
             cc.Tools.emitEvent("showPacket",this.videoType);
-            cc.Tools.emitEvent("init",false);
+            if(this.type===1){
+                cc.Tools.emitEvent("init",false);
+            }
         })
     }
     // update (dt) {}

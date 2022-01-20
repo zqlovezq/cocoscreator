@@ -10,7 +10,7 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
     private wrap:cc.Node = null;
-    private singDay = 0;
+    private signDay = 0;
     private isSign = false;
     // LIFE-CYCLE CALLBACKS:
 
@@ -29,8 +29,11 @@ export default class NewClass extends cc.Component {
     getSignList(){
         cc.Tools.sendRequest("SignList", "GET", {}).then((res) => {
             let items = res.data.items;
-            this.singDay = res.data.last_num;
+            this.signDay = res.data.last_num;
             this.isSign = res.data.is_sign_today;
+            if(this.isSign){
+                cc.Tools.setButtonGary(this.wrap.getChildByName("get_btn"));
+            }
             for(let i=1;i<=6;i++){
                 let sign = this.wrap.getChildByName("sign_"+i);
                 let text = sign.getChildByName("text").getComponent(cc.Label);
@@ -41,20 +44,22 @@ export default class NewClass extends cc.Component {
     }
     setLayer(){
         //当前是第几天
-        let singDay = this.singDay;
+        let signDay = this.isSign?this.signDay:this.signDay+1;
         for(let i=1;i<=6;i++){
             let sign = this.wrap.getChildByName("sign_"+i);
             let choiced = sign.getChildByName("choiced");
             let choice = sign.getChildByName("choice");
             choiced.active = false;
             choice.active = false;
-            if(i===singDay){
+            if(i===signDay){
                 if(!this.isSign){
                     choice.active = true;
+                    sign.on(cc.Node.EventType.TOUCH_END,this.showVideo,this);
                 }else{
                     choiced.active = true;
+                    sign.off(cc.Node.EventType.TOUCH_END,this.showVideo,this);
                 }
-            }else if(i<singDay){
+            }else if(i<signDay){
                 choiced.active = true;
             }else{
                 //
@@ -64,6 +69,10 @@ export default class NewClass extends cc.Component {
     showVideo(e) {
         // 点击加锁
         let target = e.target;
+        // if(target.getComponent(cc.Button).interactable===false){
+        //     console.log("按钮禁用");
+        //     return;
+        // }
         if (cc.Tools.lock) {
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
             return;

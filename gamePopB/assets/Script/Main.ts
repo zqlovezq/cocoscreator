@@ -26,9 +26,9 @@ export default class Main extends cc.Component {
     getCashLayer: cc.Node = null;
     settingLayer: cc.Node = null;
     saveCashLayer: cc.Node = null;
-    @property(cc.Node)
+    // @property(cc.Node)
     lotteryLayer: cc.Node = null;
-    @property(cc.Node)
+    // @property(cc.Node)
     stealLayer: cc.Node = null;
     signLayer: cc.Node = null;
     popSuccessLayer: cc.Node = null;
@@ -37,6 +37,7 @@ export default class Main extends cc.Component {
     ticketTenLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
     popSecretLayer: cc.Node = null;
+    popStealMarkLayer: cc.Node = null;
     @property(cc.Prefab)
     packet: cc.Prefab = null;
     @property(cc.Prefab)
@@ -96,9 +97,9 @@ export default class Main extends cc.Component {
     private barrageSpeed = 2;
     private barrageMove = false;
     private barrageLock = false;
+    private superTime = 0;
     onLoad() {
         // 初始化参数
-        cc.find("PROFILER-NODE").active = false;
         self = this;
         cc.Tools.screenAdapter();
         cc.Tools.Event.on("init", this.refreshUserInfo, this);
@@ -119,7 +120,14 @@ export default class Main extends cc.Component {
         this.countTime = new Date().getTime();
         this.preloadPrefab();
         this.initUserInfo();
-
+        //是否首次进入游戏
+        let first = cc.sys.localStorage.getItem("first");
+        if (!first) {
+            cc.sys.localStorage.setItem("first", true);
+        } else {
+            //显示偷取列表
+            this.showStealMarkLayer();
+        }
         let box = this.scoreInfo.getChildByName("box");
         cc.Tools.breatheAnim(box);
         box.on(cc.Node.EventType.TOUCH_END, () => {
@@ -138,13 +146,34 @@ export default class Main extends cc.Component {
                 this.getBarrageInfo(true);
             })
         }, 1)
+        //退出游戏的时候记录一下
+        cc.game.on(cc.game.EVENT_HIDE, function () {
+            console.log("cocos--EVENT_HIDE--退出游戏");
+            //当前记录一个时间
+            let date = new Date().getTime();
+            cc.sys.localStorage.setItem("lastExit", date);
+        });
+    }
+    showStealMarkLayer() {
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        this.barrageMove = false;
+        if (!this.popStealMarkLayer) {
+            this.loadPrefab('Prefab/stealMark').then((prefab: cc.Prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.popStealMarkLayer = layer;
+                self.node.addChild(layer);
+                self.popStealMarkLayer.active = true;
+            })
+        } else {
+            this.popStealMarkLayer.active = true;
+        }
     }
     //获取弹幕信息
     getBarrageInfo(isFirst: boolean) {
         cc.Tools.sendRequest("Trend", "GET", {}).then((res) => {
             let items = res.data.items;
             self.barrageArr = [...self.barrageArr, ...items];
-            console.log("self.barrageArr", self.barrageArr);
+            // console.log("self.barrageArr", self.barrageArr);
             if (isFirst) {
                 this.barrageMove = true;
                 let data = self.barrageArr.shift();
@@ -172,6 +201,12 @@ export default class Main extends cc.Component {
             } else {
                 box.x = -700;
             }
+            // if(this.superTime>40){
+            //     this.superTime = 0;
+            //     this.showSuperLayer();
+            // }else{
+            //     this.superTime+=dt;
+            // }
         }
     }
     /**
@@ -204,6 +239,9 @@ export default class Main extends cc.Component {
      * @param vip:Vip等级
     */
     addAvatar(url: string, vip: number) {
+        cc.Tools.userInfo.next_grade_rate = 0.5;
+        let bar: cc.Sprite = self.userInfo.getChildByName("vip_bar").getComponent(cc.Sprite);
+        bar.fillRange = cc.Tools.userInfo.next_grade_rate;
         let avatarJs = self.userInfo.getChildByName("avatar").getComponent("Avatar");
         avatarJs.loadUrl(url).then((res) => {
             avatarJs.setAvatar(res, vip)
@@ -229,12 +267,12 @@ export default class Main extends cc.Component {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
             }
         }).catch((err) => {
-            // cc.find("Canvas/lose").active = true;
-            // if (err === "token验证失败,请重新登陆") {
-            //     // 重新登陆
-            //     cc.director.loadScene('Login');
-            //     cc.sys.localStorage.setItem("token", "");
-            // }
+            cc.find("Canvas/lose").active = true;
+            if (err === "token验证失败,请重新登陆" && cc.sys.isNative) {
+                // 重新登陆
+                cc.director.loadScene('Login');
+                cc.sys.localStorage.setItem("token", "");
+            }
         })
     }
     /**
@@ -250,12 +288,12 @@ export default class Main extends cc.Component {
                 this.init();
             }
         }).catch((err) => {
-            // cc.find("Canvas/lose").active = true;
-            // if (err === "token验证失败,请重新登陆") {
-            //     // 重新登陆
-            //     cc.director.loadScene('Login');
-            //     cc.sys.localStorage.setItem("token", "");
-            // }
+            cc.find("Canvas/lose").active = true;
+            if (err === "token验证失败,请重新登陆" && cc.sys.isNative) {
+                // 重新登陆
+                cc.director.loadScene('Login');
+                cc.sys.localStorage.setItem("token", "");
+            }
         })
     }
     /**
@@ -270,6 +308,7 @@ export default class Main extends cc.Component {
         cc.resources.preload('Prefab/ticket', cc.Prefab);
         cc.resources.preload('Prefab/super', cc.Prefab);
         cc.resources.preload('Prefab/sign', cc.Prefab);
+        cc.resources.preload('Prefab/stealMark', cc.Prefab);
         cc.resources.preload('Prefab/secretLayer', cc.Prefab);
     }
     loadPrefab(url: string) {
@@ -312,19 +351,34 @@ export default class Main extends cc.Component {
         let freshBtn = cc.find("Canvas/lose/fresh_btn")
         freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
+    //方向 1是现金红包 2是存钱罐
     showPacket(videoType: number) {
         let self = this;
         this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => {
-            console.log("当前看的视频类型是=", videoType);
+            // console.log("当前看的视频类型是=", videoType);
             if (videoType === 16) {
                 let lottery = self.lotteryLayer;
                 let sendData = {};
                 cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
                     cc.Tools.userInfo = res.data;
-                    lottery.getChildByName("wrap").getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount
+                    lottery.getChildByName("wrap").getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
                 }).catch((err) => {
                     cc.find("Canvas/lose").active = true;
-                    if (err === "token验证失败,请重新登陆") {
+                    if (err === "token验证失败,请重新登陆" && cc.sys.isNative) {
+                        // 重新登陆
+                        cc.director.loadScene('Login');
+                        cc.sys.localStorage.setItem("token", "");
+                    }
+                })
+            } else if (videoType === 13 || videoType === 14 || videoType === 15) {
+                let steal = self.stealLayer;
+                let sendData = {};
+                cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
+                    cc.Tools.userInfo = res.data;
+                    steal.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
+                }).catch((err) => {
+                    cc.find("Canvas/lose").active = true;
+                    if (err === "token验证失败,请重新登陆" && cc.sys.isNative) {
                         // 重新登陆
                         cc.director.loadScene('Login');
                         cc.sys.localStorage.setItem("token", "");
@@ -404,7 +458,18 @@ export default class Main extends cc.Component {
                     js.setStar(num)
                 })
             } else {
-                this.popSuccessLayer.active = true;
+                // this.popSuccessLayer.active = true;
+                let js = self.popSuccessLayer.getComponent("PopSuccess");
+                let num;
+                if (this.curScore > 6000) {
+                    num = 3
+                } else if (this.curScore < 6000 && this.curScore > 3000) {
+                    num = 2
+                } else {
+                    num = 1
+                }
+                self.popSuccessLayer.active = true;
+                js.setStar(num)
             }
 
         }, 0.5)

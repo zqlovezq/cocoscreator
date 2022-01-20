@@ -1,11 +1,11 @@
 var Pubkey = `-----BEGIN RSA Public Key-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6xCn65TInQGUCfo6A7IQ
-Wu5oW1AFqYIRnLlzXMo8DB3ZC5grYf7095NWpFFERnhmCxJySj5NAV9XEubPD/za
-ZKkgV2kKM9zbrivOOVVVn1oA5WXvctply81DGsECzNwwDvOTiehlXHxAA+NPCguQ
-TcviR6W5oYH1f9ymjQy9aeKv2OvZhXm/1RzexXnlh1XzdCJtTBROaST7jI20ifKb
-XG/GRgdJrRdb1yghcNnqYtAVUWZKKx9hBI1hpMoE+9q2xMpcZmMGiu8w/nZTVzd7
-M3N56HWWu3nvYpW9KH6xTpmqKlqCemwx8E3ZEdalGp5djkRPKLJPKZ8swMNDgwu2
-ZQIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvAd71hqQFal9eqThSMwr
+iMwpTvyTYkX9Y0vuFqEoqU72qQ98CUhxwxLczuFZBmvlL2diIVf1dROR3MoHm/wI
+AP3pqFuV5XMrclrlOkIr9h1WNIje/Hfe1GMmixj8JRTf6MEDQ5vA8m+PyHdRAxCc
+LqYwji3LB3VU+XJkOcdlRHK1oi6BBY7/qJj2HuLgFfvhWW9Qc+SRsu6aKEA+x11u
+ZLCtABgAMDcD1zYdEu1Kaw22iQJRF9ZchgPEWKo0okAR5bAYRx5D+MhirQ20XJGM
+vgOiqF3LYpuA75UTjN5qGs9DVzYlnRamGfx3otJwzoKc0N8BLewlncRheJH4kGej
+hwIDAQAB
 -----END RSA Public Key-----`
 cc.Tools = {
     /**
@@ -147,11 +147,13 @@ cc.Tools = {
     showJiliAd(type) {
         if (cc.sys.isNative) {
             // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
-            if (cc.Tools.adShowNum > 0) {
+            if (cc.Tools.ad.adShowNum > 0) {
                 jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);
             } else {
                 cc.Tools.emitEvent("showTips", "今天观看视频次数已经达到上限");
             }
+        } else {
+            cc.Tools.adCallBack("100," + type);
         }
     },
     //请求预加载新的广告ID isDif 是否分层
@@ -231,17 +233,17 @@ cc.Tools = {
             cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
                 // console.log("cocos----Ecpm----data----",JSON.stringify(res));
-                cc.Tools.adShowNum = res.ad_show_num;
+                cc.Tools.ad.adShowNum = res.ad_show_num;
                 cc.sys.localStorage.setItem("ad_number", res.ad_show_num)
-                if (cc.Tools.adDif) {
-                    cc.Tools.adPosId = res.ad_pos_id;
-                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
+                if (cc.Tools.ad.adDif) {
+                    cc.Tools.ad.adPosId = res.ad_pos_id;
+                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId, "true");
                 }
                 resolve(res.ad_id);
             }).catch((res) => {
                 console.log("cocos----Ecpm----bug----", res);
-                if (cc.Tools.adDif) {
-                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
+                if (cc.Tools.ad.adDif) {
+                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId, "true");
                 }
             })
         })
@@ -367,9 +369,9 @@ cc.Tools = {
     sendRequest: function (url, type, data) {
         return new Promise(function (resolve, reject) {
             let xhr = new XMLHttpRequest();
-            // let requestURL = "https://api.jiankangzhuan.com/api.xxrich/" + url;
+            let requestURL = "https://api.jiankangzhuan.com/api.xxrich/" + url;
             //test todo
-            let requestURL = "http://192.168.110.195:8888/api.xxrich/" + url;
+            // let requestURL = "http://192.168.110.195:8888/api.xxrich/" + url;
             xhr.open(type, requestURL, true);
             if (cc.sys.isNative) {
                 xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
@@ -469,8 +471,11 @@ cc.Tools = {
      */
     setButtonGary(btn) {
         let btnCom = btn.getComponent(cc.Button);
-        btnCom.enableAutoGrayEffect = true;
-        btnCom.interactable = false;
+        if (btnCom) {
+            btnCom.enableAutoGrayEffect = true;
+            btnCom.interactable = false;
+            btn.targetOff("touchend");
+        }
     },
     /**
      * 在一个范围内随机
@@ -489,11 +494,36 @@ cc.Tools = {
         let minute = Math.floor((count - 3600 * hour) / 60);
         let second = count - hour * 3600 - 60 * minute;
         console.log(`${hour}时+${minute}分+${second}秒`);
-        return hour > 0 ? hour + "时" : "" + minute > 0 ? minute + "分" : "" + second > 0 ? second + "秒" : "";
-    }
+        return (hour > 0 ? hour + "时" : "") + (minute > 0 ? minute + "分" : "") + (second > 0 ? second + "秒" : "");
+    },
+    /**
+     * 将秒数转成天数
+    */
+    changeSecondTime(count) {
+        let day = Math.floor(count / (3600 * 24))
+        let hour = Math.floor((count - day * (3600 * 24)) / 3600);
+        let minute = Math.floor((count - 3600 * hour - day * (3600 * 24)) / 60);
+        // let second = count - hour * 3600 - 60 * minute;
+        return (day > 0 ? day + "天" : "") + (hour > 0 ? hour + "时" : "") + (minute > 0 ? minute + "分" : "");
+    },
+    /**
+     * 将时间戳转化
+    */
+    changeTimeToloc(time) {
+        let date = new Date(time);
+        let year = date.getFullYear();
+        let month = date.getMonth()+1>9?date.getMonth()+1:"0"+(date.getMonth()+1);
+        let day = date.getDate();
+        let hours = date.getHours()>9?date.getHours():"0"+date.getHours();
+        let minute = date.getMinutes()>9?date.getMinutes():"0"+date.getMinutes();
+        let second = date.getSeconds()>9?date.getSeconds():"0"+date.getSeconds();
+        return year+"/"+month+"/"+day+" "+hours+":"+minute+":"+second;
+   }
 }
 cc.Tools.userInfo = {};
-cc.Tools.adShowNum = 3;
-cc.Tools.adPosId = "947025026";
-cc.Tools.adDif = false;
-cc.Tools.DeviceInfo = {};
+cc.Tools.ad = {};
+cc.Tools.treasure = {};
+// cc.Tools.adShowNum = 3;
+// cc.Tools.adPosId = "947633984";
+// cc.Tools.adDif = false;
+// cc.Tools.DeviceInfo = {};

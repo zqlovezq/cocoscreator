@@ -12,7 +12,10 @@ export default class Super extends cc.Component {
         let percent = cash / 3000 >= 1 ? 1 : cash / 3000
         _progress.progress = percent;
         let lbl = progress.getChildByName("lbl").getComponent(cc.Label);
-        lbl.string = `${cash}/3000`
+        lbl.string = `${cash}/3000`;
+        if(cash<3000){
+            cc.Tools.setButtonGary(this.node.getChildByName("get_btn"));
+        }
     }
     registerEvent() {
         let closeBtn = this.node.getChildByName("close_btn");

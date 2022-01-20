@@ -12,6 +12,7 @@ export default class Steal extends cc.Component {
     private revenBtn:cc.Node = null;
     private stealBtn:cc.Node = null;
     private isExtend:boolean = false;
+    private loopTime:number = 5;
     onLoad() {
         this.wrap = this.node.getChildByName("wrap");
         let closeBtn = this.node.getChildByName("close_btn");
@@ -35,6 +36,9 @@ export default class Steal extends cc.Component {
         //延伸按钮
         let extendBtn = this.wrap.getChildByName("middle").getChildByName("extend_btn");
         extendBtn.on(cc.Node.EventType.TOUCH_END, this.extendView, this);
+        //刷新次数按钮
+        let fresh = up.getChildByName("fresh");
+        fresh.on(cc.Node.EventType.TOUCH_END, this.freshList, this);
         cc.Tools.Event.on("revenge", this.revengeBack, this);
         cc.Tools.Event.on("steal", this.stealBack, this);
     }
@@ -57,6 +61,8 @@ export default class Steal extends cc.Component {
         }
     }
     onEnable() {
+        //test
+        cc.Tools.userInfo.save_amount = 60;
         this.setLayer();
     }
     setLayer() {
@@ -64,8 +70,47 @@ export default class Steal extends cc.Component {
         this.setUserLayer();
         this.registerUserEvent();
         let down = this.wrap.getChildByName("down");
-        let cash = down.getChildByName("cash").getComponent(cc.Label);
-        cash.string = cc.Tools.userInfo.save_amount;
+        let todayCash = down.getChildByName("today_cash").getChildByName("text").getComponent(cc.Label);
+        todayCash.string = cc.Tools.userInfo.save_amount;
+        let tomorrowCash = down.getChildByName("tomorrow_cash");
+        let tomorrowCashText = tomorrowCash.getChildByName("text").getComponent(cc.Label);
+        tomorrowCashText.string = cc.Tools.userInfo.save_freeze_amount;
+        // tomorrowCash.scale = 0;
+        // this.schedule(()=>{
+        //     console.log("loopTime=",this.loopTime);
+        //     tomorrowCash.scale = 0;
+        //     tomorrowCash.stopAllActions();
+        //     cc.tween(tomorrowCash).to(0.1,{scale:1}).delay(5).start();
+        // },this.loopTime);
+        this.node.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
+    }
+    freshList(){
+        if (cc.Tools.lock) {
+            cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>点击太频繁</c></b>`);
+            return;
+        } else {
+            cc.Tools.lock = true;
+            setTimeout(() => {
+                cc.Tools.lock = false;
+            }, 3000)
+        }
+        let up = this.wrap.getChildByName("up");
+        cc.Tools.sendRequest("RefreshStealUser", "GET", {}).then((res) => {
+            let items = res.data.items;
+            let canSteal = res.data.can_steal;
+            let fresh = up.getChildByName("fresh");
+            if(!canSteal){
+                cc.Tools.setButtonGary(fresh);
+            }
+            for (let i = 1; i <= items.length; i++) {
+                let itemData = items[i - 1];
+                let _itemNode = up.getChildByName("item_" + i)
+                this.setUserItem(_itemNode,itemData);
+            }
+            //倒计时
+        }).catch((err) => {
+            console.log("cocos----刷新用户列表err--" + err);
+        })
     }
     //设置复仇记录
     setRevengeList() {
@@ -107,11 +152,12 @@ export default class Steal extends cc.Component {
                     userName.string = item.user_name;
                     //cash
                     let _cashNode = _itemNode.getChildByName("cash").getComponent(cc.Label);
-                    _cashNode.string = item.amount;
+                    _cashNode.string = "-"+item.amount;
                     //btn
                     let btn = _itemNode.getChildByName("btn");
                     if(item.is_revenge){
                         cc.Tools.setButtonGary(btn);
+                        // btn.off(cc.Node.EventType.TOUCH_END,this.showOtherTree,this)
                     }
                     btn["user_id"] = item.user_id;
                     btn["revenge_id"] = item.id;
@@ -119,8 +165,6 @@ export default class Steal extends cc.Component {
                         this.registerRevengeEvent();
                     }
                 }
-            }else{
-                this.wrap.getChildByName("middle").active = false;
             }
         }).catch((err) => {
             console.log("cocos----复仇列表err--" + err);
@@ -133,21 +177,23 @@ export default class Steal extends cc.Component {
         let down = this.wrap.getChildByName("down");
         cc.Tools.sendRequest("StealStat", "GET", {}).then((res) => {
             let items = res.data.items;
+            let canSteal = res.data.can_steal;
+            let fresh = up.getChildByName("fresh");
+            if(!canSteal){
+                cc.Tools.setButtonGary(fresh);
+            }
             for (let i = 1; i <= items.length; i++) {
                 let itemData = items[i - 1];
                 let _itemNode = up.getChildByName("item_" + i)
                 this.setUserItem(_itemNode,itemData);
             }
             //刷新次数
-            let refreshTimes = up.getChildByName("refresh_times").getComponent(cc.Label);
-            refreshTimes.string = `X${res.data.refresh_num}`;
             let protectTime = down.getChildByName("protect_time").getComponent(cc.Label);
             //将时间转化成字符串
             if (res.data.count_down > 0) {
                 let str = cc.Tools.changeTime(res.data.count_down);
                 protectTime.string = `保护时间：${str}`;
             } else {
-                protectTime.node.active = false;
                 protectTime.string = `点击红包树获得红包券`;
             }
             //倒计时
@@ -159,6 +205,8 @@ export default class Steal extends cc.Component {
     setUserItem(_itemNode:cc.Node,itemData:any){
         let _avatarNode = _itemNode.getChildByName("avatar");
         _avatarNode["id"] = itemData.user_id;
+        let _btn = _itemNode.getChildByName("btn");
+        _btn["id"] = itemData.user_id;
         let avatar:cc.Node;
         if(_avatarNode.children.length>0){
             avatar = _avatarNode.children[0];
@@ -228,7 +276,9 @@ export default class Steal extends cc.Component {
             cc.Tools.sendRequest("SubSaving", "POST", sendData).then((res) => {
                 cc.Tools.userInfo.save_amount = res.data.amount;
                 cc.Tools.userInfo.save_freeze_amount = res.data.freeze_amount;
-                cash.string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount;
+                cash.string = cc.Tools.userInfo.save_amount;
+                cc.tween().to(0.1,{scale:0}).start();
+                this.loopTime = 4;
             })
         }
     }
@@ -243,10 +293,9 @@ export default class Steal extends cc.Component {
         //将时间转化成字符串
         if (data.count_down > 0) {
             let str = cc.Tools.changeTime(data.count_down);
-            protectTime.string = `保护时间：${str}`;
+            protectTime.string = `保护时间：\n${str}`;
         } else {
-            protectTime.node.active = false;
-            protectTime.string = `点击红包树获得红包券`;
+            protectTime.string = `点击红包树\n获得红包券`;
         }
         let _avatarNode = tree.getChildByName("avatar");
         let avatar:cc.Node;
@@ -290,7 +339,8 @@ export default class Steal extends cc.Component {
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>用户还在保护期，不可以复仇哦</c></b>`);
         }else{
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-                cc.Tools.adCallBack("100,14")
+                // cc.Tools.adCallBack("100,14")
+                cc.Tools.showJiliAd(14);
             });
         }
     }
@@ -316,12 +366,12 @@ export default class Steal extends cc.Component {
     }
     stealOther(e){
         let target = e.target;
-        let id = target.parent.userId;
+        let id = target.id;
         this.stealBtn = target;
         console.log(`点击的头像是${id}`)
         cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-            // cc.Tools.showJiliAd(16);
-            cc.Tools.adCallBack("100,13")
+            cc.Tools.showJiliAd(13);
+            // cc.Tools.adCallBack("100,13")
         });
     }
     stealBack(ad_id:string){
@@ -337,12 +387,12 @@ export default class Steal extends cc.Component {
             if(data.is_ok){
                 cc.Tools.setButtonGary(this.stealBtn.parent.getChildByName("btn"));
             }
-            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 1, videoType: 14 });
+            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 1, videoType: 13 });
         })
     }
     refreshBtn(e){
         let target = e.target;
-        let id = target.parent.userId;
+        let id = target.id;
         let up = this.wrap.getChildByName("up");
         console.log(`刷新的是${id}`);
         let sendData = {
@@ -351,13 +401,12 @@ export default class Steal extends cc.Component {
         cc.Tools.sendRequest("RefreshStealUser", "POST", sendData).then((res) => {
             console.log("刷新的数据=",res);
             this.setUserItem(target.parent,res.data.item);
-            let refreshTimes = up.getChildByName("refresh_times").getComponent(cc.Label);
-            refreshTimes.string = `X${res.data.refresh_num}`;
             if(res.data.refresh_num<=0){
                 for (let i = 1; i <= 3; i++) {
                     let _itemNode = up.getChildByName("item_" + i);
                     let btn = _itemNode.getChildByName("btn");
                     cc.Tools.setButtonGary(btn);
+                    // btn.off(cc.Node.EventType.TOUCH_END,this.refreshBtn,this)
                 }
             }
         })

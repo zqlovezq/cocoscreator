@@ -51,8 +51,8 @@ export default class TenTicket extends cc.Component {
         this.node.active = false;
         this.scheduleOnce(() => {
             this.removeEvent();
-            // cc.Tools.emitEvent("showPacket");
-            cc.Tools.emitEvent("init", false);
+            cc.Tools.emitEvent("showPacket");
+            // cc.Tools.emitEvent("init", false);
         })
     }
     showPacketAnim(c: number, nt: number, randomScope: number = 80, startPos: cc.Vec3 = cc.v3(0, 0), call: Function = null) {
@@ -76,7 +76,7 @@ export default class TenTicket extends cc.Component {
             cc.tween(pre)
                 .by(0.4, { position: cc.v3(rannumx, rannumy) }, { easing: 'quadOut' })
                 .delay(0.3)
-                .to(0.4, { position: cc.v3(endP) })
+                .to(0.4, { position: cc.v3(endP.x,endP.y+100) })
                 .call(() => {
                     // pre.destroy()
                     _count++
