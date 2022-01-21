@@ -49,7 +49,6 @@ export default class PopSuccess extends cc.Component {
                 ts: new Date().getTime()
             };
             cc.Tools.sendRequest("NewAward", "POST", sendData).then((res) => {
-                this.closeLayer();
                 cc.Tools.emitEvent("getTicket", { ticket: res.data.amount, add: res.data.add_amount, type: 1, videoType: 4 });
             });
         } else {
@@ -66,8 +65,9 @@ export default class PopSuccess extends cc.Component {
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
                 cc.Tools.showJiliAd(4);
             });
-            this.closeLayer();
         }
+        cc.Tools.showFeedScreen("guan");
+        this.node.active = false;
     }
     closeLayer() {
         cc.Tools.showFeedScreen("guan");

@@ -120,23 +120,22 @@ export default class Main extends cc.Component {
         this.countTime = new Date().getTime();
         this.preloadPrefab();
         this.initUserInfo();
+        this.shieldBtn();
         //是否首次进入游戏
-        let first = cc.sys.localStorage.getItem("first");
-        if (!first) {
-            cc.sys.localStorage.setItem("first", true);
-        } else {
-            //显示偷取列表
-            this.showStealMarkLayer();
+        if(cc.sys.localStorage.getItem("showBtn")==100){
+            let first = cc.sys.localStorage.getItem("first");
+            if (!first) {
+                cc.sys.localStorage.setItem("first", true);
+            } else {
+                //显示偷取列表
+                this.showStealMarkLayer();
+            }
         }
         let box = this.scoreInfo.getChildByName("box");
         cc.Tools.breatheAnim(box);
         box.on(cc.Node.EventType.TOUCH_END, () => {
             this.showPopDeleteLayer(1, 1);
         }, this)
-        // box
-        //请求弹幕数据
-        // this.getBarrageInfo();
-        //创建一个弹幕
         this.scheduleOnce(() => {
             this.loadPrefab('Prefab/barrage').then((prefab: cc.Prefab) => {
                 let barrage = cc.instantiate(prefab);
@@ -153,6 +152,29 @@ export default class Main extends cc.Component {
             let date = new Date().getTime();
             cc.sys.localStorage.setItem("lastExit", date);
         });
+    }
+    //判断是否屏蔽
+    shieldBtn() {
+        if (cc.sys.localStorage.getItem("showBtn")) {
+            let val = cc.sys.localStorage.getItem("showBtn");
+            let btnLayer = this.content.getChildByName("btn_layer");
+            for (let i = 3; i <= 7; i++) {
+                let btn = btnLayer.getChildByName("btn_" + i);
+                btn.active = val == 1 ? false : true;
+            }
+        } else {
+            cc.Tools.sendRequest("RegionConf", "GET", {}).then((res) => {
+                if (res.data.status === 1) {
+                    //不显示
+                    cc.sys.localStorage.setItem("showBtn", 1);
+                } else if (res.data.status === 100) {
+                    //显示
+                    cc.sys.localStorage.setItem("showBtn", 100);
+                }
+            }).catch((err) => {
+                console.log("cocos----屏蔽err--" + err);
+            })
+        }
     }
     showStealMarkLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
@@ -185,7 +207,7 @@ export default class Main extends cc.Component {
         })
     }
     update(dt) {
-        if (this.barrageMove) {
+        if (this.barrageMove&&this.barrage&&cc.sys.localStorage.getItem("showBtn")==100) {
             let box = this.scoreInfo.getChildByName("box");
             this.barrage.x -= this.barrageSpeed;
             if (this.barrage.x < -1000) {
@@ -201,12 +223,12 @@ export default class Main extends cc.Component {
             } else {
                 box.x = -700;
             }
-            // if(this.superTime>40){
-            //     this.superTime = 0;
-            //     this.showSuperLayer();
-            // }else{
-            //     this.superTime+=dt;
-            // }
+            if (this.superTime > 60) {
+                this.superTime = 0;
+                this.showSuperLayer();
+            } else {
+                this.superTime += dt;
+            }
         }
     }
     /**
@@ -239,7 +261,7 @@ export default class Main extends cc.Component {
      * @param vip:Vip等级
     */
     addAvatar(url: string, vip: number) {
-        cc.Tools.userInfo.next_grade_rate = 0.5;
+        // cc.Tools.userInfo.next_grade_rate = 0.5;
         let bar: cc.Sprite = self.userInfo.getChildByName("vip_bar").getComponent(cc.Sprite);
         bar.fillRange = cc.Tools.userInfo.next_grade_rate;
         let avatarJs = self.userInfo.getChildByName("avatar").getComponent("Avatar");
@@ -258,13 +280,26 @@ export default class Main extends cc.Component {
             this.init();
             this.addAvatar(res.data.avatar_url, cc.Tools.userInfo.grade_id);
             // 显示冻结红包的进度条
-            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_1");
+            let freezenBtn = this.content.getChildByName("btn_layer").getChildByName("btn_3");
             let freezenRate = cc.Tools.userInfo.active_rate.split("|");
             let freezenBar = freezenBtn.getChildByName("bar").getComponent(cc.ProgressBar);
             freezenBar.progress = Number(freezenRate[0]) / Number(freezenRate[1]);
             freezenBtn.getChildByName("text").getComponent(cc.Label).string = `${freezenRate[0]}/${freezenRate[1]}`;
             if (freezenRate[0] === freezenRate[1]) {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
+            }
+            //每一段时间像服务器发请求
+            // 增加一个定时器 一定时间没有看视频 主动弹出视频
+            if(cc.sys.localStorage.getItem("showBtn")==100){
+                this.schedule(() => {
+                    cc.Tools.sendRequest("AdIntervalShow", "GET", {}).then((res) => {
+                        if (res.data.is_show) {
+                            cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
+                                cc.Tools.showJiliAd(12);
+                            });
+                        }
+                    })
+                }, cc.Tools.userInfo.ad_show_interval_second)
             }
         }).catch((err) => {
             cc.find("Canvas/lose").active = true;
@@ -283,6 +318,7 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.Tools.userInfo = res.data;
             this.barrageMove = true;
+            this.superTime = 0;
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
             if (isReload) {
                 this.init();
@@ -328,7 +364,7 @@ export default class Main extends cc.Component {
     }
     registerEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed", "showSignLayer"]
+        let btnType = ["showSetLayer", "showGetCashLayer", "showUnFreezeLayer", "showStealLayer", "showLotteryleLayer", "clickRed", "showSignLayer"]
         for (let i = 1; i <= 7; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
@@ -341,7 +377,7 @@ export default class Main extends cc.Component {
     }
     removeEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSetLayer", "showGetCashLayer", "showStealLayer", "showLotteryleLayer", "clickRed"]
+        let btnType = ["showSetLayer", "showGetCashLayer", "showUnFreezeLayer", "showStealLayer", "showLotteryleLayer", "clickRed"]
         for (let i = 1; i <= 6; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.off(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
@@ -352,16 +388,17 @@ export default class Main extends cc.Component {
         freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
     }
     //方向 1是现金红包 2是存钱罐
-    showPacket(videoType: number) {
+    showPacket(obj: any) {
         let self = this;
-        this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), this.cashInfo, () => {
+        let end = obj.dir === 1 ? this.cashInfo : this.content.getChildByName("btn_layer").getChildByName("btn_4")
+        this.showPacketAnim(10, 0.01, 200, cc.v3(360, 640), end, () => {
             // console.log("当前看的视频类型是=", videoType);
-            if (videoType === 16) {
+            if (obj.videoType === 16) {
                 let lottery = self.lotteryLayer;
                 let sendData = {};
                 cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
                     cc.Tools.userInfo = res.data;
-                    lottery.getChildByName("wrap").getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
+                    lottery.getChildByName("wrap").getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
                 }).catch((err) => {
                     cc.find("Canvas/lose").active = true;
                     if (err === "token验证失败,请重新登陆" && cc.sys.isNative) {
@@ -370,7 +407,7 @@ export default class Main extends cc.Component {
                         cc.sys.localStorage.setItem("token", "");
                     }
                 })
-            } else if (videoType === 13 || videoType === 14 || videoType === 15) {
+            } else if (obj.videoType === 13 || obj.videoType === 14 || obj.videoType === 15) {
                 let steal = self.stealLayer;
                 let sendData = {};
                 cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
@@ -384,6 +421,10 @@ export default class Main extends cc.Component {
                         cc.sys.localStorage.setItem("token", "");
                     }
                 })
+            } else if (obj.videoType === 4) {
+                cc.Tools.emitEvent("init", true);
+            } else if (obj.videoType === 9) {
+                cc.Tools.emitEvent("init", false);
             }
         })
     }

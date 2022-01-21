@@ -12,7 +12,7 @@ export default class NewClass extends cc.Component {
     private wrap: cc.Node = null;
     onLoad() {
         this.wrap = this.node.getChildByName("wrap");
-        this.wrap.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
+        this.node.getChildByName("bg").on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
         cc.tween(this.node).to(0.1, { scale: 1 }, { easing: 'sineOutIn' }).start();
     }
 
@@ -22,8 +22,8 @@ export default class NewClass extends cc.Component {
     //设置复仇记录
     setRevengeList() {
         this.revenge.destroyAllChildren();
-        let icon: cc.Sprite = this.wrap.getChildByName("icon").getComponent(cc.Sprite);
-        let pop: cc.Node = this.wrap.getChildByName("pop");
+        let icon: cc.Sprite = this.node.getChildByName("icon").getComponent(cc.Sprite);
+        let pop: cc.Node = this.node.getChildByName("pop");
         pop.scale = 0;
         let popText: cc.Label = pop.getChildByName("text").getComponent(cc.Label);
         cc.tween(pop).delay(0.2).to(0.3, { scale: 1 }, { easing: 'sineOutIn' }).start();
@@ -43,6 +43,7 @@ export default class NewClass extends cc.Component {
                 }
             }
             if (newArr.length > 0) {
+                this.wrap.active = true;
                 icon.spriteFrame = this.icon[1];
                 popText.string = "小主，对不起你没能守护好你的红包树！";
                 for (let i = 0; i < newArr.length; i++) {
@@ -61,6 +62,7 @@ export default class NewClass extends cc.Component {
                     time.string = _time;
                 }
             } else {
+                this.wrap.active = false;
                 popText.string = "小主，我守护好你的红包树～～快夸夸我";
                 icon.spriteFrame = this.icon[0];
             }

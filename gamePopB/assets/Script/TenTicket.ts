@@ -18,7 +18,14 @@ export default class TenTicket extends cc.Component {
         this.registerEvent();
         for (let i = 1; i <= 10; i++) {
             let award = this.node.getChildByName("award_" + i);
+            award.active = false;
             award.zIndex = 9999;
+            if(this.node.getChildByName("packet"+i)){
+                let packet = this.node.getChildByName("packet"+i);
+                packet.removeFromParent();
+                packet.destroy();
+                packet = null;
+            }
         }
     }
     // 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
@@ -35,6 +42,8 @@ export default class TenTicket extends cc.Component {
                     let award = this.node.getChildByName("award_" + i);
                     award.getComponent(cc.Label).string = splitArr[i-1];
                     award.active = true;
+                    let closeBtn = this.node.getChildByName("close_btn");
+                    closeBtn.active= true;
                 }
             })
         }).start()
@@ -51,8 +60,9 @@ export default class TenTicket extends cc.Component {
         this.node.active = false;
         this.scheduleOnce(() => {
             this.removeEvent();
-            cc.Tools.emitEvent("showPacket");
+            // cc.Tools.emitEvent("showPacket",16,1);
             // cc.Tools.emitEvent("init", false);
+            cc.Tools.emitEvent("showPacket",{videoType:16,dir:1});
         })
     }
     showPacketAnim(c: number, nt: number, randomScope: number = 80, startPos: cc.Vec3 = cc.v3(0, 0), call: Function = null) {
@@ -71,6 +81,7 @@ export default class TenTicket extends cc.Component {
                 _times = 10;
             }
             let endNode = this.node.getChildByName("award_" + _times)
+            pre.name = "packet"+_times;
             let endP = endNode.getPosition();
             endP = this.node.convertToNodeSpaceAR(endNode.parent.convertToWorldSpaceAR(endP))
             cc.tween(pre)

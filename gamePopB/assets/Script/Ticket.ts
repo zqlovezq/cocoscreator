@@ -48,6 +48,8 @@ export default class Ticket extends cc.Component {
             let title = _normal.getChildByName("title").getComponent(cc.Sprite);
             if(videoType===13){
                 title.spriteFrame = this.title[1]
+            }else if(videoType===14){
+                title.spriteFrame = this.title[2]
             }else{
                 title.spriteFrame = this.title[0]
             }
@@ -83,7 +85,11 @@ export default class Ticket extends cc.Component {
         }
         this.scheduleOnce(()=>{
             this.removeEvent();
-            cc.Tools.emitEvent("showPacket",this.videoType);
+            let dir = 2;
+            if(this.videoType===4||this.videoType===17||this.videoType===16||this.videoType===9||this.videoType===13||this.videoType===14){
+                dir = 1;
+            }
+            cc.Tools.emitEvent("showPacket",{videoType:this.videoType,dir:dir});
             if(this.type===1){
                 cc.Tools.emitEvent("init",false);
             }

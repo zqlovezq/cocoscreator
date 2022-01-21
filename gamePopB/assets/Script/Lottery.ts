@@ -33,10 +33,10 @@ export default class Turntable extends cc.Component {
         let cash = this.wrap.getChildByName("cash");
         let _cash = Math.floor(cc.Tools.treasure.amount/100);
         cash.getChildByName("cash").getComponent(cc.Label).string = `${_cash}元`;
-        cash.getChildByName("lbl_2").getComponent(cc.Label).string = `满${_cash}元即可提现`;
+        // cash.getChildByName("lbl_2").getComponent(cc.Label).string = `满${_cash}元即可提现`;
         let progressBar = cash.getChildByName("progress_bar").getComponent(cc.ProgressBar);
         progressBar.progress = cc.Tools.treasure.rate/100;
-        this.wrap.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.save_amount+cc.Tools.userInfo.save_freeze_amount
+        this.wrap.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount
     }
     registerEvent() {
         let cash = this.wrap.getChildByName("cash");
