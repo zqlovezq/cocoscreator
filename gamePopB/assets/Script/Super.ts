@@ -7,7 +7,7 @@ export default class Super extends cc.Component {
         // 设置界面
         let wrap = this.node.getChildByName("wrap");
         let progress = wrap.getChildByName("progress");
-        let cash = cc.Tools.userInfo.amount;
+        let cash = cc.Tools.wallet.amount;
         let _progress = progress.getComponent(cc.ProgressBar);
         let percent = cash / 3000 >= 1 ? 1 : cash / 3000
         _progress.progress = percent;

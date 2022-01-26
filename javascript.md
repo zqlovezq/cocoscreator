@@ -350,6 +350,16 @@
             }
         return quick(aryLeft).concat(middleValue,quick(aryRight));
     }
+
+    cc.Tools.ad.config.sort(function(a,b){
+        if(a.num>b.num){
+            return 1;
+        }
+        if(a.num<b.num){
+            return -1;
+        }
+        return 0;
+    })
 ```
 >选择排序 归并排序 希尔排序 堆排序 计数排序 桶排序 基数排序
 ***二叉树 三叉树 红黑树 V8引擎 装饰器***

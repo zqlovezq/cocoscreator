@@ -16,6 +16,9 @@ export default class TenTicket extends cc.Component {
     packet: cc.Prefab = null;
     onEnable() {
         this.registerEvent();
+        let red = this.node.getChildByName("red");
+        red.opacity = 255;
+        red.y = 450;
         for (let i = 1; i <= 10; i++) {
             let award = this.node.getChildByName("award_" + i);
             award.active = false;
@@ -37,7 +40,7 @@ export default class TenTicket extends cc.Component {
         let splitArr = this.splitNumber(ticket);
         cc.tween(red).to(0.5, { y: 250 }).call(() => {
             red.opacity = 0;
-            this.showPacketAnim(10, 0.01, 100, cc.v3(red.x + 375, red.y + 667), () => {
+            this.showPacketAnim(9, 0.01, 100, cc.v3(red.x + 375, red.y + 667), () => {
                 for (let i = 1; i <= 10; i++) {
                     let award = this.node.getChildByName("award_" + i);
                     award.getComponent(cc.Label).string = splitArr[i-1];
@@ -60,8 +63,6 @@ export default class TenTicket extends cc.Component {
         this.node.active = false;
         this.scheduleOnce(() => {
             this.removeEvent();
-            // cc.Tools.emitEvent("showPacket",16,1);
-            // cc.Tools.emitEvent("init", false);
             cc.Tools.emitEvent("showPacket",{videoType:16,dir:1});
         })
     }
@@ -80,7 +81,7 @@ export default class TenTicket extends cc.Component {
             if (_times > 10) {
                 _times = 10;
             }
-            let endNode = this.node.getChildByName("award_" + _times)
+            let endNode = this.node.getChildByName("award_" + _times);
             pre.name = "packet"+_times;
             let endP = endNode.getPosition();
             endP = this.node.convertToNodeSpaceAR(endNode.parent.convertToWorldSpaceAR(endP))

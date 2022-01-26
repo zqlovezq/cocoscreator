@@ -1,7 +1,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class StealMark extends cc.Component {
 
     @property(cc.Node)
     revenge: cc.Node = null;
@@ -32,11 +32,13 @@ export default class NewClass extends cc.Component {
             //处理items
             //获取上一次退出时间
             let lastExit = cc.sys.localStorage.getItem("lastExit");
+            console.log("cocos----上次退出的时间",lastExit);
             let newArr = [];
             if(items.length>0){
                 for(let i=0;i<items;i++){
                     let data = items[i];
                     let ts = data.ts;
+                    console.log("cocos----服务器记录的时间",ts);
                     if(ts>=lastExit){
                         newArr.push(data);
                     }

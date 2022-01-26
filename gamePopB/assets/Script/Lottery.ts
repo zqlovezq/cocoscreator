@@ -1,7 +1,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Turntable extends cc.Component {
+export default class Lottery extends cc.Component {
     private wrap:cc.Node = null;
     private canClick = true;
     private clickBtn = 0;
@@ -36,7 +36,7 @@ export default class Turntable extends cc.Component {
         // cash.getChildByName("lbl_2").getComponent(cc.Label).string = `满${_cash}元即可提现`;
         let progressBar = cash.getChildByName("progress_bar").getComponent(cc.ProgressBar);
         progressBar.progress = cc.Tools.treasure.rate/100;
-        this.wrap.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount
+        cc.Tools.Event.emit("refreshWallet");
     }
     registerEvent() {
         let cash = this.wrap.getChildByName("cash");
@@ -120,14 +120,14 @@ export default class Turntable extends cc.Component {
         cc.Tools.sendRequest("PipeOpenTreasureReq", "POST", sendData).then((res) => {
             // console.log("点击宝箱返回信息",res);
             if(this.clickBtn===1){
-                cc.Tools.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: 16 });
+                cc.Tools.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: 16 });
                 //刷新次数
                 let normal = this.wrap.getChildByName("normal");
                 let text = normal.getChildByName("text").getComponent(cc.Label);
                 text.string = `X${res.addon_num}`
                 this.normalNumber = res.addon_num;
             }else if(this.clickBtn===10){
-                cc.Tools.emitEvent("getTenTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: 16 });
+                cc.Tools.emitEvent("getTenTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: 16 });
                 let special = this.wrap.getChildByName("special");
                 let text = special.getChildByName("text").getComponent(cc.Label);
                 text.string = `X${res.addon_num}`

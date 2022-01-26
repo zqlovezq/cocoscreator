@@ -8,7 +8,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Sign extends cc.Component {
     private wrap:cc.Node = null;
     private signDay = 0;
     private isSign = false;

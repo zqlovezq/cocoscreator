@@ -24,7 +24,7 @@ export default class Login extends cc.Component {
                 this.getAdTimes();
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjozLCJvcGVuX2lkIjoib2psZHU2VkplVWwwY1U1WU4xdUhxM2k3SFB5USIsIm5pY2tfbmFtZSI6Iua1t-ebl-iIuemVvzIuMCIsImdlbmRlciI6MCwiYXZhdGFyIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9uaWFIZFZpY0ZzTE9kcEg3a0oxVHBpYVY5M2liaEpKOHVucEs3VkM4aHhGOWxVaWFrSGhPaWFic2lhUzFJaWFzY1haTUh4aWI2VUx0V05YdnNia25BS3NUWlpIY3FRdy8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MjU2MzI2MiwiY2hhbm5lbCI6Imt1YWlzaG91IiwiZGlzdGluY3RfaWQiOiJkNTdkOTcwYi02MWFjLTQwYTktYWU5OS0wYTU5YTZiYjhiOTAiLCJpbWVpIjoiODY4NzM0MDM2NjE0ODc4IiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAiLCJhbmRyb2lkX2lkIjoiNzZjZWYzMWRlNGE1NDY3NCIsIm9haWQiOiJmZWVmNWZiYi1jZjZiLTY3MzItYmM3Zi01YmZmNzdkZGRiNzkifQ.JHOmCh4GTpdGp-sC1bYWsawCkho-706BpHKcogUV4GA");
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjo1NCwib3Blbl9pZCI6Im9qbGR1NmZMbVNWWUoyUEs3eE9KUTNfRVcyZWsiLCJuaWNrX25hbWUiOiLkuI3lho3pgaXov5wiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvRjc1UFVvbHBqUmNHMklUcHlsMm1mV0g4aDc2aGYyZ1NERVFhQUhIVERTWGY2d0pSZE9kMU1qM3lNWm9kbmtFcHFIVEZicktINWxaSk5Hb3FCMWgxbEEvMTMyIiwiY3JlYXRlX3RpbWUiOjE2NDMxMDExNTIsImNoYW5uZWwiOiJ0b3V0aWFvIiwiZGlzdGluY3RfaWQiOiIzNWVjMzdlZC04ZTEyLTQzNjEtYmNhNS1mMGNmYzM5ODI3MjgiLCJpbWVpIjoiODYwMzE5MDQyMzU4MDQ3IiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAiLCJhbmRyb2lkX2lkIjoiMjljZWIwMjEwNDUwODc5OSIsIm9haWQiOiJkYmZjZTY1MDgwNmM1YTEyIn0.w7zvCreTZSXoqR4MHZnD7Fn4BV4lFhEOZcbXqmTOAFA");
             // cc.director.loadScene('Main');
             this.getAdTimes();
         }
@@ -113,9 +113,25 @@ export default class Login extends cc.Component {
            cc.Tools.ad.adPosId = res.data.ad_pos_id;
            cc.Tools.ad.adDif = res.data.is_need_watch;
            cc.Tools.treasure = res.data.treasure;
-           //然后像android预加载
-           cc.Tools.setNewAdId(cc.Tools.ad.adPosId,cc.Tools.ad.adDif?"true":"false");
-           cc.director.loadScene('Main');
+            //
+            let login:cc.Node = this.node.getChildByName("login");
+            let loading:cc.Node = this.node.getChildByName("loading");
+            login.active = false;
+            loading.active = true;
+            let progress:cc.ProgressBar = loading.getChildByName("progress").getComponent(cc.ProgressBar);
+            progress.progress = 0;
+            let icon:cc.Node = loading.getChildByName("icon");
+            cc.tween(progress).to(2,{progress:1}).call(()=>{
+                cc.director.loadScene('Main');
+            }).start();
+            icon.runAction(cc.moveBy(2,500,0));
+            //进度条的百分显示
+            let lbl = loading.getChildByName("lbl").getComponent(cc.Label);
+            let count = 0;
+            this.schedule(()=>{
+                count++;
+                lbl.string = count+"%"
+            },0.016,99);
         })
     }
     getCode(code:string) {
@@ -127,9 +143,11 @@ export default class Login extends cc.Component {
             "distinct_id": cc.Tools.DeviceInfo.uid ? cc.Tools.DeviceInfo.uid : "",
             "oaid": cc.Tools.DeviceInfo.oaid ? cc.Tools.DeviceInfo.oaid : "",
             "android_id": cc.Tools.DeviceInfo.android_id ? cc.Tools.DeviceInfo.android_id : "",
+            "sm_device_id": cc.Tools.DeviceInfo.sm_device_id ? cc.Tools.DeviceInfo.sm_device_id : "",
             "code": code
         }
         cc.sys.localStorage.setItem("channel", cc.Tools.DeviceInfo.channel ? cc.Tools.DeviceInfo.channel : "");
+        cc.sys.localStorage.setItem("sm_device_id",cc.Tools.DeviceInfo.sm_device_id ? cc.Tools.DeviceInfo.sm_device_id : "");
         cc.Tools.sendRequest("register", "POST", data).then((res) => {
             cc.sys.localStorage.setItem("token", res.data.token);
             // 拼接一个打点时间

@@ -38,11 +38,71 @@ cc.Tools = {
     getAdTimes(data) {
         cc.Tools.adTimes = Number(data);
     },
+    //数美接口
+    sm(type) {
+        console.log("cocos----sm---", "type=" + type);
+        let _type;
+        let json = {
+            "adType": "REWARDED_VIDEO_AD",
+            "codeId": cc.Tools.ad.adPosId ? cc.Tools.ad.adPosId : "0",
+        }
+        if (type === "adGet") {
+            cc.Tools.ad.adId = cc.Tools.userInfo.user_id + "-" + cc.Tools.uuid(8, 10);
+        }
+        json.adId = cc.Tools.ad.adId;
+        if (type.indexOf("adFinish") > -1) {
+            _type = "adFinish"
+            let __type = type.split(",");
+            if (__type[1]) {
+                if (__type[1] === "close") {
+                    json.adFinishType = "CLICK_CLOSE_BUTTON"
+                } else if (__type[1] === "complete") {
+                    json.adFinishType = "COMPLETE_AD"
+                } else if (__type[1] === "skip") {
+                    json.adFinishType = "SKIP_AD"
+                } else if (__type[1] === "error") {
+                    json.adFinishType = "SHOW_AD_ERROR"
+                }
+            }
+        } else {
+            _type = type
+        }
+        let sendData = {
+            "device_id": cc.sys.localStorage.getItem("sm_device_id"),
+            "event": _type,
+            "millisecond": new Date().getTime(),
+            "add_json": JSON.stringify(json)
+        };
+        console.log("cocos--ShuMeiEvent---", JSON.stringify(sendData));
+        cc.Tools.sendRequest("ShuMeiEvent", "POST", sendData).then((res) => {
+            console.log("cocos----数美返回的数据=", JSON.stringify(res));
+        })
+    },
+    //uuid(8, 10)
+    uuid(len, radix) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+        if (len) {
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+        } else {
+            var r;
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random() * 16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+        return uuid.join('');
+    },
     /**
      * 获取当前的存钱罐的钱数
     */
     getFreeze() {
-        if (cc.sys.isNative) {
+        if (cc.sys.isNative && cc.sys.localStorage.getItem("showBtn") == 100) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setFreeze", "(Ljava/lang/String;Ljava/lang/String;)V", cc.Tools.userInfo.calendar_msg, cc.Tools.userInfo.calendar_timestamp);
         }
     },
@@ -87,37 +147,22 @@ cc.Tools = {
             switch (type) {
                 case "1"://点我领红包
                 case "2"://悬浮红包
+                case "4"://成功过关
                 case "7"://点我领红包
                 case "8"://超级红包
+                case "9"://消除红包
+                case "12"://自动红包
                 case "10"://雪人红包
-                case "12"://定时器红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
                     break;
-                case "3":
-                    // 看视频转盘
-                    this.emitEvent("getTable", ad);
-                    break;
+                case "11"://提现视频
                 case "15"://存钱罐解冻
-                case "4"://升级红包
-                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
-                    })
-                    break;
                 case "17"://签到
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
                     })
-                    break;
-                case "16"://宝箱
-                    this.emitEvent("openBox", ad);
-                    break;
-                case "14"://复仇
-                    this.emitEvent("revenge", ad);
-                    break;
-                case "13"://偷能量
-                    this.emitEvent("steal", ad);
                     break;
                 case "5"://解冻红包
                     this.emitEvent("freeze", ad);
@@ -125,15 +170,14 @@ cc.Tools = {
                 case "6":// 存钱罐
                     this.emitEvent("saveCash", ad);
                     break;
-                case "9"://消除红包
-                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
-                    })
+                case "13"://偷能量
+                    this.emitEvent("steal", ad);
                     break;
-                case "11"://提现视频
-                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
-                    })
+                case "14"://复仇
+                    this.emitEvent("revenge", ad);
+                    break;
+                case "16"://宝箱
+                    this.emitEvent("openBox", ad);
                     break;
                 default:
                     break;
@@ -157,9 +201,9 @@ cc.Tools = {
         }
     },
     //请求预加载新的广告ID isDif 是否分层
-    setNewAdId(id, isDif) {
+    setNewAdId(id) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", "" + id, isDif);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;)V", "" + id);
         }
     },
     // 显示banner
@@ -232,18 +276,30 @@ cc.Tools = {
             data.action = "Ecpm"
             cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
-                // console.log("cocos----Ecpm----data----",JSON.stringify(res));
                 cc.Tools.ad.adShowNum = res.ad_show_num;
-                cc.sys.localStorage.setItem("ad_number", res.ad_show_num)
-                if (cc.Tools.ad.adDif) {
-                    cc.Tools.ad.adPosId = res.ad_pos_id;
-                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId, "true");
+                console.log("cocos----ecpm类型----" + type);
+                if (type < 20) {
+                    cc.Tools.ad.adTimes++;
+                    if (cc.Tools.ad.adTimes <= cc.Tools.ad.adDiv) {
+                        if (cc.Tools.ad.adSmall) {
+                            cc.Tools.ad.adPosId = cc.Tools.ad.adSmall;
+                        }
+                    } else {
+                        if (cc.Tools.ad.adBig) {
+                            cc.Tools.ad.adPosId = cc.Tools.ad.adBig;
+                        }
+                    }
+                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId);
                 }
+                console.log("cocos----adBig----" + cc.Tools.ad.adBig);
+                console.log("cocos----adSmall----" + cc.Tools.ad.adSmall);
+                console.log("cocos----今天观看的视频次数", cc.Tools.ad.adTimes);
+                cc.sys.localStorage.setItem("adTimes", cc.Tools.ad.adTimes);
                 resolve(res.ad_id);
             }).catch((res) => {
-                console.log("cocos----Ecpm----bug----", res);
-                if (cc.Tools.ad.adDif) {
-                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId, "true");
+                console.log("cocos----Ecpm----bug----", JSON.stringify(res));
+                if (cc.Tools.ad.adPosId) {
+                    cc.Tools.setNewAdId(cc.Tools.ad.adPosId);
                 }
             })
         })
@@ -512,18 +568,17 @@ cc.Tools = {
     changeTimeToloc(time) {
         let date = new Date(time);
         let year = date.getFullYear();
-        let month = date.getMonth()+1>9?date.getMonth()+1:"0"+(date.getMonth()+1);
+        let month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1);
         let day = date.getDate();
-        let hours = date.getHours()>9?date.getHours():"0"+date.getHours();
-        let minute = date.getMinutes()>9?date.getMinutes():"0"+date.getMinutes();
-        let second = date.getSeconds()>9?date.getSeconds():"0"+date.getSeconds();
-        return year+"/"+month+"/"+day+" "+hours+":"+minute+":"+second;
-   }
+        let hours = date.getHours() > 9 ? date.getHours() : "0" + date.getHours();
+        let minute = date.getMinutes() > 9 ? date.getMinutes() : "0" + date.getMinutes();
+        let second = date.getSeconds() > 9 ? date.getSeconds() : "0" + date.getSeconds();
+        return year + "/" + month + "/" + day + " " + hours + ":" + minute + ":" + second;
+    }
 }
-cc.Tools.userInfo = {};
-cc.Tools.ad = {};
-cc.Tools.treasure = {};
-// cc.Tools.adShowNum = 3;
-// cc.Tools.adPosId = "947633984";
-// cc.Tools.adDif = false;
-// cc.Tools.DeviceInfo = {};
+cc.Tools.userInfo = {};//用户信息
+cc.Tools.ad = {};//广告
+cc.Tools.treasure = {};//宝箱
+cc.Tools.wallet = {};//钱
+cc.Tools.ad.adTimes = 0;
+cc.Tools.ad.adDiv = 10;

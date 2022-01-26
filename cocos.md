@@ -767,7 +767,7 @@ function getIndex(arr,num){
   /User/wangziquan/.gradle
 
   <!-- debug keystore -->
-  keytool -list -v -keystore debug.keystore
+  keytool -list -v -keystore jkzaaaa.jks
   生成单个渠道包: ./gradlew clean assembleReleaseChannels -PchannelList=meituan
 生成多个渠道包:  ./gradlew clean assembleReleaseChannels -PchannelList=kuaishouztxw05-xxl,kuaishouztxw06-xxl
 ./gradlew clean assembleReleaseChannels -PchannelList=toutiaoztxw3-xxl,kuaishouztxw01-xxl,kuaishouztxw03-xxl,kuaishouztxw04-xxl,meizu2

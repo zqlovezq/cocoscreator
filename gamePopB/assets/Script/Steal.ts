@@ -60,7 +60,6 @@ export default class Steal extends cc.Component {
         }
     }
     onEnable() {
-        //test
         this.setLayer();
     }
     setLayer() {
@@ -69,15 +68,15 @@ export default class Steal extends cc.Component {
         this.registerUserEvent();
         let down: cc.Node = this.wrap.getChildByName("down");
         let todayCash: cc.Node = down.getChildByName("today_cash");
-        todayCash.active = cc.Tools.userInfo.save_amount>0;
+        todayCash.active = cc.Tools.wallet.save_amount>0;
         let todayCashText: cc.Label = todayCash.getChildByName("text").getComponent(cc.Label);
-        todayCashText.string = cc.Tools.userInfo.save_amount;
+        todayCashText.string = cc.Tools.wallet.save_amount;
         let tomorrowCash: cc.Node = down.getChildByName("tomorrow_cash");
-        tomorrowCash.active = cc.Tools.userInfo.save_freeze_amount>0;
+        tomorrowCash.active = cc.Tools.wallet.save_freeze_amount>0;
         let tomorrowCashText: cc.Label = tomorrowCash.getChildByName("text").getComponent(cc.Label);
-        tomorrowCashText.string = cc.Tools.userInfo.save_freeze_amount;
-        this.node.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
-        if(cc.Tools.userInfo.save_amount<=0&&cc.Tools.userInfo.save_freeze_amount>0){
+        tomorrowCashText.string = cc.Tools.wallet.save_freeze_amount;
+        this.node.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.wallet.amount;
+        if(cc.Tools.wallet.save_amount<=0&&cc.Tools.wallet.save_freeze_amount>0){
             tomorrowCash.opacity = 255;
         }
         todayCash.stopAllActions();
@@ -85,15 +84,15 @@ export default class Steal extends cc.Component {
         todayCash.runAction(cc.sequence(cc.moveBy(0.2, 0, 20).easing(cc.easeOut(3.0)), cc.moveBy(0.2, 0, -20).easing(cc.easeIn(3.0))))
         //如果存钱罐有钱 则出现小手
         let hand: cc.Node = down.getChildByName("hand");
-        if (cc.Tools.userInfo.save_amount) {
+        if (cc.Tools.wallet.save_amount) {
             hand.active = true;
         }
         for (let i = 1; i <= 5; i++) {
             let red = down.getChildByName("red_" + i);
             if (i <= 3) {
-                red.active = cc.Tools.userInfo.save_amount !== 0
+                red.active = cc.Tools.wallet.save_amount !== 0
             } else {
-                red.active = cc.Tools.userInfo.save_freeze_amount !== 0
+                red.active = cc.Tools.wallet.save_freeze_amount !== 0
             }
         }
     }
@@ -131,6 +130,7 @@ export default class Steal extends cc.Component {
         cc.Tools.sendRequest("RevengeList", "GET", {}).then((res) => {
             let items = res.data.items;
             if (items.length > 0) {
+                this.wrap.getChildByName("middle").getChildByName("notSteal").active = false;
                 for (let i = 0; i < items.length; i++) {
                     let item = items[i];
                     let _itemNode = cc.instantiate(this.item);
@@ -178,6 +178,8 @@ export default class Steal extends cc.Component {
                         this.registerRevengeEvent();
                     }
                 }
+            }else{
+                this.wrap.getChildByName("middle").getChildByName("notSteal").active = true;
             }
         }).catch((err) => {
             console.log("cocos----复仇列表err--" + err);
@@ -275,7 +277,7 @@ export default class Steal extends cc.Component {
     // 存钱罐取钱
     getCash(e) {
         let target = e.target;
-        let cash: cc.Label = target.parent.getChildByName("today_cash").getComponent(cc.Label);
+        let cash: cc.Label = target.parent.getChildByName("today_cash").getChildByName("text").getComponent(cc.Label);
         let tomorrowCash: cc.Node = target.parent.getChildByName("tomorrow_cash");
         cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
             cc.Tools.showJiliAd(15);
@@ -284,13 +286,16 @@ export default class Steal extends cc.Component {
             // 像服务器发送请求
             let sendData = {};
             cc.Tools.sendRequest("SubSaving", "POST", sendData).then((res) => {
+                console.log("cocos----取钱返回",JSON.stringify(res));
                 cc.Tools.userInfo.save_amount = res.data.amount;
                 cc.Tools.userInfo.save_freeze_amount = res.data.freeze_amount;
                 cash.string = cc.Tools.userInfo.save_amount;
-                cc.tween(cash.node).to(0.2, { scale: 0 }).start();
+                cc.tween(cash.node.parent).to(0.2, { scale: 0 }).start();
                 tomorrowCash.opacity = 255;
                 tomorrowCash.stopAllActions();
                 tomorrowCash.y = -172;
+                let tomorrow_cash = tomorrowCash.getChildByName("text").getComponent(cc.Label);
+                tomorrow_cash.string = cc.Tools.userInfo.save_freeze_amount;
                 tomorrowCash.runAction(cc.sequence(cc.moveBy(0.2, 0, 20).easing(cc.easeOut(3.0)), cc.moveBy(0.2, 0, -20).easing(cc.easeIn(3.0))));
 
                 for (let i = 1; i <= 3; i++) {
@@ -379,7 +384,7 @@ export default class Steal extends cc.Component {
                 let tree = this.node.getChildByName("other_tree");
                 tree.active = false;
             }
-            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 1, videoType: 14 });
+            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 2, videoType: 14 });
         })
     }
     stealOther(e) {
@@ -405,7 +410,7 @@ export default class Steal extends cc.Component {
             if (data.is_ok) {
                 cc.Tools.setButtonGary(this.stealBtn.parent.getChildByName("btn"));
             }
-            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 1, videoType: 13 });
+            cc.Tools.emitEvent("getTicket", { ticket: res.data.steal_award, add: 0, type: 2, videoType: 13 });
         })
     }
     closeTree() {

@@ -35,7 +35,7 @@ export default class Ticket extends cc.Component {
             if(add/ticket>1){
                 // 那么当时是倍数
                 critical_icon.active = true;
-                lbl.string = add/ticket+"倍";
+                lbl.string = Math.floor(add/ticket)+"倍";
             }else{
                 add_icon.active = true;
                 lbl.string = Math.floor((add/ticket)*100)+"%";
@@ -65,6 +65,7 @@ export default class Ticket extends cc.Component {
     }
     closeLayer(){
         // this.setTicket(300,900,4,7);
+        
         this.node.active = false;
         if(this.type===1){
             cc.Tools.emitEvent("clickRed");
