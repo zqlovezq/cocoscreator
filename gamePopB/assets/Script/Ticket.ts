@@ -9,6 +9,10 @@ export default class Ticket extends cc.Component {
     title=[];
     onEnable(){
         this.registerEvent();
+        let _special = this.node.getChildByName("special");
+        let _normal = this.node.getChildByName("normal");
+        _special.active = false;
+        _normal.active = false;
     }
     // 1点我领红包 2悬浮红包 3转盘红包 4升级红包 5解冻红包 6存钱罐 7点我领红包(进度不是100%状态) 8超级红包 9连续消除 10雪人红包 11其他不重要的通用接口
     setTicket(ticket:number,add:number,type:number,videoType:number){
@@ -22,7 +26,7 @@ export default class Ticket extends cc.Component {
             let ticketLbl = _special.getChildByName("ticketLbl").getComponent(cc.Label);
             ticketLbl.string = `红包券X${ticket}`
             let addLbl = _special.getChildByName("addLbl");
-            addLbl.getComponent(cc.Label).string = `${add}`
+            addLbl.getComponent(cc.Label).string = `${add}`;
             let effect = _special.getChildByName("effect");
             let critical_icon = _special.getChildByName("critical_icon");
             let add_icon = _special.getChildByName("add_icon");

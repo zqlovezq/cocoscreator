@@ -147,12 +147,13 @@ cc.Tools = {
             switch (type) {
                 case "1"://点我领红包
                 case "2"://悬浮红包
+                case "3"://新春红包
                 case "4"://成功过关
                 case "7"://点我领红包
                 case "8"://超级红包
                 case "9"://消除红包
                 case "12"://自动红包
-                case "10"://雪人红包
+                case "10"://飞行红包
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })

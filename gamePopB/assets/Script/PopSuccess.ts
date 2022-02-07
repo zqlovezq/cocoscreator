@@ -13,7 +13,7 @@ export default class PopSuccess extends cc.Component {
         closeBtn.active = false;
         this.scheduleOnce(() => {
             closeBtn.active = true;
-        }, 1)
+        }, 2)
     }
     setStar(num:number){
         for(let i=1;i<=3;i++){

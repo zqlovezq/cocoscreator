@@ -90,13 +90,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 120
-      },
-      {
-        "__id__": 121
-      },
-      {
         "__id__": 122
+      },
+      {
+        "__id__": 123
+      },
+      {
+        "__id__": 124
       }
     ],
     "_prefab": null,
@@ -5357,9 +5357,12 @@
       },
       {
         "__id__": 118
+      },
+      {
+        "__id__": 120
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": null,
     "_opacity": 255,
@@ -5811,6 +5814,103 @@
     "_N$overflow": 0,
     "_N$cacheMode": 0,
     "_id": "5902T47H1DKbKzSIzRwKu4"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "desc",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 110
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 121
+      }
+    ],
+    "_prefab": null,
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 247,
+      "g": 169,
+      "b": 102,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 480,
+      "height": 94.92
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        -5.104,
+        -270.533,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": "61FReMTQJCsJE2EY8ab7io"
+  },
+  {
+    "__type__": "cc.Label",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 120
+    },
+    "_enabled": true,
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
+    "_srcBlendFactor": 770,
+    "_dstBlendFactor": 771,
+    "_string": "开宝箱，赢活动奖金全提现\n",
+    "_N$string": "开宝箱，赢活动奖金全提现\n",
+    "_fontSize": 40,
+    "_lineHeight": 42,
+    "_enableWrapText": true,
+    "_N$file": {
+      "__uuid__": "c87534d3-d522-44fd-9905-4e67ec9112df"
+    },
+    "_isSystemFontUsed": false,
+    "_spacingX": 0,
+    "_batchAsBitmap": false,
+    "_styleFlags": 0,
+    "_underlineHeight": 0,
+    "_N$horizontalAlign": 1,
+    "_N$verticalAlign": 1,
+    "_N$fontFamily": "Arial",
+    "_N$overflow": 0,
+    "_N$cacheMode": 0,
+    "_id": "d90/Fil21Le67FFSTDNQeZ"
   },
   {
     "__type__": "cc.Canvas",

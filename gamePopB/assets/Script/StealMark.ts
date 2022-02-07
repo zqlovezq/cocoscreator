@@ -75,6 +75,7 @@ export default class StealMark extends cc.Component {
     closeLayer() {
         this.node.active = false;
         cc.Tools.emitEvent("init", false);
+        cc.Tools.emitEvent("showGuide");
         this.scheduleOnce(()=>{
             console.log("注销事件");
             this.wrap.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);

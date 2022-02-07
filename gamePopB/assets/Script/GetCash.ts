@@ -23,9 +23,10 @@ export default class GetCash extends cc.Component {
     setLayer() {
         // 像服务器获取提现信息
         this.content.destroyAllChildren();
-        let ticket = this.node.getChildByName("ticket").getChildByName("text").getComponent(cc.Label);
-        ticket.string = cc.Tools.userInfo.amount;
-        this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
+        let ticket = this.node.getChildByName("cash").getChildByName("ticket");
+        let text_1 = ticket.getChildByName("text_1").getComponent(cc.Label);
+        text_1.string = cc.Tools.wallet.amount ;
+        ticket.getChildByName("layout").getChildByName("text_2").getComponent(cc.Label).string = this.handleNumber(cc.Tools.wallet.amount / 10000);
         let sendData = {
 
         };

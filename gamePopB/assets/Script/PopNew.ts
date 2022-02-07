@@ -1,10 +1,3 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -43,10 +36,13 @@ export default class PopNew extends cc.Component {
             let text = this.open.getChildByName("text").getComponent(cc.Label);
             text.string = res.data.award_amount; 
             this.award = res.data.award_amount; 
+        }).catch((err)=>{
+            this.closeLayer();
         })
     }
     closeLayer() {
         cc.Tools.emitEvent("showPacket",{dir:1});
+        cc.Tools.emitEvent("showGuide");
         this.node.active = false;
         cc.Tools.emitEvent("init", false);
         this.scheduleOnce(()=>{

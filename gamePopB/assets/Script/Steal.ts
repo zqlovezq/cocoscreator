@@ -16,8 +16,8 @@ export default class Steal extends cc.Component {
         this.wrap = this.node.getChildByName("wrap");
         let closeBtn = this.node.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
-        let down:cc.Node = this.wrap.getChildByName("down");
-        let up:cc.Node = this.wrap.getChildByName("up");
+        let down: cc.Node = this.wrap.getChildByName("down");
+        let up: cc.Node = this.wrap.getChildByName("up");
         for (let i = 1; i <= 5; i++) {
             let floater = down.getChildByName("red_" + i);
             cc.Tools.popAnim(floater, 10);
@@ -68,15 +68,15 @@ export default class Steal extends cc.Component {
         this.registerUserEvent();
         let down: cc.Node = this.wrap.getChildByName("down");
         let todayCash: cc.Node = down.getChildByName("today_cash");
-        todayCash.active = cc.Tools.wallet.save_amount>0;
+        todayCash.active = cc.Tools.wallet.save_amount > 0;
         let todayCashText: cc.Label = todayCash.getChildByName("text").getComponent(cc.Label);
         todayCashText.string = cc.Tools.wallet.save_amount;
         let tomorrowCash: cc.Node = down.getChildByName("tomorrow_cash");
-        tomorrowCash.active = cc.Tools.wallet.save_freeze_amount>0;
+        tomorrowCash.active = cc.Tools.wallet.save_freeze_amount > 0;
         let tomorrowCashText: cc.Label = tomorrowCash.getChildByName("text").getComponent(cc.Label);
         tomorrowCashText.string = cc.Tools.wallet.save_freeze_amount;
         this.node.getChildByName("total_cash").getChildByName("lbl").getComponent(cc.Label).string = cc.Tools.wallet.amount;
-        if(cc.Tools.wallet.save_amount<=0&&cc.Tools.wallet.save_freeze_amount>0){
+        if (cc.Tools.wallet.save_amount <= 0 && cc.Tools.wallet.save_freeze_amount > 0) {
             tomorrowCash.opacity = 255;
         }
         todayCash.stopAllActions();
@@ -178,7 +178,7 @@ export default class Steal extends cc.Component {
                         this.registerRevengeEvent();
                     }
                 }
-            }else{
+            } else {
                 this.wrap.getChildByName("middle").getChildByName("notSteal").active = true;
             }
         }).catch((err) => {
@@ -276,28 +276,23 @@ export default class Steal extends cc.Component {
     }
     // 存钱罐取钱
     getCash(e) {
-        let target = e.target;
-        let cash: cc.Label = target.parent.getChildByName("today_cash").getChildByName("text").getComponent(cc.Label);
-        let tomorrowCash: cc.Node = target.parent.getChildByName("tomorrow_cash");
-        cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
-            cc.Tools.showJiliAd(15);
-        });
-        if (cc.Tools.userInfo.save_amount) {
+        if(cc.Tools.wallet.save_amount > 0){
+            let target = e.target;
+            let cash: cc.Label = target.parent.getChildByName("today_cash").getChildByName("text").getComponent(cc.Label);
+            let tomorrowCash: cc.Node = target.parent.getChildByName("tomorrow_cash");
             // 像服务器发送请求
             let sendData = {};
             cc.Tools.sendRequest("SubSaving", "POST", sendData).then((res) => {
-                console.log("cocos----取钱返回",JSON.stringify(res));
-                cc.Tools.userInfo.save_amount = res.data.amount;
-                cc.Tools.userInfo.save_freeze_amount = res.data.freeze_amount;
-                cash.string = cc.Tools.userInfo.save_amount;
+                console.log("cocos----取钱返回", JSON.stringify(res));
+                cc.Tools.emitEvent("showPacket",{dir:1});
+                let down:cc.Node = this.wrap.getChildByName("down");
+                let hand: cc.Node = down.getChildByName("hand");
+                hand.active = false;
                 cc.tween(cash.node.parent).to(0.2, { scale: 0 }).start();
                 tomorrowCash.opacity = 255;
                 tomorrowCash.stopAllActions();
                 tomorrowCash.y = -172;
-                let tomorrow_cash = tomorrowCash.getChildByName("text").getComponent(cc.Label);
-                tomorrow_cash.string = cc.Tools.userInfo.save_freeze_amount;
                 tomorrowCash.runAction(cc.sequence(cc.moveBy(0.2, 0, 20).easing(cc.easeOut(3.0)), cc.moveBy(0.2, 0, -20).easing(cc.easeIn(3.0))));
-
                 for (let i = 1; i <= 3; i++) {
                     let red = target.parent.getChildByName("red_" + i);
                     red.active = false;

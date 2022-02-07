@@ -16,7 +16,7 @@ export default class PopDelete extends cc.Component {
         closeBtn.active = false;
         this.scheduleOnce(() => {
             closeBtn.active = true;
-        }, 1)
+        }, 2)
     }
     setVideoType(type: number) {
         this.videoType = type

@@ -771,6 +771,7 @@ function getIndex(arr,num){
   生成单个渠道包: ./gradlew clean assembleReleaseChannels -PchannelList=meituan
 生成多个渠道包:  ./gradlew clean assembleReleaseChannels -PchannelList=kuaishouztxw05-xxl,kuaishouztxw06-xxl
 ./gradlew clean assembleReleaseChannels -PchannelList=toutiaoztxw3-xxl,kuaishouztxw01-xxl,kuaishouztxw03-xxl,kuaishouztxw04-xxl,meizu2
+./gradlew clean assembleReleaseChannels -PchannelList=toutiaozt01-sf,meizu
 keytool -exportcert -alias key0 -keypass 123456 -keystore ./jkzaaaa.jks -storepass 123456 | md5sum
 
 keytool -list -rfc -keystore jkzaaaa.jks -storepass 123456

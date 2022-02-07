@@ -14,8 +14,6 @@ export default class Barrage extends cc.Component {
     kuang = [];
     @property([cc.SpriteFrame])
     star = [];
-    @property(cc.Prefab)
-    avatar = null;
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
@@ -47,12 +45,12 @@ export default class Barrage extends cc.Component {
         if (info.action === "steal") {
             str = `<color=#CC9CFF>${userInfo.user_name}</c>偷取了<color=#CC9CFF>${referInfo.user_name}</c>的<color=#FF80AA>${info.data}</c>红包券`
         } else if (info.action === "cash") {
-            str = `${userInfo.user_name}提取了</c><color=#FF80AA>${info.data / 100}</c>元红包`
+            str = `${userInfo.user_name}提现了</c><color=#FF80AA>${info.data / 100}</c>元红包`
         }else if(info.action === "tip"){
             str = `<color=#FF80AA>${info.data}</c>`
         }
         text.string = str;
-        this.node.x = 1000;
+        this.node.x = 700;
         this.node.getChildByName("layout").getComponent(cc.Layout).updateLayout();
         this.scheduleOnce(() => {
             // console.log("延时执行");
