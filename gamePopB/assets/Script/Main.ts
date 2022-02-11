@@ -1554,14 +1554,17 @@ export default class Main extends cc.Component {
     // 让浮球显示并浮动 点击 看激励视频
     floaterMove() {
         let floaterLayer = this.content.getChildByName("floater_layer");
-        if (floaterLayer.active === false) {
-            floaterLayer.active = true;
-        }
-        for (let i = 1; i <= 3; i++) {
-            let floater = floaterLayer.getChildByName("floater_" + i);
-            floater.active = true;
-            cc.Tools.popAnim(floater, 10);
-            floater.on(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
+        let val = cc.sys.localStorage.getItem("showBtn");
+        if(val==100){
+            if (floaterLayer.active === false) {
+                floaterLayer.active = true;
+            }
+            for (let i = 1; i <= 3; i++) {
+                let floater = floaterLayer.getChildByName("floater_" + i);
+                floater.active = true;
+                cc.Tools.popAnim(floater, 10);
+                floater.on(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
+            }
         }
     }
     // 专属浮球的事件 点击浮球观看视频 之后浮球消失并且清除事件

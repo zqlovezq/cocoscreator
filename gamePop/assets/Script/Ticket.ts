@@ -85,6 +85,7 @@ export default class Ticket extends cc.Component {
         }
         this.scheduleOnce(()=>{
             this.removeEvent();
+            cc.Tools.emitEvent("time", new Date().getTime());
             cc.Tools.emitEvent("showPacket");
             cc.Tools.emitEvent("init",false);
         })

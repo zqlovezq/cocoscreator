@@ -6,6 +6,7 @@ export default class GetCash extends cc.Component {
     item: cc.Node = null;
     @property(cc.Node)
     content: cc.Node = null;
+    private cover_level:number = 0;
     onLoad(){
         let closeBtn = this.node.getChildByName("close_btn");
         closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
@@ -22,12 +23,13 @@ export default class GetCash extends cc.Component {
         this.content.destroyAllChildren();
         let ticket = this.node.getChildByName("ticket").getComponent(cc.Label);
         ticket.string = cc.Tools.userInfo.amount;
-        this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 10000);
+        this.node.getChildByName("cash").getChildByName("text").getComponent(cc.Label).string = this.handleNumber(cc.Tools.userInfo.amount / 13000);
         let sendData = {
 
         };
         cc.Tools.sendRequest("CashOutList", "GET", sendData).then((res) => {
             let items = res.data.items
+            this.cover_level = res.data.cover_level;
             for (let i = 0; i < items.length; i++) {
                 let item = cc.instantiate(this.item);
                 item.active = true;
@@ -67,6 +69,14 @@ export default class GetCash extends cc.Component {
             let btn = item.getChildByName("btn")
             cc.Tools.setButtonGary(btn)
             this.closeBtnEvent(btn);
+        }
+        if(data.is_cover){
+            let mask = item.getChildByName("mask");
+            mask.active = true;
+            let lbl = mask.getChildByName("lbl");
+            let text = mask.getChildByName("text");
+            lbl.getComponent(cc.Label).string = `第${this.cover_level}关解锁`
+            text.getComponent(cc.Label).string = `当前关卡${cc.Tools.userInfo.level}/${this.cover_level}`
         }
     }
     registerEvent() {

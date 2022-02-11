@@ -17,7 +17,7 @@ export default class Super extends cc.Component {
     }
     registerEvent() {
         let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer1, this);
         closeBtn.active = false;
         this.scheduleOnce(() => {
             closeBtn.active = true;
@@ -30,7 +30,7 @@ export default class Super extends cc.Component {
     }
     removeEvent() {
         let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
+        closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer1, this);
         let videoBtn = this.node.getChildByName("video_btn");
         videoBtn.off(cc.Node.EventType.TOUCH_END, this.showVideo, this);
         let getBtn = this.node.getChildByName("get_btn");
@@ -59,6 +59,14 @@ export default class Super extends cc.Component {
         this.scheduleOnce(() => {
             this.removeEvent();
             cc.Tools.emitEvent("cash");
+        })
+    }
+    closeLayer1(e){
+        this.node.active = false;
+        cc.Tools.emitEvent("time", new Date().getTime());
+        this.scheduleOnce(() => {
+            this.removeEvent();
+            cc.Tools.showTableScreen();
         })
     }
     closeLayer() {

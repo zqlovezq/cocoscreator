@@ -95,17 +95,17 @@
       "__uuid__": "ae1fb388-f93c-41e9-914f-a64e96a67ba7"
     },
     "_spriteFrame": {
-      "__uuid__": "dff0c95f-91c6-4899-80e5-514d7986f5c7"
+      "__uuid__": "12ffd95e-2f25-4bb6-bddf-37a2070e28f8"
     },
     "_texture": null,
     "_stopped": false,
     "playOnLoad": false,
     "autoRemoveOnFinish": false,
-    "totalParticles": 300,
-    "duration": 0.2,
-    "emissionRate": 300,
-    "life": 0.2,
-    "lifeVar": 0.2,
+    "totalParticles": 30,
+    "duration": 0.5,
+    "emissionRate": 30,
+    "life": 0.5,
+    "lifeVar": 0.3,
     "_startColor": {
       "__type__": "cc.Color",
       "r": 255,
@@ -122,9 +122,9 @@
     },
     "_endColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 251,
+      "g": 251,
+      "b": 251,
       "a": 0
     },
     "_endColorVar": {
@@ -136,10 +136,10 @@
     },
     "angle": -90,
     "angleVar": 120,
-    "startSize": 18,
-    "startSizeVar": 0,
-    "endSize": 18,
-    "endSizeVar": 0,
+    "startSize": 80,
+    "startSizeVar": 80,
+    "endSize": 21,
+    "endSizeVar": 21,
     "startSpin": 0,
     "startSpinVar": 0,
     "endSpin": 0,
@@ -160,10 +160,10 @@
     "gravity": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": -500
+      "y": 200
     },
-    "speed": 180,
-    "speedVar": 0,
+    "speed": 200,
+    "speedVar": 5,
     "tangentialAccel": 100,
     "tangentialAccelVar": 0,
     "radialAccel": 0,

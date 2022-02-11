@@ -33,6 +33,8 @@ export default class Main extends cc.Component {
     ticketLayer: cc.Node = null;
     popSuperLayer: cc.Node = null;
     popSecretLayer: cc.Node = null;
+    welfareLayer: cc.Node = null;
+    welfareRemindLayer:cc.Node = null;
     scoreBar: cc.ProgressBar = null;
     percentBar: cc.ProgressBar = null;
     @property(cc.Prefab)
@@ -64,7 +66,9 @@ export default class Main extends cc.Component {
     @property([cc.AudioClip])
     effectAudio = [];
     @property([cc.SpriteFrame])
-    popDeleteType = []
+    popDeleteType = [];
+    @property(cc.Prefab)
+    pop_red: cc.Prefab = null;
     private a = [];
     private b = [];
     private deletePosArr = [];
@@ -87,6 +91,7 @@ export default class Main extends cc.Component {
     private showSecretTimes = 0;
     private clickPos = cc.v3(0, 0);
     private addTicket = 0;
+    private special = false;
     onLoad() {
         // 初始化参数
         self = this;
@@ -112,6 +117,7 @@ export default class Main extends cc.Component {
         this.countTime = new Date().getTime();
         // 预加载组建
         this.preloadPrefab();
+        this.shieldBtn();
         let isOld = cc.sys.localStorage.getItem("first")
         if (!isOld) {
             cc.sys.localStorage.setItem("first", true);
@@ -119,14 +125,43 @@ export default class Main extends cc.Component {
         this.initUserInfo();
         // 增加一个计时器
         this.schedule(this.repeatFunc, 7.5);
-       
+
+    }
+    //判断是否屏蔽
+    shieldBtn() {
+        if (cc.sys.localStorage.getItem("showBtn")) {
+            let val = cc.sys.localStorage.getItem("showBtn");
+            let btnLayer = this.content.getChildByName("btn_layer");
+            if (val == 1) {
+                btnLayer.active = false;
+                this.tipsLayer.active = false;
+                this.scoreInfo.getChildByName("icon").active = false;
+            }
+        } else {
+            cc.Tools.sendRequest("RegionConf", "GET", {}).then((res) => {
+                if (res.data.status === 1) {
+                    //不显示
+                    cc.sys.localStorage.setItem("showBtn", 1);
+                    let btnLayer = this.content.getChildByName("btn_layer");
+                    btnLayer.active = false;
+                    this.tipsLayer.active = false;
+                    this.scoreInfo.getChildByName("icon").active = false;
+                } else if (res.data.status === 100) {
+                    //显示
+                    cc.sys.localStorage.setItem("showBtn", 100);
+                }
+            }).catch((err) => {
+                console.log("cocos----屏蔽err--" + err);
+            })
+        }
     }
     // 主界面循环function
     repeatFunc() {
         // 每5秒检测玩家是否在主界面 并且没有行动
         let date = new Date().getTime();
         if (this.countTime && !this.lock) {
-            if (date - this.countTime > 7500) {
+            let val = cc.sys.localStorage.getItem("showBtn");
+            if (date - this.countTime > 7500 && val == 100) {
                 this.showSuperLayer();
             }
         }
@@ -135,14 +170,8 @@ export default class Main extends cc.Component {
         let pop = this.tipsLayer.getChildByName("pop");
         pop.stopAllActions();
         cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
-            this.schedule(this.repeatFunc, 5)
+            this.schedule(this.repeatFunc, 7.5)
         }).start();
-        // 每一次钱数跳一下
-        let tips = this.content.getChildByName("tips_info")
-        let tipsLbl = tips.getChildByName("lbl");
-        tipsLbl.stopAllActions();
-        tipsLbl.y = 0;
-        tipsLbl.runAction(cc.sequence(cc.moveBy(0.2,0,20).easing(cc.easeOut(3.0)),cc.moveBy(0.2,0,-20).easing(cc.easeIn(3.0))))
     }
     refreshTime(time: number) {
         this.countTime = time;
@@ -150,12 +179,12 @@ export default class Main extends cc.Component {
     /**
      * 初始化数数
     */
-   initShuShu(){
+    initShuShu() {
         // 数数打点
         cc.Tools.shuShuDot();
         cc.Tools.setDistinctId();
         cc.Tools.setUserId();
-   }
+    }
     /**
     * 处理小数精度问题
     * @returns 
@@ -178,13 +207,14 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
+            cc.Tools.userInfo.to_do = JSON.parse(cc.Tools.userInfo.to_do);
             cc.Tools.setLevel();
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
-            this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
+            this.scoreInfo.getChildByName("icon").getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("tips_info");
             let tipsLbl = tips.getChildByName("lbl");
             let amount = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
-            tipsLbl.getComponent(cc.Label).string = amount>3000?`${this.handleNumber(amount/10000)}元`:`${amount}点券`
+            tipsLbl.getComponent(cc.RichText).string = cc.Tools.userInfo.tip;
             let _str = cc.Tools.userInfo.num_hint.split("|");
             let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
@@ -213,16 +243,21 @@ export default class Main extends cc.Component {
             if (freezenRate[0] === freezenRate[1]) {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
             }
-            this.showSaveCashLayer();
+            if (cc.Tools.userInfo.to_do.level_award) {
+                //显示幸运关卡
+                this.showWelfareLayer();
+            } else {
+                this.showSaveCashLayer();
+            }
             this.initShuShu();
             this.init();
             //获取当前是星期几
             let myDate = new Date();
             let markDay = cc.sys.localStorage.getItem("markDay");
-            console.log("cocos---星期%d",myDate.getDay());
-            if(myDate.getDay()!=markDay){
-                cc.sys.localStorage.setItem("markDay",myDate.getDay());
-                if(cc.Tools.userInfo.calendar_msg&&cc.Tools.userInfo.calendar_timestamp){
+            console.log("cocos---星期%d", myDate.getDay());
+            if (myDate.getDay() != markDay) {
+                cc.sys.localStorage.setItem("markDay", myDate.getDay());
+                if (cc.Tools.userInfo.calendar_msg && cc.Tools.userInfo.calendar_timestamp) {
                     cc.Tools.getFreeze();
                 }
             }
@@ -239,7 +274,12 @@ export default class Main extends cc.Component {
                             cc.Tools.lock = false;
                         }, 3000)
                     }
-                    if (res.data.is_show) {
+                    let canShow = true;
+                    if (this.popDeleteLayer && this.popDeleteLayer.active) {
+                        canShow = false;
+                    }
+                    let val = cc.sys.localStorage.getItem("showBtn");
+                    if (res.data.is_show && canShow && val == 100) {
                         cc.Tools.showTips(this.node, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
                             cc.Tools.showJiliAd(12);
                         });
@@ -264,12 +304,15 @@ export default class Main extends cc.Component {
         cc.Tools.sendRequest("UserInfo", "GET", sendData).then((res) => {
             cc.find("Canvas/lose").active = false;
             cc.Tools.userInfo = res.data;
+            console.log("cocos---todo---",cc.Tools.userInfo.to_do);
+            cc.Tools.userInfo.to_do = JSON.parse(cc.Tools.userInfo.to_do);
             this.cashInfo.getChildByName("text").getComponent(cc.Label).string = cc.Tools.userInfo.amount;
-            this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
+            // this.scoreInfo.getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
+            this.scoreInfo.getChildByName("icon").getChildByName("times").getComponent(cc.Label).string = `${cc.Tools.userInfo.up_level_num_not_get}`;
             let tips = this.content.getChildByName("tips_info")
             let tipsLbl = tips.getChildByName("lbl");
             let amount = cc.Tools.userInfo.save_amount + cc.Tools.userInfo.save_freeze_amount
-            tipsLbl.getComponent(cc.Label).string = amount>3000?`${this.handleNumber(amount/10000)}元`:`${amount}点券`
+            tipsLbl.getComponent(cc.RichText).string = cc.Tools.userInfo.tip;
             let _str = cc.Tools.userInfo.num_hint.split("|");
             let text_1 = this.tipsLayer.getChildByName("text_1").getComponent(cc.Label);
             let text_2 = this.tipsLayer.getChildByName("text_2").getComponent(cc.Label);
@@ -300,6 +343,11 @@ export default class Main extends cc.Component {
                 freezenBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
             }
             if (isReload) {
+                if (cc.Tools.userInfo.to_do.level_award) {
+                    this.showWelfareLayer();
+                }else if(cc.Tools.userInfo.to_do.pre_level_tip){
+                    this.showWelfareRemindLayer();
+                }
                 cc.Tools.setLevel();
                 this.init();
             } else {
@@ -331,6 +379,8 @@ export default class Main extends cc.Component {
         cc.resources.preload('Prefab/ticket', cc.Prefab);
         cc.resources.preload('Prefab/super', cc.Prefab);
         cc.resources.preload('Prefab/secretLayer', cc.Prefab);
+        cc.resources.preload('Prefab/welfare', cc.Prefab);
+        cc.resources.preload('Prefab/welfare_remind', cc.Prefab);
     }
     loadPrefab(url: string) {
         return new Promise(function (resolve, reject) {
@@ -347,16 +397,17 @@ export default class Main extends cc.Component {
         // 注册点击事件
         this.registerEvent();
     }
+    //showSetLayer
     registerEvent() {
         // 给几个按钮注册事件
         let btnLayer = this.content.getChildByName("btn_layer");
-        let btnType = ["showUnFreezeLayer", "showSaveCashLayer", "showSetLayer", "showGetCashLayer", "showTurntableLayer", "clickRed"]
+        let btnType = ["showUnFreezeLayer", "showSaveCashLayer", "touchSnow", "showGetCashLayer", "showTurntableLayer", "clickRed"]
         for (let i = 1; i <= 6; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.on(cc.Node.EventType.TOUCH_END, this[btnType[i - 1]], this);
         }
-        let spine = this.node.getChildByName("spine");
-        spine.on(cc.Node.EventType.TOUCH_END, this.touchSnow, this);
+        let setBtn = this.node.getChildByName("set_btn");
+        setBtn.on(cc.Node.EventType.TOUCH_END, this.showSetLayer, this);
 
         let redBtn = this.scoreInfo.getChildByName("icon");
         redBtn.runAction(cc.repeatForever(cc.sequence(cc.rotateTo(0.1, 30), cc.rotateTo(0.1, 0), cc.rotateTo(0.1, -30), cc.rotateTo(0.1, 0), cc.delayTime(2))))
@@ -372,13 +423,13 @@ export default class Main extends cc.Component {
     }
     removeEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
-        let layerType = ["showUnFreezeLayer", "showSaveCashLayer", "showSetLayer", "showGetCashLayer", "showTurntableLayer", "clickRed"]
+        let layerType = ["showUnFreezeLayer", "showSaveCashLayer", "touchSnow", "showGetCashLayer", "showTurntableLayer", "clickRed"]
         for (let i = 1; i <= 6; i++) {
             let btn = btnLayer.getChildByName("btn_" + i);
             btn.off(cc.Node.EventType.TOUCH_END, this["show" + layerType[i - 1]], this);
         }
-        let spine = this.node.getChildByName("spine");
-        spine.off(cc.Node.EventType.TOUCH_END, this.touchSnow, this);
+        let setBtn = this.node.getChildByName("set_btn");
+        setBtn.on(cc.Node.EventType.TOUCH_END, this.showSetLayer, this);
 
         let redBtn = this.scoreInfo.getChildByName("icon");
         redBtn.off(cc.Node.EventType.TOUCH_END, this.touchRed, this);
@@ -511,11 +562,44 @@ export default class Main extends cc.Component {
                 self.popSuperLayer = layer;
                 self.node.addChild(layer);
                 self.popSuperLayer.active = true;
+                self.popSuperLayer.zIndex = 10;
             })
         } else {
             this.popSuperLayer.active = true;
         }
     }
+    /**
+  * 显示福利红包界面
+  */
+    showWelfareLayer() {
+        cc.audioEngine.play(this.effectAudio[3], false, 1);
+        if (!this.welfareLayer) {
+            this.loadPrefab('Prefab/welfare').then((prefab) => {
+                let layer = cc.instantiate(prefab);
+                self.welfareLayer = layer;
+                self.node.addChild(layer);
+                self.welfareLayer.active = true;
+            })
+        } else {
+            this.welfareLayer.active = true;
+        }
+    }
+        /**
+  * 提示显示福利红包界面
+  */
+         showWelfareRemindLayer() {
+            cc.audioEngine.play(this.effectAudio[3], false, 1);
+            if (!this.welfareRemindLayer) {
+                this.loadPrefab('Prefab/welfare_remind').then((prefab) => {
+                    let layer = cc.instantiate(prefab);
+                    self.welfareRemindLayer = layer;
+                    self.node.addChild(layer);
+                    self.welfareRemindLayer.active = true;
+                })
+            } else {
+                this.welfareRemindLayer.active = true;
+            }
+        }
     /**
     * ticket界面
     * @param type 来自几级界面
@@ -753,11 +837,46 @@ export default class Main extends cc.Component {
         this.background.destroyAllChildren();
         this.blockBackground.destroyAllChildren();
         let blockNullColor = "#38537E";
+        //先随机生成一个数组[1-5];
+        let arr = [1, 2, 3, 4, 5];
+        let newArr = [];
+        for (let i = 0; i < 3; i++) {
+            let len = arr.length;
+            let val = Math.floor(Math.random() * len);
+            newArr.push(arr[val]);
+            cc.Tools.remove(arr, arr[val]);
+        }
+        //在0-99之间随机两个数
+        let _arr1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let _arr2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let _newArr = [];
+        for (let i = 0; i < 2; i++) {
+            let key = [];
+            let len1 = _arr1.length;
+            let val1 = Math.floor(Math.random() * len1);
+            key.push(_arr1[val1]);
+            cc.Tools.remove(_arr1, _arr1[val1]);
+
+            let len2 = _arr2.length;
+            let val2 = Math.floor(Math.random() * len2);
+            key.push(_arr2[val2]);
+            cc.Tools.remove(_arr2, _arr2[val2]);
+            _newArr.push(key);
+        }
         for (let i = 0; i < 10; i++) {
             this.a[i] = []
             this.b[i] = []
             for (let j = 0; j < 10; j++) {
-                this.a[i][j] = Math.ceil(Math.random() * this.difficulty)
+                let special = false;
+                for (let k = 0; k < _newArr.length; k++) {
+                    let _x = _newArr[k][0];
+                    let _y = _newArr[k][1];
+                    if (i === _x && j === _y) {
+                        special = true;
+                        cc.Tools.remove(_newArr, _newArr[k]);
+                    }
+                }
+                this.a[i][j] = newArr[Math.ceil(Math.random() * this.difficulty) - 1]
                 let blockNull = cc.instantiate(this.blockNull)
                 blockNull.parent = this.blockBackground || this.node
                 blockNull.setPosition(this.ToXY(i, j))
@@ -795,7 +914,13 @@ export default class Main extends cc.Component {
                         node.setPosition(this.ToXY(i, j))
 
                 }
-                this.b[i][j] = node
+                this.b[i][j] = node;
+                //todo
+                if (special) {
+                    let pop = cc.instantiate(this.pop_red);
+                    node.addChild(pop);
+                    node.special = true;
+                }
             }
             if (blockNullColor === "#344F7A") {
                 blockNullColor = "#38537E"
@@ -881,7 +1006,7 @@ export default class Main extends cc.Component {
             let num = 0
             for (let i = 9; i >= 0; i--) {
                 if (this.a[i][j] > 0 && num > 0) {
-                    let action = cc.moveBy(0.3, 0, -num * 74)
+                    let action = cc.moveBy(0.2, 0, -num * 74)
                     this.b[i][j].runAction(action)
                     // cc.tween(this.b[i][j]).by(0.3, { position: cc.v2(0, -num * 74) }).start();
                     this.a[i + num][j] = this.a[i][j]
@@ -905,7 +1030,7 @@ export default class Main extends cc.Component {
                 for (let i = 0; i < 10; i++) {
                     if (this.a[i][j] > 0) {
                         // cc.tween(this.b[i][j]).by(0.3, { position: cc.v2(-count * 74, 0) }).start();
-                        var action = cc.moveBy(0.3, -count * 74, 0)
+                        var action = cc.moveBy(0.2, -count * 74, 0)
                         this.b[i][j].runAction(action)
                         this.a[i][j - count] = this.a[i][j]
                         this.a[i][j] = 0
@@ -1009,15 +1134,15 @@ export default class Main extends cc.Component {
         }
         this.count = 0;
         this.isOverGame = isOver;
-        this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
+        this.schedule(this.deleteBlockCb, 0.016, this.deletePosArr.length - 1);
         if (!isOver) {
             //向服务器发送激活
             let isActive = cc.sys.localStorage.getItem("active");
-            if(!isActive){
+            if (!isActive) {
                 cc.Tools.sendRequest("UserLive", "POST", {
-                    "ts":new Date().getTime()
+                    "ts": new Date().getTime()
                 }).then((res) => {
-                    cc.sys.localStorage.setItem("active",true);
+                    cc.sys.localStorage.setItem("active", true);
                 })
             }
             // 增加金钱特效
@@ -1047,12 +1172,14 @@ export default class Main extends cc.Component {
             node.setPosition(this.ToXY(i, j))
             let CustomParticle = node.getComponent(cc.ParticleSystem);
             let color = this.getColorBlock(k);
-            CustomParticle.startColor = new cc.Color().fromHEX(color);
-            CustomParticle.startColorVar = new cc.Color(0, 0, 0)
+            // CustomParticle.startColor = new cc.Color().fromHEX(color);
+            // CustomParticle.startColorVar = new cc.Color(0, 0, 0)
             CustomParticle.endColor = new cc.Color().fromHEX(color);
             CustomParticle.endColorVar = new cc.Color(0, 0, 0)
             CustomParticle.resetSystem();
-
+            if (this.b[i][j].special) {
+                this.special = true;
+            }
             this.b[i][j].destroy()
             this.b[i][j] = null
         }
@@ -1074,6 +1201,11 @@ export default class Main extends cc.Component {
         if (this.clickOnce) {
             this.clickOnce = false;
             this.floaterMove();
+        }
+        if (this.special) {
+            this.showPopDeleteLayer(2, 9);
+            this.special = false;
+            return;
         }
         if (this.Delete_num >= 12) {
             this.showPopDeleteLayer(2, 9);
@@ -1250,21 +1382,24 @@ export default class Main extends cc.Component {
         return true;
     }
     //显示提示信息
-    showTips(msg){
-        console.log("cocos----",msg);
+    showTips(msg) {
+        console.log("cocos----", msg);
         cc.Tools.showTips(this.node, `<b><color=#ffffff>${msg}</c></b>`);
     }
     // 让浮球显示并浮动 点击 看激励视频
     floaterMove() {
         let floaterLayer = this.content.getChildByName("floater_layer");
-        if (floaterLayer.active === false) {
-            floaterLayer.active = true;
-        }
-        for (let i = 1; i <= 3; i++) {
-            let floater = floaterLayer.getChildByName("floater_" + i);
-            floater.active = true;
-            cc.Tools.popAnim(floater);
-            floater.on(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
+        let val = cc.sys.localStorage.getItem("showBtn");
+        if (val == 100) {
+            if (floaterLayer.active === false) {
+                floaterLayer.active = true;
+            }
+            for (let i = 1; i <= 3; i++) {
+                let floater = floaterLayer.getChildByName("floater_" + i);
+                floater.active = true;
+                cc.Tools.popAnim(floater);
+                floater.on(cc.Node.EventType.TOUCH_END, this.clickFloate, this);
+            }
         }
     }
     // 专属浮球的事件 点击浮球观看视频 之后浮球消失并且清除事件

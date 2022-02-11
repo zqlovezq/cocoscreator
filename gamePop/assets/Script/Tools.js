@@ -91,6 +91,7 @@ cc.Tools = {
                 case "8":
                 case "10":
                 case "12":
+                case "13":
                     cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
                         this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
                     })
@@ -137,17 +138,17 @@ cc.Tools = {
     showJiliAd(type) {
         if (cc.sys.isNative) {
             // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showAd", "(Ljava/lang/String;)V", "" + type);
-            if(cc.Tools.adShowNum>0){
-                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);   
-            }else{
-                cc.Tools.emitEvent("showTips","今天观看视频次数已经达到上限");
+            if (cc.Tools.adShowNum > 0) {
+                jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getPreLoadJili", "(Ljava/lang/String;)V", "" + type);
+            } else {
+                cc.Tools.emitEvent("showTips", "今天观看视频次数已经达到上限");
             }
         }
     },
     //请求预加载新的广告ID isDif 是否分层
-    setNewAdId(id,isDif){
-        if(cc.sys.isNative){
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", ""+id,isDif);
+    setNewAdId(id, isDif) {
+        if (cc.sys.isNative) {
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "preLoadRewardad", "(Ljava/lang/String;Ljava/lang/String;)V", "" + id, isDif);
         }
     },
     // 显示banner
@@ -177,7 +178,7 @@ cc.Tools = {
     //显示信息流广告
     showFeedScreen(isShow) {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V",isShow);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V", isShow);
         }
     },
     //隐藏信息流广告
@@ -222,16 +223,16 @@ cc.Tools = {
                 cc.Tools.reminderMsg = res.msg;
                 // console.log("cocos----Ecpm----data----",JSON.stringify(res));
                 cc.Tools.adShowNum = res.ad_show_num;
-                cc.sys.localStorage.setItem("ad_number",res.ad_show_num)
-                if(cc.Tools.adDif){
+                cc.sys.localStorage.setItem("ad_number", res.ad_show_num)
+                if (cc.Tools.adDif) {
                     cc.Tools.adPosId = res.ad_pos_id;
-                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
                 }
                 resolve(res.ad_id);
-            }).catch((res)=>{
-                console.log("cocos----Ecpm----bug----",res);
-                if(cc.Tools.adDif){
-                    cc.Tools.setNewAdId(cc.Tools.adPosId,"true");
+            }).catch((res) => {
+                console.log("cocos----Ecpm----bug----", res);
+                if (cc.Tools.adDif) {
+                    cc.Tools.setNewAdId(cc.Tools.adPosId, "true");
                 }
             })
         })
@@ -258,7 +259,7 @@ cc.Tools = {
             strToJiaMi += "&" + key + "=" + data[key];
         }, this);
         strToJiaMi = "token=" + cc.Tools.userInfo.sc1 + strToJiaMi;
-        console.log("cocos----加密串---",strToJiaMi);
+        console.log("cocos----加密串---", strToJiaMi);
         var hex_md5 = require("MD5")
         strToJiaMi = hex_md5(strToJiaMi);
         data.sign = strToJiaMi;
@@ -363,7 +364,7 @@ cc.Tools = {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
-                    console.log("cocos-----"+url+"------",xhr.response);
+                    console.log("cocos-----" + url + "------", xhr.response);
                     let _response = JSON.parse(xhr.response);
                     // 判断接口是否是加密接口
                     if (url.indexOf("Action") !== -1) {
@@ -458,7 +459,16 @@ cc.Tools = {
         let a = m - n;
         let num = Math.random() * a + n;
         return parseInt(num);
-    }
+    },
+    //将数组中的一个数值删除
+    remove(arr, val) {
+        var index = arr.indexOf(val);
+        if (index > -1) {
+            arr.splice(index, 1);
+            return index;
+        }
+        return index;
+    },
 }
 cc.Tools.userInfo = {};
 cc.Tools.adShowNum = 3;
