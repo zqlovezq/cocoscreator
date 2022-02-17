@@ -14,7 +14,7 @@ export default class GetCash extends cc.Component {
     onEnable() {
         this.setLayer();
         cc.Tools.showBanner();
-        cc.Tools.showTableScreen();
+        cc.Tools.showTableScreen("getCash");
         cc.Tools.setAdTimes();
         cc.Tools.emitEvent("time", 0);
     }
@@ -100,7 +100,6 @@ export default class GetCash extends cc.Component {
             },3000)
         }
         cc.Tools.hideBanner();
-        cc.Tools.hideTableScreen();
         cc.Tools.showTips(this.node.parent,`<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(()=>{
             cc.Tools.showJiliAd(11);
         });
@@ -142,7 +141,6 @@ export default class GetCash extends cc.Component {
         this.node.active = false;
         cc.Tools.emitEvent("time", new Date().getTime());
         cc.Tools.hideBanner();
-        cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {
             this.removeEvent();
         })

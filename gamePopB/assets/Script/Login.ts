@@ -26,7 +26,7 @@ export default class Login extends cc.Component {
                 this.getAdTimes();
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjoxMDMzLCJvcGVuX2lkIjoib2psZHU2ZkxtU1ZZSjJQSzd4T0pRM19FVzJlayIsIm5pY2tfbmFtZSI6IuS4jeWGjemBpei_nCIsImdlbmRlciI6MCwiYXZhdGFyIjoiaHR0cHM6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9GNzVQVW9scGpSY0cySVRweWwybWZXSDhoNzZoZjJnU0RFUWFBSEhURFNYZjZ3SlJkT2QxTWozeU1ab2Rua0VwcUhURmJyS0g1bFpKTkdvcUIxaDFsQS8xMzIiLCJjcmVhdGVfdGltZSI6MTY0MzI4Mzc3OCwiY2hhbm5lbCI6InRvdXRpYW96dDAxLXNmIiwiZGlzdGluY3RfaWQiOiI4ZDMzOTIyNi05Mzc5LTQ0YzQtODcxYS1kMDFlNmVkODRmZTIiLCJpbWVpIjoiODYwMzE5MDQyMzU4MDQ3IiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAiLCJhbmRyb2lkX2lkIjoiMjljZWIwMjEwNDUwODc5OSIsIm9haWQiOiJkYmZjZTY1MDgwNmM1YTEyIn0.m37jlw29uEKwl_5sjQgtuzJnQFMtrG6Gc3Rk8cuGaW4");
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjo1Mywib3Blbl9pZCI6Im9qbGR1NlZKZVVsMGNVNVlOMXVIcTNpN0hQeVEiLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvbmlhSGRWaWNGc0xPZHBIN2tKMVRwaWFWOTNpYmhKSjh1bnBLN1ZDOGh4RjlsVWlha0hoT2lhYnNpYVMxSWlhc2NYWk1IeGliNlVMdFdOWHZzYmtuQUtzVFpaSGNxUXcvMTMyIiwiY3JlYXRlX3RpbWUiOjE2NDMwOTg3MDUsImNoYW5uZWwiOiJrdWFpc2hvdSIsImRpc3RpbmN0X2lkIjoiYzc1MzBlMDQtYjIwNS00N2QwLTk4MjMtMGQ0YmUzNWI0ZmU1IiwiaW1laSI6Ijg2ODczNDAzNjYxNDg3OCIsIm1hYyI6IjAyOjAwOjAwOjAwOjAwOjAwIiwiYW5kcm9pZF9pZCI6Ijc2Y2VmMzFkZTRhNTQ2NzQiLCJvYWlkIjoiZmVlZjVmYmItY2Y2Yi02NzMyLWJjN2YtNWJmZjc3ZGRkYjc5In0.pTRcUcXxkhajsVT495MB8W6b3fZ0dfn8PgOBoza9HYs");
             // cc.director.loadScene('Main');
             this.getAdTimes();
         }

@@ -71,6 +71,10 @@ export default class Main extends cc.Component {
     popDeleteType = [];
     @property([cc.SpriteFrame])
     liziBlock = []
+    @property([cc.SpriteFrame])
+    tiger = [];
+    @property(cc.Prefab)
+    pop_red: cc.Prefab = null;
     private a = [];
     private b = [];
     private deletePosArr = [];
@@ -99,6 +103,7 @@ export default class Main extends cc.Component {
     private barrageMove = false;
     private barrageLock = false;
     private superTime = 0;
+    private special = false;
     onLoad() {
         // 初始化参数
         self = this;
@@ -1056,10 +1061,46 @@ export default class Main extends cc.Component {
         this.background.destroyAllChildren();
         this.blockBackground.destroyAllChildren();
         let blockNullColor = "#38537E";
+        //先随机生成一个数组[1-5];
+        // let arr = [1, 2, 3, 4, 5];
+        // let newArr = [];
+        // for (let i = 0; i < 3; i++) {
+        //     let len = arr.length;
+        //     let val = Math.floor(Math.random() * len);
+        //     newArr.push(arr[val]);
+        //     cc.Tools.remove(arr, arr[val]);
+        // }
+        //在0-99之间随机两个数
+        let _arr1 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let _arr2 = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        let _newArr = [];
+        for (let i = 0; i < 2; i++) {
+            let key = [];
+            let len1 = _arr1.length;
+            let val1 = Math.floor(Math.random() * len1);
+            key.push(_arr1[val1]);
+            cc.Tools.remove(_arr1, _arr1[val1]);
+
+            let len2 = _arr2.length;
+            let val2 = Math.floor(Math.random() * len2);
+            key.push(_arr2[val2]);
+            cc.Tools.remove(_arr2, _arr2[val2]);
+            _newArr.push(key);
+        }
         for (let i = 0; i < 10; i++) {
             this.a[i] = []
             this.b[i] = []
             for (let j = 0; j < 10; j++) {
+                let special = false;
+                for (let k = 0; k < _newArr.length; k++) {
+                    let _x = _newArr[k][0];
+                    let _y = _newArr[k][1];
+                    if (i === _x && j === _y) {
+                        special = true;
+                        cc.Tools.remove(_newArr, _newArr[k]);
+                    }
+                }
+                //    this.a[i][j] = newArr[Math.ceil(Math.random() * this.difficulty) - 1]
                 this.a[i][j] = Math.ceil(Math.random() * this.difficulty)
                 let blockNull = cc.instantiate(this.blockNull)
                 blockNull.parent = this.blockBackground || this.node
@@ -1098,7 +1139,13 @@ export default class Main extends cc.Component {
                         node.setPosition(this.ToXY(i, j))
 
                 }
-                this.b[i][j] = node
+                this.b[i][j] = node;
+                if (special) {
+                    let pop = cc.instantiate(this.pop_red);
+                    pop.getComponent(cc.Sprite).spriteFrame = this.tiger[this.a[i][j]-1];
+                    node.addChild(pop);
+                    node.special = true;
+                }
             }
             if (blockNullColor === "#344F7A") {
                 blockNullColor = "#38537E"
@@ -1357,7 +1404,9 @@ export default class Main extends cc.Component {
             // CustomParticle.endColorVar = new cc.Color(0, 0, 0)
             CustomParticle.spriteFrame = this.liziBlock[k - 1];
             CustomParticle.resetSystem();
-
+            if (this.b[i][j].special) {
+                this.special = true;
+            }
             this.b[i][j].destroy()
             this.b[i][j] = null
         }
@@ -1379,6 +1428,11 @@ export default class Main extends cc.Component {
         if (this.clickOnce) {
             this.clickOnce = false;
             this.floaterMove();
+        }
+        if (this.special) {
+            this.showPopDeleteLayer(2, 9);
+            this.special = false;
+            return;
         }
         if (this.Delete_num >= 12) {
             this.showPopDeleteLayer(2, 9);

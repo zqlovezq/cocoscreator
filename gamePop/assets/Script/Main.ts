@@ -124,7 +124,7 @@ export default class Main extends cc.Component {
         }
         this.initUserInfo();
         // 增加一个计时器
-        this.schedule(this.repeatFunc, 7.5);
+        this.schedule(this.repeatFunc, 10);
 
     }
     //判断是否屏蔽
@@ -157,20 +157,18 @@ export default class Main extends cc.Component {
     }
     // 主界面循环function
     repeatFunc() {
-        // 每5秒检测玩家是否在主界面 并且没有行动
         let date = new Date().getTime();
         if (this.countTime && !this.lock) {
             let val = cc.sys.localStorage.getItem("showBtn");
-            if (date - this.countTime > 7500 && val == 100) {
+            if (date - this.countTime > 10000 && val == 100) {
                 this.showSuperLayer();
             }
         }
-        // 每5秒中滚屏
         this.unschedule(this.repeatFunc);
         let pop = this.tipsLayer.getChildByName("pop");
         pop.stopAllActions();
         cc.tween(pop).to(0.5, { scale: 1 }).delay(3).to(0.5, { scale: 0 }).call(() => {
-            this.schedule(this.repeatFunc, 7.5)
+            this.schedule(this.repeatFunc, 10)
         }).start();
     }
     refreshTime(time: number) {

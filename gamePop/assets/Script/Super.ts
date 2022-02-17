@@ -17,7 +17,7 @@ export default class Super extends cc.Component {
     }
     registerEvent() {
         let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer1, this);
+        closeBtn.on(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         closeBtn.active = false;
         this.scheduleOnce(() => {
             closeBtn.active = true;
@@ -30,7 +30,7 @@ export default class Super extends cc.Component {
     }
     removeEvent() {
         let closeBtn = this.node.getChildByName("close_btn");
-        closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer1, this);
+        closeBtn.off(cc.Node.EventType.TOUCH_END, this.closeLayer, this);
         let videoBtn = this.node.getChildByName("video_btn");
         videoBtn.off(cc.Node.EventType.TOUCH_END, this.showVideo, this);
         let getBtn = this.node.getChildByName("get_btn");
@@ -51,7 +51,7 @@ export default class Super extends cc.Component {
         cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
             cc.Tools.showJiliAd(8);
         });
-        this.closeLayer();
+        this.videoClose();
     }
     goCashLayer() {
         this.node.active = false;
@@ -61,18 +61,18 @@ export default class Super extends cc.Component {
             cc.Tools.emitEvent("cash");
         })
     }
-    closeLayer1(e){
+    closeLayer(e){
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         this.scheduleOnce(() => {
             this.removeEvent();
-            cc.Tools.showTableScreen();
+            cc.Tools.emitEvent("time", new Date().getTime());
+            cc.Tools.showTableScreen("super");
         })
     }
-    closeLayer() {
+    videoClose() {
         this.node.active = false;
-        cc.Tools.emitEvent("time", new Date().getTime());
         this.scheduleOnce(() => {
+            cc.Tools.emitEvent("time", new Date().getTime());
             this.removeEvent();
         })
     }

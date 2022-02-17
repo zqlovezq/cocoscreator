@@ -56,18 +56,26 @@ export default class PopDelete extends cc.Component {
         cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
             cc.Tools.showJiliAd(this.videoType);
         });
-        this.closeLayer();
+        this.videoClose();
     }
-    closeLayer() {
+    videoClose(){
         cc.Tools.showFeedScreen("guan");
         this.node.active = false;
         cc.Tools.emitEvent("time", new Date().getTime());
         if (this.videoType !== 9) {
             cc.Tools.emitEvent("clickRed");
         }
-        // this.scheduleOnce(()=>{
-        //     this.removeEvent();
-        // })
+    }
+    closeLayer() {
+        this.node.active = false;
+        this.scheduleOnce(()=>{
+            cc.Tools.showFeedScreen("guan");
+            cc.Tools.emitEvent("time", new Date().getTime());
+            if (this.videoType !== 9) {
+                cc.Tools.emitEvent("clickRed");
+            }
+            // cc.Tools.showTableScreen("popDelete");
+        })
     }
     // update (dt) {}
 }

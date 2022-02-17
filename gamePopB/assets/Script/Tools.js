@@ -566,6 +566,15 @@ cc.Tools = {
     /**
      * 将时间戳转化
     */
+    //将数组中的一个数值删除
+    remove(arr, val) {
+        var index = arr.indexOf(val);
+        if (index > -1) {
+            arr.splice(index, 1);
+            return index;
+        }
+        return index;
+    },
     changeTimeToloc(time) {
         let date = new Date(time);
         let year = date.getFullYear();

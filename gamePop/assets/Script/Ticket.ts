@@ -8,7 +8,7 @@ export default class Ticket extends cc.Component {
     private videoType:number = 0;//视频类型
     onEnable(){
         cc.Tools.emitEvent("time",0);
-        // cc.Tools.hideFeedScreen();
+        cc.Tools.showFeedScreen("kai");
         this.registerEvent();
         let wrap = this.node.getChildByName("wrap");
         this.spine = wrap.getChildByName("spine").getComponent("sp.Skeleton");
@@ -57,15 +57,15 @@ export default class Ticket extends cc.Component {
         }
     }
     registerEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
+        let closeBtn = this.node.getChildByName("block");
         closeBtn.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     removeEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
+        let closeBtn = this.node.getChildByName("block");
         closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     closeLayer(){
-        // this.setTicket(300,900,4,7);
+        cc.Tools.showFeedScreen("guan");
         this.node.active = false;
         this.spine.clearTracks();
         if(this.type===1){

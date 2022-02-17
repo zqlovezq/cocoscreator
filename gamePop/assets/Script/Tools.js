@@ -164,7 +164,8 @@ cc.Tools = {
         }
     },
     // 显示插屏广告
-    showTableScreen() {
+    showTableScreen(dir) {
+        console.log("cocos---显示新插屏---from--",dir)
         if (cc.sys.isNative) {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showTableScreen", "()V");
         }

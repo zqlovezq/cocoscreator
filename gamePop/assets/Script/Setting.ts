@@ -10,8 +10,8 @@ export default class Setting extends cc.Component {
     onEnable(){
         this.registerEvent();
         cc.Tools.emitEvent("time",0);
-        cc.Tools.showBanner();
-        cc.Tools.showTableScreen();
+        cc.Tools.showFeedScreen("kai");
+        cc.Tools.showTableScreen("setting");
     }
     initLayer(){
         this.userPrivacy = this.node.getChildByName("user_privacy");
@@ -79,8 +79,7 @@ export default class Setting extends cc.Component {
     closeLayer(){
         this.node.active = false;
         cc.Tools.emitEvent("time",new Date().getTime());
-        cc.Tools.hideBanner();
-        cc.Tools.hideTableScreen();
+        cc.Tools.showFeedScreen("guan");
         this.scheduleOnce(()=>{
             this.removeEvent();
         })
