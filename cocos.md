@@ -772,7 +772,7 @@ function getIndex(arr,num){
 生成多个渠道包:  ./gradlew clean assembleReleaseChannels -PchannelList=kuaishouztxw05-xxl,kuaishouztxw06-xxl
 ./gradlew clean assembleReleaseChannels -PchannelList=toutiaoztxw3-xxl,kuaishouztxw01-xxl,kuaishouztxw03-xxl,kuaishouztxw04-xxl,meizu2
 ./gradlew clean assembleReleaseChannels -PchannelList=kuaishoukp01-sf,kuaishoukp02-sf
-./gradlew clean assembleReleaseChannels -PchannelList=meizu2,meizu,toutiaoztxw3-xxl
+./gradlew clean assembleReleaseChannels -PchannelList=meizu2,meizu,toutiaoztxw3-sf
 keytool -exportcert -alias key0 -keypass 123456 -keystore ./jkzaaaa.jks -storepass 123456 | md5sum
 
 keytool -list -rfc -keystore jkzaaaa.jks -storepass 123456
@@ -905,12 +905,4 @@ jarsigner -verbose -keystore /Users/wangziquan/Desktop/sign/jkzaaaa.jks -signedj
 console.log("newArr=",maxChild("jiangzemizn"));
 
 hasOwnProperty是javascript种唯一一个处理属性并且不会遍历原型链的方法。另一种是Object.keys();
-
-2022-02-09 14:06:18.602 9765-9958/com.zhima.zmxxl D/FeedAdLoadManager: cocos--setFeedLoad---true
-2022-02-09 14:06:22.748 9765-9765/com.zhima.zmxxl D/FeedAdLoadManager$showFeedAd: cocos--feed---onAdLoaded
-2022-02-09 14:06:22.750 9765-9765/com.zhima.zmxxl D/FeedAdLoadManager$showFeedAd: cocos--显示信息流
-2022-02-09 14:06:23.227 9765-9765/com.zhima.zmxxl D/FeedAdLoadManager$loadFeedAd: cocos--feed---onRenderSuccess
-2022-02-09 14:06:23.418 9765-9765/com.zhima.zmxxl D/FeedAdLoadManager$loadFeedAd: cocos--feed---onAdShow
-2022-02-09 14:06:23.430 9765-9765/com.zhima.zmxxl D/ShushuAnalysisHelp: cocos----dotad_nativie_1{"ecpm":11,"ad_price":0.011,"ad_workRitId":"947332906","ad_platform":"穿山甲"}
-2022-02-09 14:06:23.433 9765-9765/com.zhima.zmxxl E/cocos: ad_nativie_1{"ecpm":11,"ad_price":0.011,"ad_workRitId":"947332906","ad_platform":"穿山甲"}
 ```

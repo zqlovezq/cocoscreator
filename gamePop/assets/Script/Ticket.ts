@@ -65,7 +65,6 @@ export default class Ticket extends cc.Component {
         closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     closeLayer(){
-        cc.Tools.showFeedScreen("guan");
         this.node.active = false;
         this.spine.clearTracks();
         if(this.type===1){
@@ -84,6 +83,7 @@ export default class Ticket extends cc.Component {
             }
         }
         this.scheduleOnce(()=>{
+            cc.Tools.showFeedScreen("guan");
             this.removeEvent();
             cc.Tools.emitEvent("time", new Date().getTime());
             cc.Tools.emitEvent("showPacket");

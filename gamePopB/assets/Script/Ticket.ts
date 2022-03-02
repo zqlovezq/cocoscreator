@@ -9,7 +9,7 @@ export default class Ticket extends cc.Component {
     title=[];
     onEnable(){
         this.registerEvent();
-        cc.Tools.showFeedScreen("kai");
+        cc.Tools.showFeedScreen();
         let _special = this.node.getChildByName("special");
         let _normal = this.node.getChildByName("normal");
         _special.active = false;
@@ -61,16 +61,16 @@ export default class Ticket extends cc.Component {
         }
     }
     registerEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
+        let closeBtn = this.node.getChildByName("block");
         closeBtn.on(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     removeEvent(){
-        let closeBtn = this.node.getChildByName("close_btn");
+        let closeBtn = this.node.getChildByName("block");
         closeBtn.off(cc.Node.EventType.TOUCH_END,this.closeLayer,this);
     }
     closeLayer(){
         // this.setTicket(300,900,4,7);
-        cc.Tools.showFeedScreen("guan");
+        cc.Tools.hideFeedScreen();
         this.node.active = false;
         if(this.type===1){
             cc.Tools.emitEvent("clickRed");

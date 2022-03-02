@@ -27,14 +27,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 246
+        "__id__": 245
       },
       {
-        "__id__": 247
+        "__id__": 246
       }
     ],
     "_prefab": {
-      "__id__": 248
+      "__id__": 247
     },
     "_opacity": 255,
     "_color": {
@@ -246,13 +246,9 @@
       }
     ],
     "_active": true,
-    "_components": [
-      {
-        "__id__": 244
-      }
-    ],
+    "_components": [],
     "_prefab": {
-      "__id__": 245
+      "__id__": 244
     },
     "_opacity": 255,
     "_color": {
@@ -1045,7 +1041,7 @@
         "__id__": 29
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": {
       "__id__": 32
@@ -1212,7 +1208,7 @@
       "__id__": 25
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 30
@@ -9115,33 +9111,6 @@
     "sync": false
   },
   {
-    "__type__": "cc.Widget",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 6
-    },
-    "_enabled": true,
-    "alignMode": 1,
-    "_target": null,
-    "_alignFlags": 5,
-    "_left": 0,
-    "_right": 0,
-    "_top": 0,
-    "_bottom": 0,
-    "_verticalCenter": 0,
-    "_horizontalCenter": 0,
-    "_isAbsLeft": true,
-    "_isAbsRight": true,
-    "_isAbsTop": true,
-    "_isAbsBottom": true,
-    "_isAbsHorizontalCenter": true,
-    "_isAbsVerticalCenter": true,
-    "_originalWidth": 0,
-    "_originalHeight": 850,
-    "_id": ""
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -9151,6 +9120,16 @@
     },
     "fileId": "88npU9Wj9I2YgnWUIpmPkd",
     "sync": false
+  },
+  {
+    "__type__": "cb2afmZayNFo7lB3ehl8Uq5",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_id": ""
   },
   {
     "__type__": "cc.Widget",
@@ -9177,16 +9156,6 @@
     "_isAbsVerticalCenter": true,
     "_originalWidth": 750,
     "_originalHeight": 1334,
-    "_id": ""
-  },
-  {
-    "__type__": "cb2afmZayNFo7lB3ehl8Uq5",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
     "_id": ""
   },
   {

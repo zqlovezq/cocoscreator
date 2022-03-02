@@ -93,7 +93,7 @@ export default class GetCash extends cc.Component {
             }, 3000)
         }
         cc.Tools.hideBanner();
-        cc.Tools.hideTableScreen();
+        // cc.Tools.hideTableScreen();
         if (cc.sys.localStorage.getItem("showBtn") == 100) {
             cc.Tools.showTips(this.node.parent, `<b><color=#ffffff>看完视频 领取更多红包券</c></b>`).then(() => {
                 cc.Tools.showJiliAd(11);
@@ -136,11 +136,10 @@ export default class GetCash extends cc.Component {
     }
     closeLayer() {
         this.node.active = false;
-        cc.Tools.emitEvent("init", false);
-        cc.Tools.hideBanner();
-        cc.Tools.hideTableScreen();
         this.scheduleOnce(() => {
             this.removeEvent();
+            cc.Tools.emitEvent("init", false);
+            cc.Tools.hideBanner();
         })
     }
     // update (dt) {}

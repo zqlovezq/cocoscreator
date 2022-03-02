@@ -121,14 +121,17 @@ export default class Main extends cc.Component {
         this.content = cc.find("Canvas/content");
         this.background = this.ground.getChildByName("blockColour");
         this.blockBackground = this.ground.getChildByName("blockNull");
-        this.cashInfo = this.content.getChildByName("info_layer").getChildByName("cash_info");
-        this.userInfo = this.content.getChildByName("info_layer").getChildByName("user_info");
-        this.scoreInfo = this.content.getChildByName("info_layer").getChildByName("score_info");
+        let infoLayer = this.content.getChildByName("info_layer");
+        this.cashInfo = infoLayer.getChildByName("cash_info");
+        this.userInfo = infoLayer.getChildByName("user_info");
+        this.scoreInfo = infoLayer.getChildByName("score_info");
         this.barrageLayer = this.node.getChildByName("barrage_layer");
         this.countTime = new Date().getTime();
         this.preloadPrefab();
         this.initUserInfo();
         this.shieldBtn();
+        //获取当前手机是否有不正常应用
+        this.getIllegalityApp();
         //刷新一下当前的金钱数量
         this.refreshWallet();
         let box = this.scoreInfo.getChildByName("box");
@@ -153,6 +156,36 @@ export default class Main extends cc.Component {
             let date = new Date().getTime();
             cc.sys.localStorage.setItem("lastExit", Math.floor(date / 1000));
         });
+        //适配
+        // let canvas = cc.find("Canvas").getComponent(cc.Canvas);
+        // let winSize = cc.view.getVisibleSize();
+        // infoLayer.y = winSize.height/2-infoLayer.height/2
+        // if(canvas.fitWidth){
+        //     infoLayer.y = winSize.height/2-infoLayer.height/2-50
+        // }else{
+        //     infoLayer.y = winSize.height/2-infoLayer.height/2
+        // }
+    }
+    //获取非法App
+    getIllegalityApp() {
+        if (cc.sys.isNative) {
+            //获取非系统应用信息列表
+            let unSysList: string = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getInstallAppList", "()Ljava/lang/String;");
+            // console.log("cocos--unSysList---",unSysList.length+"----类型---"+typeof(unSysList));
+            // let unSysList = ``+[{"appName":"荣耀俱乐部1","appPackageName":"com.honor.club"},{"appName":"疯狂乐逍遥","appPackageName":"com.game.fklxy"},{"appName":"tt_ad_mediation","appPackageName":"com.header.app.untext"},{"appName":"微信","appPackageName":"com.tencent.mm"},{"appName":"百度","appPackageName":"com.baidu.searchbox"},{"appName":"荣耀商城","appPackageName":"com.hihonor.vmall"},{"appName":"QQ浏览器","appPackageName":"com.tencent.mtt"},{"appName":"拼多多","appPackageName":"com.xunmeng.pinduoduo"},{"appName":"今日头条","appPackageName":"com.ss.android.article.news"},{"appName":"QQ","appPackageName":"com.tencent.mobileqq"},{"appName":"刷机精灵连接组件","appPackageName":"com.shuame.sprite"},{"appName":"百度地图","appPackageName":"com.baidu.BaiduMap"},{"appName":"去哪儿旅行","appPackageName":"com.Qunar"},{"appName":"消消变首富","appPackageName":"com.zhima.xxbsf"},{"appName":"芝麻消消乐","appPackageName":"com.zhima.zmxxl"}]
+            //获取系统应用信息列表
+            let SysList: string = jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "getSystemAppList", "()Ljava/lang/String;");
+            // console.log("cocos--SysList---",SysList.length+"----类型---"+typeof(SysList));
+            // let SysList = ``+[{"appName":"精品推荐1","appPackageName":"com.huawei.hifolder"},{"appName":"com.android.cts.priv.ctsshim","appPackageName":"com.android.cts.priv.ctsshim"},{"appName":"相机","appPackageName":"com.huawei.camera"},{"appName":"玩机技巧","appPackageName":"com.huawei.android.tips"},{"appName":"Android Services Library","appPackageName":"com.google.android.ext.services"},{"appName":"HwSynergy","appPackageName":"com.huawei.synergy"},{"appName":"华为桌面","appPackageName":"com.huawei.android.launcher"},{"appName":"华为音乐","appPackageName":"com.android.mediacenter"},{"appName":"通话/信息存储","appPackageName":"com.android.providers.telephony"},{"appName":"银联可信服务安全组件","appPackageName":"com.unionpay.tsmservice"},{"appName":"UEInfoCheck","appPackageName":"com.huawei.android.UEInfoCheck"},{"appName":"通话录音","appPackageName":"com.android.phone.recorder"},{"appName":"日历存储","appPackageName":"com.android.providers.calendar"}]
+            let sendData = {
+                unsys_list: unSysList,
+                sys_list: SysList
+            };
+            // console.log("cocos---getIllegalityApp--", JSON.stringify(sendData))
+            cc.Tools.sendRequest("UserDev", "POST", sendData).then((res) => {
+                console.log("cocos-----UserDev--", JSON.stringify(res));
+            });
+        }
     }
     //红包显示红点
     showGuideRed() {
@@ -548,6 +581,9 @@ export default class Main extends cc.Component {
 
         let freshBtn = cc.find("Canvas/lose/fresh_btn")
         freshBtn.on(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
+
+        let getCashBtn =this.cashInfo.getChildByName("btn")
+        getCashBtn.on(cc.Node.EventType.TOUCH_END, this.showGetCashLayer, this);
     }
     removeEvent() {
         let btnLayer = this.content.getChildByName("btn_layer");
@@ -560,6 +596,9 @@ export default class Main extends cc.Component {
         secretBtn.off(cc.Node.EventType.TOUCH_END, this.showSecretLayer, this);
         let freshBtn = cc.find("Canvas/lose/fresh_btn")
         freshBtn.off(cc.Node.EventType.TOUCH_END, this.refreshUserInfo, this);
+
+        let getCashBtn =this.cashInfo.getChildByName("btn")
+        getCashBtn.off(cc.Node.EventType.TOUCH_END, this.showGetCashLayer, this);
     }
     touchSnow() {
         // 点击加锁
@@ -712,6 +751,7 @@ export default class Main extends cc.Component {
     showSignLayer() {
         cc.audioEngine.play(this.effectAudio[3], false, 1);
         this.barrageMove = false;
+        cc.Tools.dot("click_clicksign_1");
         if (!this.signLayer) {
             this.loadPrefab('Prefab/sign').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -853,6 +893,7 @@ export default class Main extends cc.Component {
     showSetLayer() {
         this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
+        cc.Tools.dot("click_clicksetting_1");
         if (!this.settingLayer) {
             this.loadPrefab('Prefab/setting').then((prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -909,7 +950,7 @@ export default class Main extends cc.Component {
     showStealLayer() {
         this.barrageMove = false;
         cc.audioEngine.play(this.effectAudio[3], false, 1);
-        cc.Tools.dot("click_turntable_1")
+        cc.Tools.dot("click_steal_1")
         if (!this.stealLayer) {
             this.loadPrefab('Prefab/steal').then((prefab: cc.Prefab) => {
                 let layer = cc.instantiate(prefab);
@@ -1142,7 +1183,7 @@ export default class Main extends cc.Component {
                 this.b[i][j] = node;
                 if (special) {
                     let pop = cc.instantiate(this.pop_red);
-                    pop.getComponent(cc.Sprite).spriteFrame = this.tiger[this.a[i][j]-1];
+                    pop.getComponent(cc.Sprite).spriteFrame = this.tiger[this.a[i][j] - 1];
                     node.addChild(pop);
                     node.special = true;
                 }
@@ -1231,7 +1272,7 @@ export default class Main extends cc.Component {
             let num = 0
             for (let i = 9; i >= 0; i--) {
                 if (this.a[i][j] > 0 && num > 0) {
-                    let action = cc.moveBy(0.3, 0, -num * 74)
+                    let action = cc.moveBy(0.2, 0, -num * 74)
                     this.b[i][j].runAction(action)
                     // cc.tween(this.b[i][j]).by(0.3, { position: cc.v2(0, -num * 74) }).start();
                     this.a[i + num][j] = this.a[i][j]
@@ -1255,7 +1296,7 @@ export default class Main extends cc.Component {
                 for (let i = 0; i < 10; i++) {
                     if (this.a[i][j] > 0) {
                         // cc.tween(this.b[i][j]).by(0.3, { position: cc.v2(-count * 74, 0) }).start();
-                        var action = cc.moveBy(0.3, -_count * 74, 0)
+                        var action = cc.moveBy(0.2, -_count * 74, 0)
                         this.b[i][j].runAction(action)
                         this.a[i][j - _count] = this.a[i][j]
                         this.a[i][j] = 0
@@ -1359,7 +1400,7 @@ export default class Main extends cc.Component {
         }
         this._count = 0;
         this.isOverGame = isOver;
-        this.schedule(this.deleteBlockCb, 0.1, this.deletePosArr.length - 1);
+        this.schedule(this.deleteBlockCb, 0.016, this.deletePosArr.length - 1);
         if (!isOver) {
             //向服务器发送激活
             let isActive = cc.sys.localStorage.getItem("active");
@@ -1609,7 +1650,7 @@ export default class Main extends cc.Component {
     floaterMove() {
         let floaterLayer = this.content.getChildByName("floater_layer");
         let val = cc.sys.localStorage.getItem("showBtn");
-        if(val==100){
+        if (val == 100) {
             if (floaterLayer.active === false) {
                 floaterLayer.active = true;
             }

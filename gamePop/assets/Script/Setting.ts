@@ -79,9 +79,9 @@ export default class Setting extends cc.Component {
     closeLayer(){
         this.node.active = false;
         cc.Tools.emitEvent("time",new Date().getTime());
-        cc.Tools.showFeedScreen("guan");
         this.scheduleOnce(()=>{
             this.removeEvent();
+            cc.Tools.showFeedScreen("guan");
         })
     }
     // update (dt) {}

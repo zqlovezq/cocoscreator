@@ -24,6 +24,8 @@ export default class Sign extends cc.Component {
     }
     onEnable(){
         this.getSignList();
+        cc.Tools.showTableScreen();
+        cc.Tools.showBanner();
     }
     //获取签到列表
     getSignList(){
@@ -91,7 +93,10 @@ export default class Sign extends cc.Component {
     }
     closeLayer() {
         this.node.active = false;
-        cc.Tools.emitEvent("init", false);
+        this.scheduleOnce(()=>{
+            cc.Tools.emitEvent("init", false);
+            cc.Tools.hideBanner();
+        })
     }
     // update (dt) {}
 }

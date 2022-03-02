@@ -8,7 +8,7 @@ export default class PopSuccess extends cc.Component {
         this.registerEvent();
     }
     onEnable() {
-        cc.Tools.showFeedScreen("kai");
+        cc.Tools.showFeedScreen();
         let closeBtn = this.wrap.getChildByName("close_btn");
         closeBtn.active = false;
         this.scheduleOnce(() => {
@@ -66,13 +66,16 @@ export default class PopSuccess extends cc.Component {
                 cc.Tools.showJiliAd(4);
             });
         }
-        cc.Tools.showFeedScreen("guan");
+        cc.Tools.hideFeedScreen();
         this.node.active = false;
     }
     closeLayer() {
-        cc.Tools.showFeedScreen("guan");
         this.node.active = false;
-        cc.Tools.emitEvent("init", true);
+        this.scheduleOnce(()=>{
+            cc.Tools.hideFeedScreen();
+            cc.Tools.emitEvent("init", true);
+            cc.Tools.showTableScreen();
+        })
     }
     // update (dt) {}
 }

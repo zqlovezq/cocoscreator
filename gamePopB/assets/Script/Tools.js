@@ -73,9 +73,8 @@ cc.Tools = {
             "millisecond": new Date().getTime(),
             "add_json": JSON.stringify(json)
         };
-        console.log("cocos--ShuMeiEvent---", JSON.stringify(sendData));
         cc.Tools.sendRequest("ShuMeiEvent", "POST", sendData).then((res) => {
-            console.log("cocos----数美返回的数据=", JSON.stringify(res));
+            
         })
     },
     //uuid(8, 10)
@@ -232,9 +231,9 @@ cc.Tools = {
         }
     },
     //显示信息流广告
-    showFeedScreen(isShow) {
+    showFeedScreen() {
         if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "setPreLoadFeed", "(Ljava/lang/String;)V", isShow);
+            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "showFeedScreen", "()V");
         }
     },
     //隐藏信息流广告
@@ -292,9 +291,6 @@ cc.Tools = {
                     }
                     cc.Tools.setNewAdId(cc.Tools.ad.adPosId);
                 }
-                console.log("cocos----adBig----" + cc.Tools.ad.adBig);
-                console.log("cocos----adSmall----" + cc.Tools.ad.adSmall);
-                console.log("cocos----今天观看的视频次数", cc.Tools.ad.adTimes);
                 cc.sys.localStorage.setItem("adTimes", cc.Tools.ad.adTimes);
                 resolve(res.ad_id);
             }).catch((res) => {
@@ -339,13 +335,13 @@ cc.Tools = {
         let canvas = cc.find("Canvas").getComponent(cc.Canvas);
         let winSize = cc.view.getVisibleSize();
 
-        if (winSize.height / winSize.width <= 720 / 1280) {
-            canvas.fitHeight = true;
-            canvas.fitWidth = false;
-        }
-        else {
+        if (winSize.width / winSize.height <= 750 / 1334) {
             canvas.fitHeight = false;
             canvas.fitWidth = true;
+        }
+        else {
+            canvas.fitHeight = true;
+            canvas.fitWidth = false;
         }
     },
     /**
@@ -380,7 +376,9 @@ cc.Tools = {
             tips.zIndex = 9999;
             tips.y = 145;
             tips.opacity = 255;
+            tips.active = true;
             cc.tween(tips).to(1, { y: 300 }).delay(0.5).to(0.1, { opacity: 0 }).call(() => {
+                tips.active = false;
                 resolve();
             }).start()
         })

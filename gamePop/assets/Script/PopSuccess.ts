@@ -47,7 +47,6 @@ export default class PopSuccess extends cc.Component {
         });
     }
     onEnable() {
-        // cc.Tools.showFeedScreen("success");
         cc.Tools.showBanner();
         cc.Tools.emitEvent("time", 0);
         let closeBtn = this.wrap.getChildByName("close_btn");

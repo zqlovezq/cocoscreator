@@ -26,7 +26,7 @@ export default class Login extends cc.Component {
                 this.getAdTimes();
             }
         } else {
-            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjo1Mywib3Blbl9pZCI6Im9qbGR1NlZKZVVsMGNVNVlOMXVIcTNpN0hQeVEiLCJuaWNrX25hbWUiOiLmtbfnm5foiLnplb8yLjAiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvbmlhSGRWaWNGc0xPZHBIN2tKMVRwaWFWOTNpYmhKSjh1bnBLN1ZDOGh4RjlsVWlha0hoT2lhYnNpYVMxSWlhc2NYWk1IeGliNlVMdFdOWHZzYmtuQUtzVFpaSGNxUXcvMTMyIiwiY3JlYXRlX3RpbWUiOjE2NDMwOTg3MDUsImNoYW5uZWwiOiJrdWFpc2hvdSIsImRpc3RpbmN0X2lkIjoiYzc1MzBlMDQtYjIwNS00N2QwLTk4MjMtMGQ0YmUzNWI0ZmU1IiwiaW1laSI6Ijg2ODczNDAzNjYxNDg3OCIsIm1hYyI6IjAyOjAwOjAwOjAwOjAwOjAwIiwiYW5kcm9pZF9pZCI6Ijc2Y2VmMzFkZTRhNTQ2NzQiLCJvYWlkIjoiZmVlZjVmYmItY2Y2Yi02NzMyLWJjN2YtNWJmZjc3ZGRkYjc5In0.pTRcUcXxkhajsVT495MB8W6b3fZ0dfn8PgOBoza9HYs");
+            cc.sys.localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjowLCJ1c2VyX2lkIjo3OTU5Miwib3Blbl9pZCI6Im9qbGR1NmIyMFMzbWtJM1pWNmgxOS1oU1YwQlUiLCJuaWNrX25hbWUiOiJZLvCfjLUiLCJnZW5kZXIiOjAsImF2YXRhciI6Imh0dHBzOi8vdGhpcmR3eC5xbG9nby5jbi9tbW9wZW4vdmlfMzIvNE9SaGdyendTeEVJUXk1anJmNXR3VE0wdmQ1ZjBHRDVGVWZiejRiV01ybktNVVJKVVJzQzhFMHZ2OTdLUVFFdERUR1RrbncxYWVka0FtZFEyeDZpYkRnLzEzMiIsImNyZWF0ZV90aW1lIjoxNjQ1NDI1NjYzLCJjaGFubmVsIjoibWVpenUyIiwiZGlzdGluY3RfaWQiOiI4ZDZjMGRmZC0yMzAzLTQwMTUtOTNjNS1lMjY1NGU1ZTI4ZmQiLCJpbWVpIjoiIiwibWFjIjoiMDI6MDA6MDA6MDA6MDA6MDAiLCJhbmRyb2lkX2lkIjoiNzZjZWYzMWRlNGE1NDY3NCIsIm9haWQiOiJmZWVmNWZiYi1jZjZiLTY3MzItYmM3Zi01YmZmNzdkZGRiNzkifQ.BmVpohnKod-1_L2paFDLMSDO1YgQR6CjUNTj1IXYMkc");
             // cc.director.loadScene('Main');
             this.getAdTimes();
         }
@@ -114,6 +114,7 @@ export default class Login extends cc.Component {
             cc.Tools.ad.adShowNum = res.data.ad_show_num;
             cc.Tools.ad.adPosId = res.data.ad_pos_id;
             cc.Tools.ad.adDif = res.data.is_need_watch;
+            cc.Tools.ad.steal_left_num = res.data.steal_left_num;
             cc.Tools.treasure = res.data.treasure;
             //
             let login: cc.Node = this.node.getChildByName("login");
