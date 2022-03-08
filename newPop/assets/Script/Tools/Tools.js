@@ -1,12 +1,13 @@
-var Pubkey = `-----BEGIN RSA Public Key-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvAd71hqQFal9eqThSMwr
-iMwpTvyTYkX9Y0vuFqEoqU72qQ98CUhxwxLczuFZBmvlL2diIVf1dROR3MoHm/wI
-AP3pqFuV5XMrclrlOkIr9h1WNIje/Hfe1GMmixj8JRTf6MEDQ5vA8m+PyHdRAxCc
-LqYwji3LB3VU+XJkOcdlRHK1oi6BBY7/qJj2HuLgFfvhWW9Qc+SRsu6aKEA+x11u
-ZLCtABgAMDcD1zYdEu1Kaw22iQJRF9ZchgPEWKo0okAR5bAYRx5D+MhirQ20XJGM
-vgOiqF3LYpuA75UTjN5qGs9DVzYlnRamGfx3otJwzoKc0N8BLewlncRheJH4kGej
-hwIDAQAB
------END RSA Public Key-----`
+var Pubkey = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA61+ruftQti3cwHBBYbOf
+J6SDKh9aUcmJAmueWvTMpIUDRsAlLhMzkqrQ48AzWA7mA1OBlCr/8UlARr8uMNSl
+BHT4MKK1NEqej687tDUeodEUMxESznhpW1CiCB0BuErRrIViwAsbaz3ClK64k8zA
+7eJgkZ52J1UyahHsJqkV3cX19bkJKx1KxaRemf7E9nddjjSouEOyaPr/q3ZTygGF
+lLeu7edf5VHfD2nmHVUe2ntAiAyxgd2VJndjI60tpN5TJw64wXv2JUfiR7JI2+sq
+PI/4pf3Nz+oDKa6fKjg6S1hluJysjKGVlDRuTQ82+gBk+65eUdNludnd6U2Y+XGD
+pQIDAQAB
+-----END PUBLIC KEY-----
+`
 cc.Tools = {
     /**
      * @param {*} event 数数打点的事件名称
@@ -74,7 +75,7 @@ cc.Tools = {
             "add_json": JSON.stringify(json)
         };
         cc.Tools.sendRequest("ShuMeiEvent", "POST", sendData).then((res) => {
-            
+
         })
     },
     //uuid(8, 10)
@@ -140,44 +141,15 @@ cc.Tools = {
             sendData = {
                 "ad_id": ad,
                 "ts": new Date().getTime(),//时间戳
-                "type": parseInt(type),
-                "action": "AdAward"
+                "type": parseInt(type)
             };
+            console.log("sendData---",sendData);
+            // cc.Tools.sendRequest("PipeActionAdAward", "POST", sendData).then((res) => {
+            //     console.log("PipeActionAdAward-----",res);
+            // })
             switch (type) {
-                case "1"://点我领红包
-                case "2"://悬浮红包
-                case "3"://新春红包
-                case "4"://成功过关
-                case "7"://点我领红包
-                case "8"://超级红包
-                case "9"://消除红包
-                case "12"://自动红包
-                case "10"://飞行红包
-                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 1, videoType: parseInt(type) });
-                    })
-                    break;
-                case "11"://提现视频
-                case "15"://存钱罐解冻
-                case "17"://签到
-                    cc.Tools.sendRequest("PipeAction", "POST", sendData).then((res) => {
-                        this.emitEvent("getTicket", { ticket: res.amount, add: res.add_amount, type: 2, videoType: parseInt(type) });
-                    })
-                    break;
-                case "5"://解冻红包
-                    this.emitEvent("freeze", ad);
-                    break;
-                case "6":// 存钱罐
-                    this.emitEvent("saveCash", ad);
-                    break;
-                case "13"://偷能量
-                    this.emitEvent("steal", ad);
-                    break;
-                case "14"://复仇
-                    this.emitEvent("revenge", ad);
-                    break;
-                case "16"://宝箱
-                    this.emitEvent("openBox", ad);
+                case "4"://宝箱
+                    this.emitEvent("turntable", ad);
                     break;
                 default:
                     break;
@@ -242,11 +214,6 @@ cc.Tools = {
             jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "hideFeedScreen", "()V");
         }
     },
-    wxShare(type) {
-        if (cc.sys.isNative) {
-            jsb.reflection.callStaticMethod("org/cocos2dx/javascript/AppActivity", "weixin_share", "(I)V", type);
-        }
-    },
     // 微信登陆
     wxLogin() {
         if (cc.sys.isNative) {
@@ -273,8 +240,7 @@ cc.Tools = {
                 "type": parseInt(type)
             };
             let data = cc.Tools.createSignData(sendData);
-            data.action = "Ecpm"
-            cc.Tools.sendRequest("PipeAction", "POST", data).then((res) => {
+            cc.Tools.sendRequest("PipeActionEcpm", "POST", data).then((res) => {
                 cc.Tools.reminderMsg = res.msg;
                 cc.Tools.ad.adShowNum = res.ad_show_num;
                 console.log("cocos----ecpm类型----" + type);
@@ -388,7 +354,7 @@ cc.Tools = {
     */
     encryptData(data) {
         let encrypt = new JSEncrypt();
-        encrypt.setPublicKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----');
+        encrypt.setPublicKey(Pubkey);
         let str = JSON.stringify(data);
         let encrypted = encrypt.encrypt(str);
         let backData = [];
@@ -398,15 +364,15 @@ cc.Tools = {
         let obj = {
 
         }
-        obj.data = backData
+        obj.data = backData;
+        console.log('cocos----解密前数据:%o', obj);
         return obj;
     },
     decryptData(encryptedData) {
         let parseData = "";
-        // console.log('cocos----解密后数据:', encryptedData.length);
         for (let i = 0; i < encryptedData.length; i++) {
             let decrypt = new JSEncrypt();
-            decrypt.setPrivateKey('-----BEGIN RSA Public Key-----' + Pubkey + '-----END RSA Public Key-----')
+            decrypt.setPrivateKey(Pubkey)
             let uncrypted = decrypt.decrypt(encryptedData[i]);
             // console.log('cocos----解密后----数据:', uncrypted);
             parseData += uncrypted;
@@ -424,9 +390,13 @@ cc.Tools = {
     sendRequest: function (url, type, data) {
         return new Promise(function (resolve, reject) {
             let xhr = new XMLHttpRequest();
-            let requestURL = "https://api.jiankangzhuan.com/api.xxrich/" + url;
-            //test todo
-            // let requestURL = "http://192.168.110.195:8888/api.xxrich/" + url;
+            let requestURL;
+            // if (cc.sys.isNative) {
+            //     requestURL = "https://api.jiankangzhuan.com/api.quxiaoxiao/" + url;
+            // } else {
+            //     requestURL = "http://localhost:8080/" + url;
+            // }
+            requestURL = "https://api.jiankangzhuan.com/api.quxiaoxiao/" + url;
             xhr.open(type, requestURL, true);
             if (cc.sys.isNative) {
                 xhr.setRequestHeader("Accept-Encodeing", "gzip,deflate");
@@ -440,12 +410,11 @@ cc.Tools = {
                 if (xhr.readyState === 4 && xhr.status == 200) {
                     // 统一处理
                     let _response = JSON.parse(xhr.response);
-                    // console.log("cocos-----" + url + "------", xhr.response);
+                    console.log("cocos-----" + url + "------", xhr.response);
                     // 判断接口是否是加密接口
-                    if (data.action) {
+                    if (url.indexOf("Action")>-1) {
                         if (_response.code === 0) {
                             //解密
-                            // console.log("cocos-----"+url+"-----"+data.action+"----"+xhr.response)
                             resolve(cc.Tools.decryptData(_response.data.data))
                         } else {
                             reject(_response.message);
@@ -462,7 +431,7 @@ cc.Tools = {
             xhr.onerror = function () {
                 reject(new Error(xhr.statusText))
             }
-            if (data.action) {
+            if (url.indexOf("Action")>-1) {
                 xhr.send(JSON.stringify(cc.Tools.encryptData(data)));
             } else {
                 xhr.send(JSON.stringify(data));
@@ -474,11 +443,19 @@ cc.Tools = {
      * @param btn:cc.Node
      */
     breatheAnim(btn) {
+        // btn.stopAllActions();
+        // let action = cc.sequence(cc.scaleTo(0.5, 0.9), cc.scaleTo(0.5, 1))
+        // cc.tween(btn)
+        //     .repeatForever(action)
+        //     .start()
+        let t = cc.tween
         btn.stopAllActions();
-        let action = cc.sequence(cc.scaleTo(0.5, 0.9), cc.scaleTo(0.5, 1))
-        cc.tween(btn)
-            .repeatForever(action)
-            .start()
+        let scale1 = cc.scaleTo(0.1, 1.1, 0.93).easing(cc.easeQuadraticActionOut());
+        let scale2 = cc.scaleTo(0.1, 0.9, 1.1).easing(cc.easeQuadraticActionOut());
+        let scale3 = cc.scaleTo(0.1, 1.1, 0.9).easing(cc.easeQuadraticActionOut());
+        let scale4 = cc.scaleTo(0.2, 1, 1).easing(cc.easeQuadraticActionOut());
+        let seq = cc.sequence(scale1, scale2, scale3,scale4,cc.delayTime(0.5));
+        cc.tween(btn).repeatForever(seq).start()
     },
     /**
      * 旋转动画

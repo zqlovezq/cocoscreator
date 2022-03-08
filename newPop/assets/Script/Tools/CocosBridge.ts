@@ -1,4 +1,12 @@
 var CocosBridge = {
+    VideoEnum:cc.Enum({
+        GAME:1,
+        LEVEL:2,
+        CASH:3,
+        TRUNTABLE:4,
+        OPENRED:5,
+        LUCKY:6
+    }),
     JSCallNative(action: string, json: string): void {
         //根据不同的action对接
         switch (action) {
@@ -26,7 +34,7 @@ var CocosBridge = {
                         cc.Tools.emitEvent("showTips", "今天观看视频次数已经达到上限");
                     }
                 } else {
-                    cc.Tools.adCallBack("100," + json);
+                    cc.Tools.adCallBack("10000," + json);
                 }
                 break;
 

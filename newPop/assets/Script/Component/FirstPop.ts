@@ -33,7 +33,7 @@ export default class FirstPop extends cc.Component {
     protected closeLayer(): void {
         console.log("close");
         this.removeEvent();
-        let first:cc.Prefab = AssetsBundle.Instance.getAsset("Game", "Prefab/first_pop");
+        let first:cc.Prefab = AssetsBundle.Instance.getAsset("MainScene", "Prefab/first_pop");
         first.decRef();
         first = null;
         this.node.active = false;

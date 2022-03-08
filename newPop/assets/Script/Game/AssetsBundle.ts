@@ -17,19 +17,18 @@
  */
 export default class AssetsBundle extends cc.Component {
     public static Instance: AssetsBundle = null;
+    private abBunds = {};
     private total: number = 0;
     private now: number = 0;
-    private totalAb: number = 0;
-    private nowAb: number = 0;
     private progressFunc: Function = null;
     private endFunc: Function = null;
-    private abBunds = {};
-    onLoad() {
-        //单例
+    protected onLoad(): void {
         if (AssetsBundle.Instance === null) {
             AssetsBundle.Instance = this;
         } else {
-            this.destroy();
+            //this.destroy();
+            //临时方案
+            AssetsBundle.Instance = this;
             return;
         }
     }
@@ -37,36 +36,23 @@ export default class AssetsBundle extends cc.Component {
      * 加载我们的资源包
      * @param resPkg = {ab包名:{assetType:cc.Prefab,urls:[路径1]}}
     */
-    preloadResPkg(resPkg, progressFunc, endFunc): void {
+    preloadResPkg(abName:string, resPkg, progressFunc, endFunc): void {
         this.total = 0;
         this.now = 0;
-        this.totalAb = 0;
-        this.nowAb = 0;
         this.progressFunc = progressFunc;
         this.endFunc = endFunc;
         for (let key in resPkg) {
-            this.totalAb++;
-            let json = resPkg[key];
-            for(let val in json){
-                this.total += json[val].urls.length;
-            }
+            this.total += resPkg[key].urls.length;
         }
-        for (let key in resPkg) {
-            this.loadAssetsBundle(key, () => {
-                this.nowAb++;
-                if (this.nowAb === this.totalAb) {
-                    this.loadAssetsInAssetsBundle(resPkg);
-                }
-            })
-        }
+        this.loadAssetsBundle(abName, () => {
+            this.loadAssetsInAssetsBundle(abName,resPkg);
+        })
     }
     private loadAssetsBundle(abName: string, endFunc: Function): void {
         cc.assetManager.loadBundle(abName, (err, bundle) => {
             if (err !== null) {
-                console.log("[AssetsBundle]:load AssetsBundle Error:" + abName);
                 this.abBunds[abName] = null;
             } else {
-                console.log("[AssetsBundle]:load AssetsBundle Success:" + abName);
                 this.abBunds[abName] = bundle;
             }
             if (endFunc) {
@@ -75,31 +61,21 @@ export default class AssetsBundle extends cc.Component {
         })
 
     }
-    private loadAssetsInAssetsBundle(resPkg): void {
+    private loadAssetsInAssetsBundle(abName:string,resPkg): void {
         for (let key in resPkg) {
-            let json = resPkg[key];
-            for(let val in json){
-                let urlSet = json[val].urls;
-                let typeClass = json[val].assetType;
-                for (let i = 0; i < urlSet.length; i++) {
-                    this.loadRes(this.abBunds[key], urlSet[i], typeClass)
-                }
+            let urlSet = resPkg[key].urls;
+            let typeClass = resPkg[key].assetType;
+            for (let i = 0; i < urlSet.length; i++) {
+                this.loadRes(this.abBunds[abName], urlSet[i], typeClass)
             }
         }
     }
     private loadRes(abBundle, url, typeClass): void {
         abBundle.load(url, typeClass, (error, asset) => {
             this.now++;
-            if (error) {
-                console.log("load Res" + url + "error:" + error);
-            }
-            else {
-                console.log("load Res" + url + "success!");
-            }
             if (this.progressFunc) {
                 this.progressFunc(this.now, this.total);
             }
-            console.log(this.now, this.total);
             if (this.now >= this.total) {
                 if (this.endFunc !== null) {
                     this.endFunc();
@@ -112,7 +88,7 @@ export default class AssetsBundle extends cc.Component {
    * @param abName--->包名
    * @param url---->地址
   */
-    getAsset(abName, url): any {
+    public getAsset(abName, url): any {
         let bundle = cc.assetManager.getBundle(abName);
         if (bundle === null) {
             console.log("[error]:" + abName + "AssetsBundle not loaded:");
@@ -120,7 +96,7 @@ export default class AssetsBundle extends cc.Component {
         }
         return bundle.get(url);
     }
-    loadScene(abName,url):any{
+    public loadScene(abName, url): any {
         let bundle = cc.assetManager.getBundle(abName);
         if (bundle === null) {
             console.log("[error]:" + abName + "AssetsBundle not loaded:");
@@ -131,7 +107,7 @@ export default class AssetsBundle extends cc.Component {
         });
     }
     //释放bundle
-    realeseResPkg(abName): any {
+    public realeseResPkg(abName): any {
         let bundle = cc.assetManager.getBundle(abName);
         if (bundle === null) {
             console.log("[error]:" + abName + "AssetsBundle not loaded:");
