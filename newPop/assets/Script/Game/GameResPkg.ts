@@ -4,8 +4,7 @@ var resPkg = {
             assetType: cc.SpriteFrame,
             urls: [
                 "SpriteTurn/turn_1", "SpriteTurn/turn_2", "SpriteTurn/turn_3", "SpriteTurn/turn_4", "SpriteTurn/turn_5", "SpriteTurn/turn_6", "SpriteTurn/turn_7"
-                ,"SpriteTurn/turn_8", "SpriteTurn/turn_9", "SpriteTurn/turn_10"  ,"SpriteTurn/turn_11", "SpriteTurn/turn_12", "SpriteTurn/turn_13", "SpriteTurn/turn_14"
-                , "SpriteTurn/turn_15"
+                ,"SpriteTurn/turn_8", "SpriteTurn/turn_9", "SpriteTurn/turn_10" 
             ]
         },
         "Audio": {

@@ -1,6 +1,7 @@
 import AssetsBundle from "./AssetsBundle";
 import Cash from "../Component/Cash";
 import resPkg from "./GameResPkg";
+import Award from "../Component/Award";
 const { ccclass, property } = cc._decorator;
 var self: any = null;
 @ccclass
@@ -20,6 +21,7 @@ export default class Game extends cc.Component {
     private delete_pos_arr = [];
     private loadResOver: boolean = false;
     private lock: boolean = false;
+    private awardInfo: any = null;
     protected onLoad(): void {
         if (Game.Instance === null) {
             Game.Instance = this;
@@ -44,6 +46,19 @@ export default class Game extends cc.Component {
         this.layer = this.node.getChildByName("layer");
         this.pop = this.node.getChildByName("pop");
         this.getReqInfo("UserInfo", "GET", {}, this.initUserInfo);
+        let _time = new Date().getTime();
+        cc.game.on(cc.game.EVENT_HIDE,()=>{
+            let interval = (new Date().getTime()-_time)/1000;
+            let sendData = {
+                "ts": new Date().getTime(),//时间戳
+                "live_second_time": interval
+            };
+            cc.Tools.sendRequest("PipeActionLiveTime","POST",sendData).then((res)=>{
+                console.log("cocos----interval----" + interval);
+            }).catch((res)=>{
+                console.log("cocos----interval----bug----", JSON.stringify(res));
+            })
+        })
     }
     private InitGame(): void {
         let content: cc.Node = this.wrap.getChildByName("content");
@@ -127,6 +142,8 @@ export default class Game extends cc.Component {
         self.getReqInfo("LuckyLotteryStatus", "GET", {}, self.refeshTurnTableNumber);
         //同步红包
         self.getReqInfo("RedPkgStat", "GET", {}, self.refeshRedNumber);
+        //同步开奖信息
+        self.getReqInfo("DrawInfo", "GET", {}, self.awardReq);
         self.registerEvent();
         self.firstEnterGame();
         self.InitGame();
@@ -145,7 +162,7 @@ export default class Game extends cc.Component {
         });
     }
     //刷新界面
-    private refreshGame():void{
+    private refreshGame(): void {
         this.getReqInfo("UserInfo", "GET", {}, this.refreshUserInfo);
     }
     private refreshUserInfo(data: any): void {
@@ -175,10 +192,10 @@ export default class Game extends cc.Component {
     //同步红包个数
     private refeshRedNumber(data: any): void {
         let top: cc.Node = self.wrap.getChildByName("top");
-        let red:cc.Node = top.getChildByName("red");
+        let red: cc.Node = top.getChildByName("red");
         let redNumber: cc.Label = red.getChildByName("num").getComponent(cc.Label);
         redNumber.string = data.red_pkg_num + "";
-        red.active = data.red_pkg_num>0?true:false;
+        red.active = data.red_pkg_num > 0 ? true : false;
     }
     //同步转盘个数
     private refeshTurnTableNumber(data: any): void {
@@ -212,8 +229,8 @@ export default class Game extends cc.Component {
         let red = top.getChildByName("red");
         red.off(cc.Node.EventType.TOUCH_END, this.mainRed, this)
     }
-    private mainRed(){
-        this.showRedPop(1,false);
+    private mainRed() {
+        this.showRedPop(1, false);
     }
     private showCash2(): void {
         cc.Tools.emitEvent("cash", 2)
@@ -237,17 +254,54 @@ export default class Game extends cc.Component {
             }
         }
     }
-    public showAward(): void {
-        let award = this.layer.getChildByName("award_layer");
-        if (award) {
-            award.active = true;
+    private awardReq(data: any): void {
+        self.awardInfo = data;
+        let bottom: cc.Node = self.wrap.getChildByName("bottom");
+        let btn: cc.Node = bottom.getChildByName("btn_2");
+        if (data.wait_open > 0 && data.wait_end === 0) {
+            cc.Tools.setButtonGary(btn);
+            self.schedule(self.awardCountDownFunc, 1);
         } else {
-            if (this.loadResOver) {
-                let _award: cc.Prefab = AssetsBundle.Instance.getAsset("MainScene", "Prefab/award_layer")
-                let node: cc.Node = cc.instantiate(_award);
-                node.parent = self.layer;
-            }
+            bottom.getChildByName("time_bg").active = false;
         }
+    }
+    private awardCountDownFunc() {
+        let bottom: cc.Node = self.wrap.getChildByName("bottom");
+        let btn: cc.Node = bottom.getChildByName("btn_2");
+        let time: cc.Label = bottom.getChildByName("time_bg").getChildByName("time").getComponent(cc.Label);
+        time.string = cc.Tools.changeTime(self.awardInfo.wait_open,false);
+        if (self.awardInfo.wait_open <= 0) {
+            btn.on(cc.Node.EventType.TOUCH_END, self.showAward, self);
+            btn.getComponent(cc.Button).enableAutoGrayEffect = false;
+            btn.getComponent(cc.Button).interactable = true;
+            bottom.getChildByName("time_bg").active = false;
+            self.unschedule(self.awardCountDownFunc);
+        }
+        self.awardInfo.wait_open--;
+    }
+    public showAward(): void {
+        cc.Tools.sendRequest("DrawInfo", "GET", {}).then(res => {
+            this.awardInfo = res.data;
+            let award = this.layer.getChildByName("award_layer");
+            if (this.awardInfo.wait_end <= 5) {
+                console.log("正在开奖...请等待");
+            } else {
+                if (award) {
+                    award.active = true;
+                } else {
+                    if (this.loadResOver) {
+                        let _award: cc.Prefab = AssetsBundle.Instance.getAsset("MainScene", "Prefab/award_layer")
+                        let node: cc.Node = cc.instantiate(_award);
+                        node.parent = self.layer;
+                    }
+                }
+                if (!this.awardInfo.info) {
+                    Award.Instance.showTypeLayer1(this.awardInfo);
+                } else {
+                    Award.Instance.showTypeLayer2(this.awardInfo);
+                }
+            }
+        })
     }
     public showCash(): void {
         let cash = this.layer.getChildByName("cash_layer");
@@ -549,7 +603,7 @@ export default class Game extends cc.Component {
             console.log("成功过关");
             self.showAwardPop(self.level_add_cash, 2);
             self.scheduleOnce(() => {
-                self.showRedPop(2,true);
+                self.showRedPop(2, true);
             }, 2.5)
         })
     }
@@ -641,19 +695,19 @@ export default class Game extends cc.Component {
      * type:1是弹出界面---关闭 直接关闭
      * type:2是结算界面---关闭 刷新主页
     */
-    private showRedPop(type: number,add:boolean) {
+    private showRedPop(type: number, add: boolean) {
         let red_pop = this.pop.getChildByName("red_pop");
         if (red_pop) {
             red_pop.active = true;
             let js = red_pop.getComponent("RedPop");
-            js.setType(type,add);
+            js.setType(type, add);
         } else {
             if (this.loadResOver) {
                 let _red_pop: cc.Prefab = AssetsBundle.Instance.getAsset("MainScene", "Prefab/red_pop")
                 let node: cc.Node = cc.instantiate(_red_pop);
                 node.parent = self.pop;
                 let js = node.getComponent("RedPop");
-                js.setType(type,add);
+                js.setType(type, add);
             }
         }
     }
@@ -667,10 +721,10 @@ export default class Game extends cc.Component {
         if (award_pop) {
             // award_pop.active = true;
             let js = award_pop.getComponent("AwardPop");
-            this.scheduleOnce(()=>{
+            this.scheduleOnce(() => {
                 award_pop.active = true;
                 js.showAward(count, type);
-            },0.2)
+            }, 0.2)
         } else {
             if (this.loadResOver) {
                 let _award_pop: cc.Prefab = AssetsBundle.Instance.getAsset("MainScene", "Prefab/award_pop")
@@ -678,10 +732,10 @@ export default class Game extends cc.Component {
                 node.parent = self.pop;
                 node.active = false;
                 let js = node.getComponent("AwardPop");
-                this.scheduleOnce(()=>{
+                this.scheduleOnce(() => {
                     node.active = true;
                     js.showAward(count, type);
-                },0.2)
+                }, 0.2)
             }
         }
     }

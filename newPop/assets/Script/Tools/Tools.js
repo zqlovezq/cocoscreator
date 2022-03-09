@@ -143,13 +143,19 @@ cc.Tools = {
                 "ts": new Date().getTime(),//时间戳
                 "type": parseInt(type)
             };
-            console.log("sendData---",sendData);
+            console.log("sendData---", sendData);
             // cc.Tools.sendRequest("PipeActionAdAward", "POST", sendData).then((res) => {
             //     console.log("PipeActionAdAward-----",res);
             // })
             switch (type) {
-                case "4"://宝箱
+                case "4"://转盘
                     this.emitEvent("turntable", ad);
+                    break;
+                case "3"://提现
+                    this.emitEvent("cashout", ad);
+                    break;
+                case "6"://提现
+                    this.emitEvent("award", ad);
                     break;
                 default:
                     break;
@@ -412,7 +418,7 @@ cc.Tools = {
                     let _response = JSON.parse(xhr.response);
                     console.log("cocos-----" + url + "------", xhr.response);
                     // 判断接口是否是加密接口
-                    if (url.indexOf("Action")>-1) {
+                    if (url.indexOf("Action") > -1) {
                         if (_response.code === 0) {
                             //解密
                             resolve(cc.Tools.decryptData(_response.data.data))
@@ -431,7 +437,7 @@ cc.Tools = {
             xhr.onerror = function () {
                 reject(new Error(xhr.statusText))
             }
-            if (url.indexOf("Action")>-1) {
+            if (url.indexOf("Action") > -1) {
                 xhr.send(JSON.stringify(cc.Tools.encryptData(data)));
             } else {
                 xhr.send(JSON.stringify(data));
@@ -454,7 +460,7 @@ cc.Tools = {
         let scale2 = cc.scaleTo(0.1, 0.9, 1.1).easing(cc.easeQuadraticActionOut());
         let scale3 = cc.scaleTo(0.1, 1.1, 0.9).easing(cc.easeQuadraticActionOut());
         let scale4 = cc.scaleTo(0.2, 1, 1).easing(cc.easeQuadraticActionOut());
-        let seq = cc.sequence(scale1, scale2, scale3,scale4,cc.delayTime(0.5));
+        let seq = cc.sequence(scale1, scale2, scale3, scale4, cc.delayTime(0.5));
         cc.tween(btn).repeatForever(seq).start()
     },
     /**
@@ -521,12 +527,15 @@ cc.Tools = {
     /**
      * 将秒数转成时间
     */
-    changeTime(count) {
+    changeTime(count,isCn) {
         let hour = Math.floor(count / 3600);
         let minute = Math.floor((count - 3600 * hour) / 60);
         let second = count - hour * 3600 - 60 * minute;
-        console.log(`${hour}时+${minute}分+${second}秒`);
-        return (hour > 0 ? hour + "时" : "") + (minute > 0 ? minute + "分" : "") + (second > 0 ? second + "秒" : "");
+        if(isCn){
+            return (hour > 0 ? hour + "时" : "") + (minute > 0 ? minute + "分" : "0分") + (second > 0 ? second + "秒" : "0秒");
+        }else{
+            return (hour>0?(hour>=10?hour+":":"0"+hour+":"):"")  + (minute>0?(minute>=10?minute+":":"0"+minute+":"):"00:") + (second>0?(second>=10?second:"0"+second):"00");
+        }
     },
     /**
      * 将秒数转成天数
