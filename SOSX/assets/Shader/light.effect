@@ -1,0 +1,202 @@
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.  
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+        alphaThreshold: { value: 0.5 }
+        diffuseColor: { value: [1, 1, 1, 1], editor: { type: color } }
+        specularColor: { value: [1, 1, 1, 1], editor: { type: color } }
+        emissiveColor: { value: [0, 0, 0, 1], editor: { type: color } }
+        glossiness: { value: 10 } 
+        lightColor: { value: [1, 1, 1, 1], inspector: { type: color } }
+        lightPos: { value: [0, 0, 1, 1] }
+        ambientLight: { value: [0.1, 0.1, 0.1, 1], inspector: { type: color } }
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+  out vec3 v_pos;
+  out vec3 v_normal;
+
+  #if USE_TEXTURE
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+  #endif
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    v_pos = (cc_matWorld * pos).xyz;
+    #else
+    pos = cc_matViewProj * pos;
+    v_pos = pos.xyz;
+    #endif
+
+    #if USE_TEXTURE
+    v_uv0 = a_uv0;
+    #endif
+
+    v_color = a_color;
+    v_normal = vec3(0, 0, 1);
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+  
+  #include <alpha-test>
+  #include <texture>
+  #include <cc-lights>
+  #include <cc-global> 
+
+  in vec4 v_color;
+  in vec3 v_pos;
+  in vec3 v_normal;
+
+  #if USE_TEXTURE
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  #endif
+
+  uniform PhongFrag {
+    vec4 lightColor; 
+    vec4 lightPos;
+    vec4 ambientLight;
+    lowp vec4 diffuseColor;
+    lowp vec4 specularColor;
+    lowp vec4 emissiveColor;
+    float glossiness;
+  };
+
+  struct PhongSurface {
+    vec3 diffuse;
+    vec3 emissive;
+    vec3 specular;
+    float opacity;
+
+    float glossiness;
+
+    vec3 position;
+    vec3 normal;
+    vec3 viewDirection;
+  };
+
+  Lighting brdf (PhongSurface s, LightInfo info) {
+    Lighting result;
+    float ndh = 0.0;
+    // Get the half direction in world space
+    vec3 halfDir = normalize(s.viewDirection + info.lightDir);
+    float NdotH = max(0.0, dot(s.normal, halfDir));
+    NdotH = pow(NdotH, max(1.0, s.glossiness * 128.0));
+
+    result.diffuse = info.radiance * max(0.0, dot(s.normal, info.lightDir));
+    result.specular = info.radiance * NdotH;
+
+    return result;
+  }
+
+  vec4 composePhongShading (Lighting lighting, PhongSurface s) {
+    vec4 o = vec4(0.0, 0.0, 0.0, 1.0);
+
+    //diffuse is always calculated
+    o.rgb = lighting.diffuse * s.diffuse;
+    
+    #if USE_EMISSIVE
+      o.rgb += s.emissive;
+    #endif
+
+    #if USE_SPECULAR
+      o.rgb += lighting.specular * s.specular;
+    #endif
+
+    o.a = s.opacity;
+
+    return o;
+  }
+
+  void surf (out PhongSurface s) {
+    vec4 diffuse = vec4(1, 1, 1, 1);
+    
+    #if CC_USE_ATTRIBUTE_COLOR
+      diffuse *= v_color;
+    #endif
+
+    diffuse *= diffuseColor;
+    s.diffuse = diffuse.rgb;
+    s.opacity = diffuse.a;
+
+    #if USE_EMISSIVE
+      s.emissive = emissiveColor.rgb;
+    #endif
+
+    #if USE_SPECULAR
+      s.specular = specularColor.rgb;
+    #endif
+
+    s.normal = v_normal;
+    s.position = v_pos; 
+
+    vec3 viewPos = cc_cameraPos.xyz;
+    s.viewDirection = normalize(viewPos - v_pos);
+
+    s.glossiness = glossiness;
+  }
+
+  vec3 ambient(PhongSurface s, vec4 ambientColor) {
+    return s.diffuse * ambientColor.rgb;
+  }
+
+  void main () {
+    PhongSurface s;
+    surf(s);
+    Lighting result;
+
+    //计算环境光
+    result.diffuse += ambient(s, ambientLight);
+
+    
+    //计算点光源
+    LightInfo info = computePointLighting(s.position, lightPos, lightColor); 
+    Lighting resultPoint = brdf(s, info);
+    
+    result.diffuse += resultPoint.diffuse;
+    result.specular += resultPoint.specular;
+    vec4 color = composePhongShading(result, s);
+
+    vec4 o = vec4(1, 1, 1, 1);
+    #if USE_TEXTURE
+      CCTexture(texture, v_uv0, o);
+    #endif
+    ALPHA_TEST(o);
+
+    // o.rgb = color.rgb * o.rgb;
+    o *= color;
+    // o = color;
+
+    // #if USE_SPECULAR
+    //   o = vec4(1, 1, 1, 1);
+    // #endif
+    gl_FragColor = o; 
+  }
+}%

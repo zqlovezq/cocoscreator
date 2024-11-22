@@ -1,0 +1,35 @@
+{
+  "__type__": "cc.Material",
+  "_name": "InfiniteBgWithLight",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "bc0f9176-645e-4ff4-b2ad-5f5cc2fd2922"
+  },
+  "_techniqueIndex": 1,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      },
+      "props": {
+        "lightColor": {
+          "__type__": "cc.Color",
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        "lightPos": {
+          "__type__": "cc.Vec4",
+          "x": -0.52,
+          "y": 0.6,
+          "z": 0.5,
+          "w": 1
+        },
+        "shininess": 32,
+        "speed": 1
+      }
+    }
+  }
+}

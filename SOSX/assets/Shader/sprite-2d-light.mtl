@@ -1,0 +1,34 @@
+{
+  "__type__": "cc.Material",
+  "_name": "sprite-2d-light",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "bd77bbeb-563e-4ea1-9bc2-1268466c6512"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "lightPos": {
+          "__type__": "cc.Vec4",
+          "x": 0,
+          "y": 0,
+          "z": 0.1,
+          "w": 1
+        },
+        "lightColor": {
+          "__type__": "cc.Color",
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        "shininess": 32
+      },
+      "defines": {
+        "USE_TEXTURE": true
+      }
+    }
+  }
+}

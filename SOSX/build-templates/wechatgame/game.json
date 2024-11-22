@@ -1,0 +1,20 @@
+{
+    "deviceOrientation": "portrait",
+    "networkTimeout": {
+        "request": 60000,
+        "connectSocket": 15000,
+        "uploadFile": 60000,
+        "downloadFile": 60000
+    },
+    "subpackages": [
+        {
+            "name": "resources",
+            "root": "subpackages/resources"
+        },
+        {
+            "name": "Script",
+            "root": "subpackages/Script"
+        }
+    ],
+	"openDataContext":"open-data"
+}

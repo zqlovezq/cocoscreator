@@ -1,0 +1,65 @@
+{
+  "__type__": "cc.Material",
+  "_name": "light",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "18940b21-5cc5-41f5-a59d-ad6397845e17"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "diffuseColor": {
+          "__type__": "cc.Color",
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        "lightColor": {
+          "__type__": "cc.Color",
+          "r": 53,
+          "g": 117,
+          "b": 255,
+          "a": 255
+        },
+        "lightPos": {
+          "__type__": "cc.Vec4",
+          "x": 0,
+          "y": 0,
+          "z": 0.1,
+          "w": 1
+        },
+        "specularColor": {
+          "__type__": "cc.Color",
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        },
+        "emissiveColor": {
+          "__type__": "cc.Color",
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 255
+        },
+        "glossiness": 0,
+        "ambientLight": {
+          "__type__": "cc.Color",
+          "r": 255,
+          "g": 255,
+          "b": 255,
+          "a": 255
+        }
+      },
+      "defines": {
+        "USE_TEXTURE": false,
+        "USE_EMISSIVE": false,
+        "USE_SPECULAR": true,
+        "USE_ALPHA_TEST": false
+      }
+    }
+  }
+}
