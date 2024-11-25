@@ -1,0 +1,16 @@
+gradle.ext.isAssetPadPackOpen = true
+include ':libcocos',':libservice',':app'
+project(':libcocos').projectDir     = new File(COCOS_ENGINE_PATH,'cocos/platform/android/libcocos2dx')
+if(gradle.isAssetPadPackOpen == true) {
+    include ':game_asset_pack'
+    project(':game_asset_pack').projectDir = new File(settingsDir, '../../../native/engine/common/game_asset_pack')
+}
+project(':app').projectDir    = new File(NATIVE_DIR, 'app')
+project(':app').name = "client"
+if(PROP_ENABLE_INSTANT_APP == "true" || PROP_ENABLE_INSTANT_APP == "yes") {
+    include ':instantapp'
+    project(':instantapp').projectDir   = new File(NATIVE_DIR, 'instantapp')
+}
+
+rootProject.name = "client"
+//include ':game_asset_pack'

@@ -1,0 +1,326 @@
+{
+  "__type__": "sp.SkeletonData",
+  "_name": "hero_skill_warrior_effect",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_skeletonJson": {
+    "skeleton": {
+      "hash": "tvO6u5iZa2dPlGKpf6jB0eiUtWc",
+      "spine": "3.6.53",
+      "width": 0,
+      "height": 0,
+      "images": "./images/"
+    },
+    "bones": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "bone",
+        "parent": "root",
+        "scaleX": 3,
+        "scaleY": 3
+      }
+    ],
+    "slots": [
+      {
+        "name": "sc001_00000",
+        "bone": "bone"
+      },
+      {
+        "name": "sc002_00000",
+        "bone": "root"
+      }
+    ],
+    "skins": {
+      "default": {
+        "sc001_00000": {
+          "sc001_00000": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00001": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00002": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00003": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00004": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00005": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00006": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00007": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00008": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00009": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00010": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00011": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00012": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00013": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00014": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00015": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00016": {
+            "width": 200,
+            "height": 200
+          },
+          "sc001_00017": {
+            "width": 200,
+            "height": 200
+          }
+        },
+        "sc002_00000": {
+          "sc002_00000": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00001": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00002": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00003": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00004": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00005": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00006": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00007": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00008": {
+            "width": 200,
+            "height": 200
+          },
+          "sc002_00009": {
+            "width": 200,
+            "height": 200
+          }
+        }
+      }
+    },
+    "animations": {
+      "effect_bomb": {
+        "slots": {
+          "sc001_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "sc001_00000"
+              },
+              {
+                "time": 0.0667,
+                "name": "sc001_00001"
+              },
+              {
+                "time": 0.1333,
+                "name": "sc001_00002"
+              },
+              {
+                "time": 0.2,
+                "name": "sc001_00003"
+              },
+              {
+                "time": 0.2667,
+                "name": "sc001_00004"
+              },
+              {
+                "time": 0.3333,
+                "name": "sc001_00005"
+              },
+              {
+                "time": 0.4,
+                "name": "sc001_00006"
+              },
+              {
+                "time": 0.4667,
+                "name": "sc001_00007"
+              },
+              {
+                "time": 0.5333,
+                "name": "sc001_00008"
+              },
+              {
+                "time": 0.6,
+                "name": "sc001_00009"
+              },
+              {
+                "time": 0.6667,
+                "name": "sc001_00010"
+              },
+              {
+                "time": 0.7333,
+                "name": "sc001_00011"
+              },
+              {
+                "time": 0.8,
+                "name": "sc001_00012"
+              },
+              {
+                "time": 0.8667,
+                "name": "sc001_00013"
+              },
+              {
+                "time": 0.9333,
+                "name": "sc001_00014"
+              },
+              {
+                "time": 1,
+                "name": "sc001_00015"
+              },
+              {
+                "time": 1.0667,
+                "name": "sc001_00016"
+              },
+              {
+                "time": 1.1333,
+                "name": "sc001_00017"
+              },
+              {
+                "time": 1.2,
+                "name": null
+              }
+            ]
+          },
+          "sc002_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              },
+              {
+                "time": 1.2,
+                "name": null
+              }
+            ]
+          }
+        }
+      },
+      "effect_fly": {
+        "slots": {
+          "sc001_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              },
+              {
+                "time": 0.3,
+                "name": null
+              }
+            ]
+          },
+          "sc002_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "sc002_00000"
+              },
+              {
+                "time": 0.0333,
+                "name": "sc002_00001"
+              },
+              {
+                "time": 0.0667,
+                "name": "sc002_00002"
+              },
+              {
+                "time": 0.1,
+                "name": "sc002_00003"
+              },
+              {
+                "time": 0.1333,
+                "name": "sc002_00004"
+              },
+              {
+                "time": 0.1667,
+                "name": "sc002_00005"
+              },
+              {
+                "time": 0.2,
+                "name": "sc002_00006"
+              },
+              {
+                "time": 0.2333,
+                "name": "sc002_00007"
+              },
+              {
+                "time": 0.2667,
+                "name": "sc002_00008"
+              },
+              {
+                "time": 0.3,
+                "name": "sc002_00009"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "textures": [
+    {
+      "__uuid__": "f9d490f6-472f-44eb-94e6-32b8c28bf0ce@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    }
+  ],
+  "textureNames": [
+    "hero_skill_warrior_effect.png"
+  ],
+  "scale": 1,
+  "_atlasText": "\nhero_skill_warrior_effect.png\nsize: 1024,512\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nsc001_00000\n  rotate: false\n  xy: 101, 21\n  size: 27, 32\n  orig: 200, 200\n  offset: 87, 84\n  index: -1\nsc001_00001\n  rotate: true\n  xy: 686, 271\n  size: 87, 92\n  orig: 200, 200\n  offset: 58, 54\n  index: -1\nsc001_00002\n  rotate: false\n  xy: 890, 380\n  size: 122, 124\n  orig: 200, 200\n  offset: 40, 37\n  index: -1\nsc001_00003\n  rotate: false\n  xy: 2, 351\n  size: 151, 153\n  orig: 200, 200\n  offset: 25, 23\n  index: -1\nsc001_00004\n  rotate: false\n  xy: 147, 28\n  size: 105, 104\n  orig: 200, 200\n  offset: 47, 49\n  index: -1\nsc001_00005\n  rotate: false\n  xy: 2, 204\n  size: 146, 145\n  orig: 200, 200\n  offset: 27, 26\n  index: -1\nsc001_00006\n  rotate: false\n  xy: 150, 134\n  size: 106, 103\n  orig: 200, 200\n  offset: 46, 48\n  index: -1\nsc001_00007\n  rotate: false\n  xy: 155, 359\n  size: 145, 145\n  orig: 200, 200\n  offset: 26, 26\n  index: -1\nsc001_00008\n  rotate: false\n  xy: 155, 239\n  size: 119, 118\n  orig: 200, 200\n  offset: 40, 41\n  index: -1\nsc001_00009\n  rotate: false\n  xy: 744, 360\n  size: 144, 144\n  orig: 200, 200\n  offset: 27, 28\n  index: -1\nsc001_00010\n  rotate: true\n  xy: 276, 252\n  size: 105, 104\n  orig: 200, 200\n  offset: 47, 45\n  index: -1\nsc001_00011\n  rotate: false\n  xy: 302, 361\n  size: 146, 143\n  orig: 200, 200\n  offset: 27, 29\n  index: -1\nsc001_00012\n  rotate: false\n  xy: 890, 263\n  size: 120, 115\n  orig: 200, 200\n  offset: 40, 45\n  index: -1\nsc001_00013\n  rotate: false\n  xy: 450, 360\n  size: 145, 144\n  orig: 200, 200\n  offset: 28, 28\n  index: -1\nsc001_00014\n  rotate: false\n  xy: 382, 255\n  size: 104, 103\n  orig: 200, 200\n  offset: 48, 48\n  index: -1\nsc001_00015\n  rotate: false\n  xy: 2, 55\n  size: 143, 147\n  orig: 200, 200\n  offset: 29, 26\n  index: -1\nsc001_00016\n  rotate: false\n  xy: 488, 255\n  size: 103, 103\n  orig: 200, 200\n  offset: 48, 47\n  index: -1\nsc001_00017\n  rotate: false\n  xy: 597, 360\n  size: 145, 144\n  orig: 200, 200\n  offset: 27, 28\n  index: -1\nsc002_00000\n  rotate: false\n  xy: 55, 8\n  size: 44, 45\n  orig: 200, 200\n  offset: 79, 78\n  index: -1\nsc002_00001\n  rotate: false\n  xy: 2, 2\n  size: 51, 51\n  orig: 200, 200\n  offset: 76, 75\n  index: -1\nsc002_00002\n  rotate: false\n  xy: 634, 206\n  size: 58, 59\n  orig: 200, 200\n  offset: 73, 71\n  index: -1\nsc002_00003\n  rotate: false\n  xy: 568, 187\n  size: 64, 66\n  orig: 200, 200\n  offset: 68, 68\n  index: -1\nsc002_00004\n  rotate: true\n  xy: 494, 182\n  size: 71, 72\n  orig: 200, 200\n  offset: 64, 65\n  index: -1\nsc002_00005\n  rotate: false\n  xy: 258, 158\n  size: 78, 79\n  orig: 200, 200\n  offset: 61, 62\n  index: -1\nsc002_00006\n  rotate: false\n  xy: 419, 182\n  size: 73, 71\n  orig: 200, 200\n  offset: 64, 67\n  index: -1\nsc002_00007\n  rotate: false\n  xy: 338, 171\n  size: 79, 79\n  orig: 200, 200\n  offset: 61, 63\n  index: -1\nsc002_00008\n  rotate: false\n  xy: 780, 272\n  size: 86, 86\n  orig: 200, 200\n  offset: 58, 59\n  index: -1\nsc002_00009\n  rotate: false\n  xy: 593, 267\n  size: 91, 91\n  orig: 200, 200\n  offset: 56, 56\n  index: -1\n"
+}

@@ -1,0 +1,126 @@
+{
+"skeleton": { "hash": "yYioToXMQ+UR7YR4KIMPCM77NKM", "spine": "3.6.53", "width": 0, "height": 0, "images": "./images/" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "sc000_00000", "bone": "root" },
+	{ "name": "sc001_00000", "bone": "root" },
+	{ "name": "sc004_00000", "bone": "root" },
+	{ "name": "sc002_00000", "bone": "root" }
+],
+"skins": {
+	"default": {
+		"sc000_00000": {
+			"sc000_00000": { "x": -0.67, "y": 27.09, "rotation": -90, "width": 100, "height": 100 }
+		},
+		"sc001_00000": {
+			"sc001_00000": { "x": -1.27, "y": 30.54, "rotation": -90, "width": 100, "height": 100 }
+		},
+		"sc002_00000": {
+			"sc002_00000": { "x": -0.6, "y": 13.88, "rotation": -90, "width": 40, "height": 40 }
+		},
+		"sc004_00000": {
+			"sc004_00000": { "x": -0.48, "y": 19.08, "rotation": -90, "width": 60, "height": 60 }
+		}
+	}
+},
+"animations": {
+	"effect_fly": {
+		"slots": {
+			"sc000_00000": {
+				"attachment": [
+					{ "time": 0, "name": "sc000_00000" }
+				]
+			},
+			"sc001_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc002_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc004_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"effect_fly1": {
+		"slots": {
+			"sc000_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc001_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc002_00000": {
+				"attachment": [
+					{ "time": 0, "name": "sc002_00000" }
+				]
+			},
+			"sc004_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"effect_fly2": {
+		"slots": {
+			"sc000_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc001_00000": {
+				"attachment": [
+					{ "time": 0, "name": "sc001_00000" }
+				]
+			},
+			"sc002_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc004_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"effect_fly3": {
+		"slots": {
+			"sc000_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc001_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc002_00000": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"sc004_00000": {
+				"attachment": [
+					{ "time": 0, "name": "sc004_00000" }
+				]
+			}
+		}
+	}
+}
+}

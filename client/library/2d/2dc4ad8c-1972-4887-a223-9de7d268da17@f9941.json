@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "monster_coming",
+    "atlas": "",
+    "rect": {
+      "x": 2,
+      "y": 0,
+      "width": 256,
+      "height": 74
+    },
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 259,
+      "height": 74
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -128,
+        -37,
+        0,
+        128,
+        -37,
+        0,
+        -128,
+        37,
+        0,
+        128,
+        37,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        2,
+        74,
+        258,
+        74,
+        2,
+        0,
+        258,
+        0
+      ],
+      "nuv": [
+        0.007722007722007722,
+        0,
+        0.9961389961389961,
+        0,
+        0.007722007722007722,
+        1,
+        0.9961389961389961,
+        1
+      ],
+      "minPos": {
+        "x": -128,
+        "y": -37,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 128,
+        "y": 37,
+        "z": 0
+      }
+    },
+    "texture": "2dc4ad8c-1972-4887-a223-9de7d268da17@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

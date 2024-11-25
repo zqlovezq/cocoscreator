@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "boss_left",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 2133,
+      "height": 202
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 2133,
+      "height": 202
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -1066.5,
+        -101,
+        0,
+        1066.5,
+        -101,
+        0,
+        -1066.5,
+        101,
+        0,
+        1066.5,
+        101,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        202,
+        2133,
+        202,
+        0,
+        0,
+        2133,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -1066.5,
+        "y": -101,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 1066.5,
+        "y": 101,
+        "z": 0
+      }
+    },
+    "texture": "11ae9f93-b49f-445f-a01e-b0bfb026e354@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

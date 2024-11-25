@@ -1,0 +1,15 @@
+{
+  /* Base configuration. Do not edit this field. */
+  "extends": "./temp/tsconfig.cocos.json",
+  
+  /* Add your custom configuration here. */
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": false,
+    "paths": {
+      "client_protocol": ["./assets/scripts/Protobuf/client_protocol"]
+    },
+    "allowSyntheticDefaultImports": true
+  }
+}

@@ -1,0 +1,2610 @@
+{
+  "__type__": "cc.JsonAsset",
+  "_name": "climbtower_0078",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "json": {
+    "drop": [
+      1031
+    ],
+    "phaseList": [
+      {
+        "phase": 1,
+        "phaseclearcondition": 3,
+        "phasetime": 120,
+        "times": [
+          {
+            "time": 0,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 710352,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 304,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 2,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 710352,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 304,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 3,
+            "monsterId": 21022,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 2294214,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 304,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 5,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 710352,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 304,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 6,
+            "monsterId": 21022,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 3000126,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 385,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 8,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 928922,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 385,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 9,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 2170517,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 385,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 10,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 928922,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 385,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 11,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 3191937,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 239,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 13,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 1366062,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 239,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 14,
+            "monsterId": 21022,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4411950,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 239,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 15,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 1366062,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 239,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 16,
+            "monsterId": 21022,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4411950,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 239,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 18,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 1366062,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 239,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 18,
+            "warning": 2
+          },
+          {
+            "time": 19,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 3191937,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 239,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 20,
+            "monsterId": 31003,
+            "count": 1,
+            "cycles": 0,
+            "attack": 117208,
+            "hp": 67866675,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 250,
+            "exp": 0,
+            "drop": 1032,
+            "position": [
+              5
+            ]
+          },
+          {
+            "time": 21,
+            "monsterId": 10303,
+            "count": 7,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5823774,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 477,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 23,
+            "monsterId": 10303,
+            "count": 7,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5823774,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 477,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 25,
+            "monsterId": 10303,
+            "count": 7,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5823774,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 477,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 26,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.5,
+            "attack": 29302,
+            "hp": 7235598,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 589,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 28,
+            "monsterId": 10303,
+            "count": 7,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 7235598,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 589,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 30,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.5,
+            "attack": 29302,
+            "hp": 7235598,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 589,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 30,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 22212905,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 264,
+            "position": [
+              21
+            ]
+          },
+          {
+            "time": 30,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 22212905,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 264,
+            "position": [
+              25
+            ]
+          },
+          {
+            "time": 30,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 22212905,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 264,
+            "position": [
+              66
+            ]
+          },
+          {
+            "time": 30,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 22212905,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 264,
+            "position": [
+              70
+            ]
+          },
+          {
+            "time": 31,
+            "monsterId": 10302,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 2936375,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 264,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 33,
+            "monsterId": 21014,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.5,
+            "attack": 13185,
+            "hp": 8299037,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 264,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 35,
+            "monsterId": 10302,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 2936375,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 264,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 36,
+            "monsterId": 21014,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.5,
+            "attack": 13185,
+            "hp": 8299037,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 264,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 38,
+            "monsterId": 10302,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 2936375,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 264,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 38,
+            "warning": 1
+          },
+          {
+            "time": 40,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 26313749,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 148,
+            "position": [
+              21
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 26313749,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 148,
+            "position": [
+              25
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 26313749,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 148,
+            "position": [
+              66
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 26313749,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 148,
+            "position": [
+              70
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 9831167,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 148,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 40,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 9831167,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 148,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 45,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 45,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 45,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4207472,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 148,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 45,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 13588806,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 148,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 45,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 13588806,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 148,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 50,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 50,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 50,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 50,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 11490975,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 157,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 50,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 11490975,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 157,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 55,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 55,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 55,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 4917825,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 157,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 55,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 15883020,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 157,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 55,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 15883020,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 157,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 58,
+            "warning": 2
+          },
+          {
+            "time": 60,
+            "monsterId": 31007,
+            "count": 1,
+            "cycles": 0,
+            "attack": 117208,
+            "hp": 271466700,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 250,
+            "exp": 0,
+            "drop": 1032,
+            "position": [
+              5
+            ]
+          },
+          {
+            "time": 60,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 60,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 60,
+            "monsterId": 10301,
+            "count": 8,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 65,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 65,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 65,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 65,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 12767750,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 109,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 65,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 12767750,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 109,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 70,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 70,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 70,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 5464250,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 109,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 70,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 70,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 75,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 75,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 75,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 75,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 75,
+            "monsterId": 21014,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 80,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 80,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 80,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 80,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 80,
+            "monsterId": 21022,
+            "count": 4,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 85,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 85,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 85,
+            "monsterId": 10301,
+            "count": 10,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 6557100,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 60,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 88,
+            "warning": 1
+          },
+          {
+            "time": 90,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              21
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              25
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              66
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              70
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 90,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 95,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              21
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              25
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              66
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21005,
+            "count": 1,
+            "cycles": 0,
+            "attack": 0,
+            "hp": 41008440,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 0,
+            "exp": 36,
+            "position": [
+              70
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 100,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 105,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              11,
+              2,
+              12,
+              3,
+              13,
+              4
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              13,
+              4,
+              14,
+              5,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 21022,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 29302,
+            "hp": 21177360,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 100,
+            "exp": 36,
+            "position": [
+              16,
+              7,
+              17,
+              8,
+              15,
+              6
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 110,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 112,
+            "warning": 2
+          },
+          {
+            "time": 114,
+            "monsterId": 31009,
+            "count": 1,
+            "cycles": 0,
+            "attack": 117208,
+            "hp": 325760040,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 250,
+            "exp": 0,
+            "position": [
+              5
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 21014,
+            "count": 3,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 15321300,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "time": 115,
+            "monsterId": 10302,
+            "count": 5,
+            "isRand": true,
+            "cycles": 0.3,
+            "attack": 13185,
+            "hp": 5421000,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 80,
+            "exp": 36,
+            "position": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "time": 119,
+            "monsterId": 31010,
+            "count": 1,
+            "cycles": 0,
+            "attack": 117208,
+            "hp": 325760040,
+            "def": 18920,
+            "resistcritical": 5000,
+            "damrefix": 77765,
+            "spe": 250,
+            "exp": 0,
+            "position": [
+              5
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

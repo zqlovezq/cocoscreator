@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "boss_coming",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 331,
+      "height": 153
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 331,
+      "height": 153
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -165.5,
+        -76.5,
+        0,
+        165.5,
+        -76.5,
+        0,
+        -165.5,
+        76.5,
+        0,
+        165.5,
+        76.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        153,
+        331,
+        153,
+        0,
+        0,
+        331,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -165.5,
+        "y": -76.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 165.5,
+        "y": 76.5,
+        "z": 0
+      }
+    },
+    "texture": "c9447e66-e0cf-4a7c-8bc7-24bb5ff60202@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

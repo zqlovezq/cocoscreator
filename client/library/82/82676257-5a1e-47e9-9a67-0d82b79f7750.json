@@ -1,0 +1,82 @@
+{
+  "__type__": "sp.SkeletonData",
+  "_name": "m_32003_buff_1",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_skeletonJson": {
+    "skeleton": {
+      "hash": "oA1YGGDT2juXP5hNVwqlC7pYiYg",
+      "spine": "3.6.53",
+      "width": 0,
+      "height": 0,
+      "images": ""
+    },
+    "bones": [
+      {
+        "name": "root"
+      }
+    ],
+    "slots": [
+      {
+        "name": "images/sc001_00000",
+        "bone": "root"
+      }
+    ],
+    "skins": {
+      "default": {
+        "images/sc001_00000": {
+          "images/sc001_00000": {
+            "x": 0.5,
+            "y": 37.15,
+            "width": 250,
+            "height": 250
+          }
+        }
+      }
+    },
+    "animations": {
+      "effect_idle2": {
+        "slots": {
+          "images/sc001_00000": {
+            "color": [
+              {
+                "time": 0,
+                "color": "ffffffff"
+              },
+              {
+                "time": 0.6667,
+                "color": "ffffff84"
+              },
+              {
+                "time": 1.3333,
+                "color": "ffffffff"
+              }
+            ],
+            "attachment": [
+              {
+                "time": 0,
+                "name": "images/sc001_00000"
+              },
+              {
+                "time": 1.3333,
+                "name": "images/sc001_00000"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "textures": [
+    {
+      "__uuid__": "dbd99675-ddcb-48c9-a788-a157f59f41ea@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    }
+  ],
+  "textureNames": [
+    "m_32003_buff_1.png"
+  ],
+  "scale": 1,
+  "_atlasText": "\nm_32003_buff_1.png\nsize: 256,256\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nimages/sc001_00000\n  rotate: false\n  xy: 2, 2\n  size: 161, 172\n  orig: 250, 250\n  offset: 46, 38\n  index: -1\n"
+}

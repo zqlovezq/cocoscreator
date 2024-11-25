@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "pvp",
+    "atlas": "",
+    "rect": {
+      "x": 4,
+      "y": 5,
+      "width": 91,
+      "height": 95
+    },
+    "offset": {
+      "x": -0.5,
+      "y": -2.5
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -45.5,
+        -47.5,
+        0,
+        45.5,
+        -47.5,
+        0,
+        -45.5,
+        47.5,
+        0,
+        45.5,
+        47.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        4,
+        95,
+        95,
+        95,
+        4,
+        0,
+        95,
+        0
+      ],
+      "nuv": [
+        0.04,
+        0,
+        0.95,
+        0,
+        0.04,
+        0.95,
+        0.95,
+        0.95
+      ],
+      "minPos": {
+        "x": -45.5,
+        "y": -47.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 45.5,
+        "y": 47.5,
+        "z": 0
+      }
+    },
+    "texture": "f4b7ba6c-80dd-481c-a227-ddb67a4e05e1@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

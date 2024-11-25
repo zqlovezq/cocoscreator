@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "login_btn",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 309,
+      "height": 107
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 309,
+      "height": 107
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -154.5,
+        -53.5,
+        0,
+        154.5,
+        -53.5,
+        0,
+        -154.5,
+        53.5,
+        0,
+        154.5,
+        53.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        107,
+        309,
+        107,
+        0,
+        0,
+        309,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -154.5,
+        "y": -53.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 154.5,
+        "y": 53.5,
+        "z": 0
+      }
+    },
+    "texture": "3d17095f-c4ec-46d7-998f-17b7e850a861@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

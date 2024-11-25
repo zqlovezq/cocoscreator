@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "gift_front",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 695,
+      "height": 293
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 695,
+      "height": 293
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -347.5,
+        -146.5,
+        0,
+        347.5,
+        -146.5,
+        0,
+        -347.5,
+        146.5,
+        0,
+        347.5,
+        146.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        293,
+        695,
+        293,
+        0,
+        0,
+        695,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -347.5,
+        "y": -146.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 347.5,
+        "y": 146.5,
+        "z": 0
+      }
+    },
+    "texture": "827728b2-9fa8-4697-85fe-33d718c8e753@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

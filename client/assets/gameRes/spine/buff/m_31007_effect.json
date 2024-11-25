@@ -1,0 +1,121 @@
+{
+"skeleton": { "hash": "n6Kb0UJTy6hNIvFtTg2cp8Td3Dk", "spine": "3.6.53", "width": 372, "height": 269, "images": "./open/image/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "zong", "parent": "root" },
+	{ "name": "tiaozheng", "parent": "zong", "y": 45.07 },
+	{ "name": "skill2_ilde", "parent": "tiaozheng" },
+	{ "name": "skill2_up", "parent": "tiaozheng" }
+],
+"slots": [
+	{ "name": "skill2_idle", "bone": "skill2_ilde" },
+	{ "name": "skill2_up", "bone": "skill2_up", "attachment": "skill2_1/skill 2_42" }
+],
+"skins": {
+	"default": {
+		"skill2_idle": {
+			"skill3/skill 3_00040": { "width": 456, "height": 378 },
+			"skill3/skill 3_00042": { "width": 456, "height": 378 },
+			"skill3/skill 3_00044": { "width": 456, "height": 378 },
+			"skill3/skill 3_00046": { "width": 456, "height": 378 },
+			"skill3/skill 3_00048": { "width": 456, "height": 378 },
+			"skill3/skill 3_00050": { "width": 456, "height": 378 },
+			"skill3/skill 3_00052": { "width": 456, "height": 378 },
+			"skill3/skill 3_00054": { "width": 456, "height": 378 },
+			"skill3/skill 3_00056": { "width": 456, "height": 378 },
+			"skill3/skill 3_00058": { "width": 456, "height": 378 },
+			"skill3/skill 3_00060": { "width": 456, "height": 378 }
+		},
+		"skill2_up": {
+			"skill2_1/skill 2_21": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_23": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_25": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_27": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_29": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_31": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_33": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_35": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_37": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_39": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_41": { "width": 372, "height": 269 },
+			"skill2_1/skill 2_42": { "width": 372, "height": 269 }
+		}
+	}
+},
+"animations": {
+	"effect_edle_idle": {
+		"slots": {
+			"skill2_idle": {
+				"attachment": [
+					{ "time": 0, "name": "skill3/skill 3_00040" },
+					{ "time": 0.0667, "name": "skill3/skill 3_00042" },
+					{ "time": 0.1333, "name": "skill3/skill 3_00044" },
+					{ "time": 0.2, "name": "skill3/skill 3_00046" },
+					{ "time": 0.2667, "name": "skill3/skill 3_00048" },
+					{ "time": 0.3, "name": "skill3/skill 3_00050" },
+					{ "time": 0.3667, "name": "skill3/skill 3_00052" },
+					{ "time": 0.4333, "name": "skill3/skill 3_00054" },
+					{ "time": 0.5, "name": "skill3/skill 3_00056" },
+					{ "time": 0.5667, "name": "skill3/skill 3_00058" },
+					{ "time": 0.6333, "name": "skill3/skill 3_00060" },
+					{ "time": 0.7, "name": "skill3/skill 3_00040" },
+					{ "time": 0.7667, "name": "skill3/skill 3_00042" },
+					{ "time": 0.8, "name": "skill3/skill 3_00044" },
+					{ "time": 0.8667, "name": "skill3/skill 3_00046" },
+					{ "time": 0.9333, "name": "skill3/skill 3_00048" },
+					{ "time": 1, "name": "skill3/skill 3_00050" },
+					{ "time": 1.0667, "name": "skill3/skill 3_00052" },
+					{ "time": 1.1333, "name": "skill3/skill 3_00054" },
+					{ "time": 1.2, "name": "skill3/skill 3_00056" },
+					{ "time": 1.2667, "name": "skill3/skill 3_00058" },
+					{ "time": 1.3, "name": "skill3/skill 3_00060" },
+					{ "time": 1.3667, "name": "skill3/skill 3_00040" },
+					{ "time": 1.4333, "name": "skill3/skill 3_00042" },
+					{ "time": 1.5, "name": "skill3/skill 3_00044" },
+					{ "time": 1.5667, "name": "skill3/skill 3_00046" },
+					{ "time": 1.6333, "name": "skill3/skill 3_00048" },
+					{ "time": 1.7, "name": "skill3/skill 3_00050" },
+					{ "time": 1.7667, "name": "skill3/skill 3_00052" },
+					{ "time": 1.8, "name": "skill3/skill 3_00054" },
+					{ "time": 1.8667, "name": "skill3/skill 3_00056" },
+					{ "time": 1.9333, "name": "skill3/skill 3_00058" },
+					{ "time": 2, "name": "skill3/skill 3_00060" }
+				]
+			},
+			"skill2_up": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		},
+		"bones": {
+			"skill2_ilde": {
+				"translate": [
+					{ "time": 0, "x": 30.04, "y": 7.51 }
+				]
+			}
+		}
+	},
+	"effect_edle_up": {
+		"slots": {
+			"skill2_up": {
+				"attachment": [
+					{ "time": 0, "name": "skill2_1/skill 2_21" },
+					{ "time": 0.0333, "name": "skill2_1/skill 2_23" },
+					{ "time": 0.0667, "name": "skill2_1/skill 2_25" },
+					{ "time": 0.1, "name": "skill2_1/skill 2_27" },
+					{ "time": 0.1333, "name": "skill2_1/skill 2_29" },
+					{ "time": 0.1667, "name": "skill2_1/skill 2_31" },
+					{ "time": 0.2, "name": "skill2_1/skill 2_33" },
+					{ "time": 0.2333, "name": "skill2_1/skill 2_35" },
+					{ "time": 0.2667, "name": "skill2_1/skill 2_37" },
+					{ "time": 0.3, "name": "skill2_1/skill 2_39" },
+					{ "time": 0.3333, "name": "skill2_1/skill 2_41" },
+					{ "time": 0.3667, "name": "skill2_1/skill 2_42" },
+					{ "time": 0.4, "name": null }
+				]
+			}
+		}
+	}
+}
+}

@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "choice_weaponCore",
+    "atlas": "",
+    "rect": {
+      "x": 2,
+      "y": 1,
+      "width": 98,
+      "height": 97
+    },
+    "offset": {
+      "x": 1,
+      "y": 0.5
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -49,
+        -48.5,
+        0,
+        49,
+        -48.5,
+        0,
+        -49,
+        48.5,
+        0,
+        49,
+        48.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        2,
+        99,
+        100,
+        99,
+        2,
+        2,
+        100,
+        2
+      ],
+      "nuv": [
+        0.02,
+        0.02,
+        1,
+        0.02,
+        0.02,
+        0.99,
+        1,
+        0.99
+      ],
+      "minPos": {
+        "x": -49,
+        "y": -48.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 49,
+        "y": 48.5,
+        "z": 0
+      }
+    },
+    "texture": "01525d9d-2c02-42e4-8072-4be943cd0bab@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

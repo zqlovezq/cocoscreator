@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "bg_lose",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 540,
+      "height": 437
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 540,
+      "height": 437
+    },
+    "rotated": false,
+    "capInsets": [
+      38,
+      170,
+      38,
+      30
+    ],
+    "vertices": {
+      "rawPosition": [
+        -270,
+        -218.5,
+        0,
+        270,
+        -218.5,
+        0,
+        -270,
+        218.5,
+        0,
+        270,
+        218.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        437,
+        540,
+        437,
+        0,
+        0,
+        540,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -270,
+        "y": -218.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 270,
+        "y": 218.5,
+        "z": 0
+      }
+    },
+    "texture": "11a40a4e-b832-4980-9820-21b7d636c923@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

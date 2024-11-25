@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "box_task1",
+    "atlas": "",
+    "rect": {
+      "x": 1,
+      "y": 13,
+      "width": 98,
+      "height": 77
+    },
+    "offset": {
+      "x": 0,
+      "y": -1.5
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -49,
+        -38.5,
+        0,
+        49,
+        -38.5,
+        0,
+        -49,
+        38.5,
+        0,
+        49,
+        38.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        1,
+        87,
+        99,
+        87,
+        1,
+        10,
+        99,
+        10
+      ],
+      "nuv": [
+        0.01,
+        0.1,
+        0.99,
+        0.1,
+        0.01,
+        0.87,
+        0.99,
+        0.87
+      ],
+      "minPos": {
+        "x": -49,
+        "y": -38.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 49,
+        "y": 38.5,
+        "z": 0
+      }
+    },
+    "texture": "992c7206-3a7e-4082-befb-b792b305f230@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

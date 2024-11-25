@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "hero_4101_bullet_1",
+    "atlas": "",
+    "rect": {
+      "x": 29,
+      "y": 39,
+      "width": 736,
+      "height": 20
+    },
+    "offset": {
+      "x": -3,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 800,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -368,
+        -10,
+        0,
+        368,
+        -10,
+        0,
+        -368,
+        10,
+        0,
+        368,
+        10,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        29,
+        61,
+        765,
+        61,
+        29,
+        41,
+        765,
+        41
+      ],
+      "nuv": [
+        0.03625,
+        0.41,
+        0.95625,
+        0.41,
+        0.03625,
+        0.61,
+        0.95625,
+        0.61
+      ],
+      "minPos": {
+        "x": -368,
+        "y": -10,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 368,
+        "y": 10,
+        "z": 0
+      }
+    },
+    "texture": "8c0bc89f-0518-48a9-894c-40a024503156@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

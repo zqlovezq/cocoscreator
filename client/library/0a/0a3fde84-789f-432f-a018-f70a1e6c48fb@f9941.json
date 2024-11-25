@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "weapon_assassin",
+    "atlas": "",
+    "rect": {
+      "x": 2,
+      "y": 0,
+      "width": 96,
+      "height": 98
+    },
+    "offset": {
+      "x": 0,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -48,
+        -49,
+        0,
+        48,
+        -49,
+        0,
+        -48,
+        49,
+        0,
+        48,
+        49,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        2,
+        100,
+        98,
+        100,
+        2,
+        2,
+        98,
+        2
+      ],
+      "nuv": [
+        0.02,
+        0.02,
+        0.98,
+        0.02,
+        0.02,
+        1,
+        0.98,
+        1
+      ],
+      "minPos": {
+        "x": -48,
+        "y": -49,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 48,
+        "y": 49,
+        "z": 0
+      }
+    },
+    "texture": "0a3fde84-789f-432f-a018-f70a1e6c48fb@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

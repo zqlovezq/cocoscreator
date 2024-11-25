@@ -1,0 +1,381 @@
+{
+  "__type__": "sp.SkeletonData",
+  "_name": "m_31007_effect",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_skeletonJson": {
+    "skeleton": {
+      "hash": "n6Kb0UJTy6hNIvFtTg2cp8Td3Dk",
+      "spine": "3.6.53",
+      "width": 372,
+      "height": 269,
+      "images": "./open/image/"
+    },
+    "bones": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "zong",
+        "parent": "root"
+      },
+      {
+        "name": "tiaozheng",
+        "parent": "zong",
+        "y": 45.07
+      },
+      {
+        "name": "skill2_ilde",
+        "parent": "tiaozheng"
+      },
+      {
+        "name": "skill2_up",
+        "parent": "tiaozheng"
+      }
+    ],
+    "slots": [
+      {
+        "name": "skill2_idle",
+        "bone": "skill2_ilde"
+      },
+      {
+        "name": "skill2_up",
+        "bone": "skill2_up",
+        "attachment": "skill2_1/skill 2_42"
+      }
+    ],
+    "skins": {
+      "default": {
+        "skill2_idle": {
+          "skill3/skill 3_00040": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00042": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00044": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00046": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00048": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00050": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00052": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00054": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00056": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00058": {
+            "width": 456,
+            "height": 378
+          },
+          "skill3/skill 3_00060": {
+            "width": 456,
+            "height": 378
+          }
+        },
+        "skill2_up": {
+          "skill2_1/skill 2_21": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_23": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_25": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_27": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_29": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_31": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_33": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_35": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_37": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_39": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_41": {
+            "width": 372,
+            "height": 269
+          },
+          "skill2_1/skill 2_42": {
+            "width": 372,
+            "height": 269
+          }
+        }
+      }
+    },
+    "animations": {
+      "effect_edle_idle": {
+        "slots": {
+          "skill2_idle": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "skill3/skill 3_00040"
+              },
+              {
+                "time": 0.0667,
+                "name": "skill3/skill 3_00042"
+              },
+              {
+                "time": 0.1333,
+                "name": "skill3/skill 3_00044"
+              },
+              {
+                "time": 0.2,
+                "name": "skill3/skill 3_00046"
+              },
+              {
+                "time": 0.2667,
+                "name": "skill3/skill 3_00048"
+              },
+              {
+                "time": 0.3,
+                "name": "skill3/skill 3_00050"
+              },
+              {
+                "time": 0.3667,
+                "name": "skill3/skill 3_00052"
+              },
+              {
+                "time": 0.4333,
+                "name": "skill3/skill 3_00054"
+              },
+              {
+                "time": 0.5,
+                "name": "skill3/skill 3_00056"
+              },
+              {
+                "time": 0.5667,
+                "name": "skill3/skill 3_00058"
+              },
+              {
+                "time": 0.6333,
+                "name": "skill3/skill 3_00060"
+              },
+              {
+                "time": 0.7,
+                "name": "skill3/skill 3_00040"
+              },
+              {
+                "time": 0.7667,
+                "name": "skill3/skill 3_00042"
+              },
+              {
+                "time": 0.8,
+                "name": "skill3/skill 3_00044"
+              },
+              {
+                "time": 0.8667,
+                "name": "skill3/skill 3_00046"
+              },
+              {
+                "time": 0.9333,
+                "name": "skill3/skill 3_00048"
+              },
+              {
+                "time": 1,
+                "name": "skill3/skill 3_00050"
+              },
+              {
+                "time": 1.0667,
+                "name": "skill3/skill 3_00052"
+              },
+              {
+                "time": 1.1333,
+                "name": "skill3/skill 3_00054"
+              },
+              {
+                "time": 1.2,
+                "name": "skill3/skill 3_00056"
+              },
+              {
+                "time": 1.2667,
+                "name": "skill3/skill 3_00058"
+              },
+              {
+                "time": 1.3,
+                "name": "skill3/skill 3_00060"
+              },
+              {
+                "time": 1.3667,
+                "name": "skill3/skill 3_00040"
+              },
+              {
+                "time": 1.4333,
+                "name": "skill3/skill 3_00042"
+              },
+              {
+                "time": 1.5,
+                "name": "skill3/skill 3_00044"
+              },
+              {
+                "time": 1.5667,
+                "name": "skill3/skill 3_00046"
+              },
+              {
+                "time": 1.6333,
+                "name": "skill3/skill 3_00048"
+              },
+              {
+                "time": 1.7,
+                "name": "skill3/skill 3_00050"
+              },
+              {
+                "time": 1.7667,
+                "name": "skill3/skill 3_00052"
+              },
+              {
+                "time": 1.8,
+                "name": "skill3/skill 3_00054"
+              },
+              {
+                "time": 1.8667,
+                "name": "skill3/skill 3_00056"
+              },
+              {
+                "time": 1.9333,
+                "name": "skill3/skill 3_00058"
+              },
+              {
+                "time": 2,
+                "name": "skill3/skill 3_00060"
+              }
+            ]
+          },
+          "skill2_up": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              }
+            ]
+          }
+        },
+        "bones": {
+          "skill2_ilde": {
+            "translate": [
+              {
+                "time": 0,
+                "x": 30.04,
+                "y": 7.51
+              }
+            ]
+          }
+        }
+      },
+      "effect_edle_up": {
+        "slots": {
+          "skill2_up": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "skill2_1/skill 2_21"
+              },
+              {
+                "time": 0.0333,
+                "name": "skill2_1/skill 2_23"
+              },
+              {
+                "time": 0.0667,
+                "name": "skill2_1/skill 2_25"
+              },
+              {
+                "time": 0.1,
+                "name": "skill2_1/skill 2_27"
+              },
+              {
+                "time": 0.1333,
+                "name": "skill2_1/skill 2_29"
+              },
+              {
+                "time": 0.1667,
+                "name": "skill2_1/skill 2_31"
+              },
+              {
+                "time": 0.2,
+                "name": "skill2_1/skill 2_33"
+              },
+              {
+                "time": 0.2333,
+                "name": "skill2_1/skill 2_35"
+              },
+              {
+                "time": 0.2667,
+                "name": "skill2_1/skill 2_37"
+              },
+              {
+                "time": 0.3,
+                "name": "skill2_1/skill 2_39"
+              },
+              {
+                "time": 0.3333,
+                "name": "skill2_1/skill 2_41"
+              },
+              {
+                "time": 0.3667,
+                "name": "skill2_1/skill 2_42"
+              },
+              {
+                "time": 0.4,
+                "name": null
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "textures": [
+    {
+      "__uuid__": "3d475fb7-8b4b-4129-a91a-62f5ae4c65e8@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    }
+  ],
+  "textureNames": [
+    "m_31007_effect.png"
+  ],
+  "scale": 1,
+  "_atlasText": "\nm_31007_effect.png\nsize: 1024,1024\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nskill2_1/skill 2_21\n  rotate: true\n  xy: 953, 879\n  size: 143, 51\n  orig: 335, 242\n  offset: 108, 51\n  index: -1\nskill2_1/skill 2_23\n  rotate: false\n  xy: 641, 249\n  size: 153, 115\n  orig: 335, 242\n  offset: 98, 33\n  index: -1\nskill2_1/skill 2_25\n  rotate: false\n  xy: 246, 372\n  size: 214, 161\n  orig: 335, 242\n  offset: 59, 32\n  index: -1\nskill2_1/skill 2_27\n  rotate: false\n  xy: 2, 367\n  size: 235, 162\n  orig: 335, 242\n  offset: 57, 32\n  index: -1\nskill2_1/skill 2_29\n  rotate: false\n  xy: 2, 531\n  size: 242, 165\n  orig: 335, 242\n  offset: 53, 32\n  index: -1\nskill2_1/skill 2_31\n  rotate: false\n  xy: 253, 861\n  size: 246, 161\n  orig: 335, 242\n  offset: 51, 36\n  index: -1\nskill2_1/skill 2_33\n  rotate: false\n  xy: 2, 861\n  size: 249, 161\n  orig: 335, 242\n  offset: 50, 36\n  index: -1\nskill2_1/skill 2_35\n  rotate: false\n  xy: 2, 698\n  size: 248, 161\n  orig: 335, 242\n  offset: 52, 36\n  index: -1\nskill2_1/skill 2_37\n  rotate: false\n  xy: 246, 535\n  size: 226, 161\n  orig: 335, 242\n  offset: 60, 36\n  index: -1\nskill2_1/skill 2_39\n  rotate: false\n  xy: 501, 861\n  size: 226, 161\n  orig: 335, 242\n  offset: 60, 36\n  index: -1\nskill2_1/skill 2_41\n  rotate: false\n  xy: 2, 203\n  size: 226, 162\n  orig: 335, 242\n  offset: 60, 35\n  index: -1\nskill2_1/skill 2_42\n  rotate: false\n  xy: 252, 698\n  size: 226, 161\n  orig: 335, 242\n  offset: 60, 36\n  index: -1\nskill3/skill 3_00040\n  rotate: false\n  xy: 480, 697\n  size: 225, 162\n  orig: 410, 340\n  offset: 71, 78\n  index: -1\nskill3/skill 3_00042\n  rotate: false\n  xy: 729, 859\n  size: 222, 163\n  orig: 410, 340\n  offset: 73, 79\n  index: -1\nskill3/skill 3_00044\n  rotate: false\n  xy: 707, 695\n  size: 217, 162\n  orig: 410, 340\n  offset: 76, 80\n  index: -1\nskill3/skill 3_00046\n  rotate: false\n  xy: 167, 36\n  size: 213, 165\n  orig: 410, 340\n  offset: 79, 79\n  index: -1\nskill3/skill 3_00048\n  rotate: false\n  xy: 674, 366\n  size: 208, 164\n  orig: 410, 340\n  offset: 82, 80\n  index: -1\nskill3/skill 3_00050\n  rotate: false\n  xy: 436, 205\n  size: 203, 164\n  orig: 410, 340\n  offset: 85, 80\n  index: -1\nskill3/skill 3_00052\n  rotate: true\n  xy: 2, 2\n  size: 199, 163\n  orig: 410, 340\n  offset: 87, 80\n  index: -1\nskill3/skill 3_00054\n  rotate: false\n  xy: 230, 203\n  size: 204, 161\n  orig: 410, 340\n  offset: 84, 80\n  index: -1\nskill3/skill 3_00056\n  rotate: false\n  xy: 462, 371\n  size: 210, 160\n  orig: 410, 340\n  offset: 80, 80\n  index: -1\nskill3/skill 3_00058\n  rotate: false\n  xy: 697, 532\n  size: 216, 161\n  orig: 410, 340\n  offset: 77, 79\n  index: -1\nskill3/skill 3_00060\n  rotate: false\n  xy: 474, 533\n  size: 221, 162\n  orig: 410, 340\n  offset: 73, 78\n  index: -1\n"
+}

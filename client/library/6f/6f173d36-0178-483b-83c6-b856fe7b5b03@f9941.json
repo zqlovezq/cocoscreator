@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "eq_QiangHua",
+    "atlas": "",
+    "rect": {
+      "x": 25,
+      "y": 20,
+      "width": 49,
+      "height": 64
+    },
+    "offset": {
+      "x": -0.5,
+      "y": -2
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -24.5,
+        -32,
+        0,
+        24.5,
+        -32,
+        0,
+        -24.5,
+        32,
+        0,
+        24.5,
+        32,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        25,
+        80,
+        74,
+        80,
+        25,
+        16,
+        74,
+        16
+      ],
+      "nuv": [
+        0.25,
+        0.16,
+        0.74,
+        0.16,
+        0.25,
+        0.8,
+        0.74,
+        0.8
+      ],
+      "minPos": {
+        "x": -24.5,
+        "y": -32,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 24.5,
+        "y": 32,
+        "z": 0
+      }
+    },
+    "texture": "6f173d36-0178-483b-83c6-b856fe7b5b03@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "__type__": "sp.SkeletonData",
+  "_name": "effect_hero_006_1",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_skeletonJson": {
+    "skeleton": {
+      "hash": "T4ghmG8MdWgZvJTr/NtbRUN8Ckk",
+      "spine": "3.7.89",
+      "width": 0,
+      "height": 0,
+      "images": "./images/",
+      "audio": ""
+    },
+    "bones": [
+      {
+        "name": "root"
+      }
+    ],
+    "slots": [
+      {
+        "name": "17",
+        "bone": "root"
+      },
+      {
+        "name": "1_00000",
+        "bone": "root"
+      }
+    ],
+    "skins": {
+      "default": {
+        "17": {
+          "2_00000": {
+            "x": -1.15,
+            "y": 23.59,
+            "rotation": -88.09,
+            "width": 100,
+            "height": 100
+          }
+        },
+        "1_00000": {
+          "tutu2": {
+            "x": 2.8,
+            "y": 63.5,
+            "rotation": -90,
+            "width": 157,
+            "height": 80
+          }
+        }
+      }
+    },
+    "animations": {
+      "effect_fly": {
+        "slots": {
+          "17": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "2_00000"
+              }
+            ]
+          },
+          "1_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              }
+            ]
+          }
+        }
+      },
+      "effect_fly1": {
+        "slots": {
+          "17": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              }
+            ]
+          },
+          "1_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "tutu2"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "textures": [
+    {
+      "__uuid__": "9a522e16-2ef4-41fe-a2a5-b9669c8bf19b@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    }
+  ],
+  "textureNames": [
+    "effect_hero_006_1.png"
+  ],
+  "scale": 1,
+  "_atlasText": "\neffect_hero_006_1.png\nsize: 256,256\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\n2_00000\n  rotate: false\n  xy: 2, 2\n  size: 100, 100\n  orig: 100, 100\n  offset: 0, 0\n  index: -1\ntutu2\n  rotate: false\n  xy: 2, 104\n  size: 157, 80\n  orig: 157, 80\n  offset: 0, 0\n  index: -1\n"
+}

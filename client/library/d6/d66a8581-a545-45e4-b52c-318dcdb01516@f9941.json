@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "f_lan",
+    "atlas": "",
+    "rect": {
+      "x": 11,
+      "y": 5,
+      "width": 81,
+      "height": 88
+    },
+    "offset": {
+      "x": 1.5,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -40.5,
+        -44,
+        0,
+        40.5,
+        -44,
+        0,
+        -40.5,
+        44,
+        0,
+        40.5,
+        44,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        11,
+        95,
+        92,
+        95,
+        11,
+        7,
+        92,
+        7
+      ],
+      "nuv": [
+        0.11,
+        0.07,
+        0.92,
+        0.07,
+        0.11,
+        0.95,
+        0.92,
+        0.95
+      ],
+      "minPos": {
+        "x": -40.5,
+        "y": -44,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 40.5,
+        "y": 44,
+        "z": 0
+      }
+    },
+    "texture": "d66a8581-a545-45e4-b52c-318dcdb01516@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

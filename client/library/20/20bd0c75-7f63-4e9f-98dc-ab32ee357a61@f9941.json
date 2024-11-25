@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "bullet_test",
+    "atlas": "",
+    "rect": {
+      "x": 12,
+      "y": 31,
+      "width": 172,
+      "height": 86
+    },
+    "offset": {
+      "x": -2,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 200,
+      "height": 150
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -86,
+        -43,
+        0,
+        86,
+        -43,
+        0,
+        -86,
+        43,
+        0,
+        86,
+        43,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        12,
+        119,
+        184,
+        119,
+        12,
+        33,
+        184,
+        33
+      ],
+      "nuv": [
+        0.06,
+        0.22,
+        0.92,
+        0.22,
+        0.06,
+        0.7933333333333333,
+        0.92,
+        0.7933333333333333
+      ],
+      "minPos": {
+        "x": -86,
+        "y": -43,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 86,
+        "y": 43,
+        "z": 0
+      }
+    },
+    "texture": "20bd0c75-7f63-4e9f-98dc-ab32ee357a61@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

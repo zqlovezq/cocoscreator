@@ -1,0 +1,23 @@
+{
+  "name": "client",
+  "uuid": "bc131e11-93b9-427e-872d-89c98602adb6",
+  "version": "3.8.2",
+  "creator": {
+    "version": "3.8.2",
+    "registry": {
+      "remote": {}
+    },
+    "dependencies": {
+      "localization-editor": "1.0.1"
+    }
+  },
+  "_sourceId": "548591ff-c1b7-4a6a-b3ba-f8102c0b17b0",
+  "_storeId": "e22304c396b4663fe49d33ccae068c42",
+  "dependencies": {
+    "protobufjs": "^7.3.2",
+    "protobufjs-cli": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/protobufjs": "^6.0.0"
+  }
+}

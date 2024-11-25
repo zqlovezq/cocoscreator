@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "gold_2h",
+    "atlas": "",
+    "rect": {
+      "x": 1,
+      "y": 1,
+      "width": 96,
+      "height": 83
+    },
+    "offset": {
+      "x": -1,
+      "y": 7.5
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -48,
+        -41.5,
+        0,
+        48,
+        -41.5,
+        0,
+        -48,
+        41.5,
+        0,
+        48,
+        41.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        1,
+        99,
+        97,
+        99,
+        1,
+        16,
+        97,
+        16
+      ],
+      "nuv": [
+        0.01,
+        0.16,
+        0.97,
+        0.16,
+        0.01,
+        0.99,
+        0.97,
+        0.99
+      ],
+      "minPos": {
+        "x": -48,
+        "y": -41.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 48,
+        "y": 41.5,
+        "z": 0
+      }
+    },
+    "texture": "6ff93777-55d0-4a97-aedd-5af174869a40@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

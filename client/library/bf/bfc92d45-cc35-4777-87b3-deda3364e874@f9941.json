@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "boss_bg2",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 584,
+      "height": 323
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 584,
+      "height": 323
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -292,
+        -161.5,
+        0,
+        292,
+        -161.5,
+        0,
+        -292,
+        161.5,
+        0,
+        292,
+        161.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        323,
+        584,
+        323,
+        0,
+        0,
+        584,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -292,
+        "y": -161.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 292,
+        "y": 161.5,
+        "z": 0
+      }
+    },
+    "texture": "bfc92d45-cc35-4777-87b3-deda3364e874@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

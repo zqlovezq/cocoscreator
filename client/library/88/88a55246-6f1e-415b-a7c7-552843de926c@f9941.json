@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "reconnect_img",
+    "atlas": "",
+    "rect": {
+      "x": 5,
+      "y": 8,
+      "width": 90,
+      "height": 82
+    },
+    "offset": {
+      "x": 0,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -45,
+        -41,
+        0,
+        45,
+        -41,
+        0,
+        -45,
+        41,
+        0,
+        45,
+        41,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        5,
+        92,
+        95,
+        92,
+        5,
+        10,
+        95,
+        10
+      ],
+      "nuv": [
+        0.05,
+        0.1,
+        0.95,
+        0.1,
+        0.05,
+        0.92,
+        0.95,
+        0.92
+      ],
+      "minPos": {
+        "x": -45,
+        "y": -41,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 45,
+        "y": 41,
+        "z": 0
+      }
+    },
+    "texture": "88a55246-6f1e-415b-a7c7-552843de926c@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

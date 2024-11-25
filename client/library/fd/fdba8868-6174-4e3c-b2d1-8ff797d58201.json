@@ -1,0 +1,8 @@
+{
+  "__type__": "cc.TextAsset",
+  "_name": "floor",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<tileset version=\"1.2\" tiledversion=\"1.2.3\" name=\"floor\" tilewidth=\"32\" tileheight=\"32\" tilecount=\"2\" columns=\"0\">\r\n <grid orientation=\"orthogonal\" width=\"1\" height=\"1\"/>\r\n <terraintypes>\r\n  <terrain name=\"soil\" tile=\"0\"/>\r\n  <terrain name=\"grass\" tile=\"0\"/>\r\n </terraintypes>\r\n <tile id=\"0\" terrain=\"0,0,0,0\">\r\n  <image width=\"32\" height=\"32\" source=\"floor.png\"/>\r\n </tile>\r\n <tile id=\"1\" terrain=\"1,1,1,1\">\r\n  <image width=\"32\" height=\"32\" source=\"grass.png\"/>\r\n </tile>\r\n</tileset>\r\n"
+}

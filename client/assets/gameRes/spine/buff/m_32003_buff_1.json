@@ -1,0 +1,33 @@
+{
+"skeleton": { "hash": "oA1YGGDT2juXP5hNVwqlC7pYiYg", "spine": "3.6.53", "width": 0, "height": 0, "images": "" },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "images/sc001_00000", "bone": "root" }
+],
+"skins": {
+	"default": {
+		"images/sc001_00000": {
+			"images/sc001_00000": { "x": 0.5, "y": 37.15, "width": 250, "height": 250 }
+		}
+	}
+},
+"animations": {
+	"effect_idle2": {
+		"slots": {
+			"images/sc001_00000": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" },
+					{ "time": 0.6667, "color": "ffffff84" },
+					{ "time": 1.3333, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "images/sc001_00000" },
+					{ "time": 1.3333, "name": "images/sc001_00000" }
+				]
+			}
+		}
+	}
+}
+}

@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "insect_zi",
+    "atlas": "",
+    "rect": {
+      "x": 8,
+      "y": 21,
+      "width": 85,
+      "height": 58
+    },
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -42.5,
+        -29,
+        0,
+        42.5,
+        -29,
+        0,
+        -42.5,
+        29,
+        0,
+        42.5,
+        29,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        8,
+        79,
+        93,
+        79,
+        8,
+        21,
+        93,
+        21
+      ],
+      "nuv": [
+        0.08,
+        0.21,
+        0.93,
+        0.21,
+        0.08,
+        0.79,
+        0.93,
+        0.79
+      ],
+      "minPos": {
+        "x": -42.5,
+        "y": -29,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 42.5,
+        "y": 29,
+        "z": 0
+      }
+    },
+    "texture": "b549fdd0-b386-4fdc-8e16-2cc5acdf64ab@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

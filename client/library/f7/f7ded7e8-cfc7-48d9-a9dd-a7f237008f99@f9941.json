@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "zb",
+    "atlas": "",
+    "rect": {
+      "x": 6,
+      "y": 4,
+      "width": 90,
+      "height": 90
+    },
+    "offset": {
+      "x": 1,
+      "y": 1
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -45,
+        -45,
+        0,
+        45,
+        -45,
+        0,
+        -45,
+        45,
+        0,
+        45,
+        45,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        6,
+        96,
+        96,
+        96,
+        6,
+        6,
+        96,
+        6
+      ],
+      "nuv": [
+        0.06,
+        0.06,
+        0.96,
+        0.06,
+        0.06,
+        0.96,
+        0.96,
+        0.96
+      ],
+      "minPos": {
+        "x": -45,
+        "y": -45,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 45,
+        "y": 45,
+        "z": 0
+      }
+    },
+    "texture": "f7ded7e8-cfc7-48d9-a9dd-a7f237008f99@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

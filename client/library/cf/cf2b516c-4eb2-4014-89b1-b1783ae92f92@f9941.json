@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "privilege",
+    "atlas": "",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 67,
+      "height": 61
+    },
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 67,
+      "height": 61
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -33.5,
+        -30.5,
+        0,
+        33.5,
+        -30.5,
+        0,
+        -33.5,
+        30.5,
+        0,
+        33.5,
+        30.5,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        0,
+        61,
+        67,
+        61,
+        0,
+        0,
+        67,
+        0
+      ],
+      "nuv": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -33.5,
+        "y": -30.5,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 33.5,
+        "y": 30.5,
+        "z": 0
+      }
+    },
+    "texture": "cf2b516c-4eb2-4014-89b1-b1783ae92f92@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

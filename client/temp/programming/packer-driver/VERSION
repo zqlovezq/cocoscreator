@@ -1,0 +1,21 @@
+{
+  "version": "20",
+  "config": {
+    "useDefineForClassFields": true,
+    "allowDeclareFields": true,
+    "loose": true,
+    "exportsConditions": [
+      "browser"
+    ],
+    "guessCommonJsExports": false,
+    "importMap": {
+      "json": {
+        "imports": {
+          "client_protocol": "./assets/scripts/Protobuf/client_protocol.js"
+        }
+      },
+      "url": "file:///C:/chickenStarClient/client/import-map.json"
+    },
+    "preserveSymlinks": true
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "__type__": "sp.SkeletonData",
+  "_name": "hero_skill_mage_effect",
+  "_objFlags": 0,
+  "__editorExtras__": {},
+  "_native": "",
+  "_skeletonJson": {
+    "skeleton": {
+      "hash": "a4qsUkPaHnHGBcKpXsUztFNDU6M",
+      "spine": "3.6.53",
+      "width": 0,
+      "height": 0,
+      "images": "./images/"
+    },
+    "bones": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "bone",
+        "parent": "root",
+        "scaleX": 3,
+        "scaleY": 3
+      }
+    ],
+    "slots": [
+      {
+        "name": "sc001_00001",
+        "bone": "bone"
+      },
+      {
+        "name": "sc002_00000",
+        "bone": "root"
+      }
+    ],
+    "skins": {
+      "default": {
+        "sc001_00001": {
+          "sc001_00001": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00002": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00003": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00004": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00005": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00006": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00007": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00008": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00009": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00010": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00011": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00012": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00013": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00014": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00015": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00016": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00017": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00018": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00019": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00020": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00021": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00022": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00023": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00024": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00025": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          },
+          "sc001_00026": {
+            "x": 1.8,
+            "y": 6.02,
+            "width": 200,
+            "height": 213
+          }
+        },
+        "sc002_00000": {
+          "sc002_00000": {
+            "x": 1.12,
+            "y": 80.91,
+            "scaleX": -1,
+            "rotation": 90,
+            "width": 200,
+            "height": 200
+          }
+        }
+      }
+    },
+    "animations": {
+      "effect_bomb": {
+        "slots": {
+          "sc001_00001": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "sc001_00001"
+              },
+              {
+                "time": 0.0667,
+                "name": "sc001_00002"
+              },
+              {
+                "time": 0.1333,
+                "name": "sc001_00003"
+              },
+              {
+                "time": 0.2,
+                "name": "sc001_00004"
+              },
+              {
+                "time": 0.2667,
+                "name": "sc001_00005"
+              },
+              {
+                "time": 0.3333,
+                "name": "sc001_00006"
+              },
+              {
+                "time": 0.4,
+                "name": "sc001_00007"
+              },
+              {
+                "time": 0.4667,
+                "name": "sc001_00008"
+              },
+              {
+                "time": 0.5333,
+                "name": "sc001_00009"
+              },
+              {
+                "time": 0.6,
+                "name": "sc001_00010"
+              },
+              {
+                "time": 0.6667,
+                "name": "sc001_00011"
+              },
+              {
+                "time": 0.7333,
+                "name": "sc001_00012"
+              },
+              {
+                "time": 0.8,
+                "name": "sc001_00013"
+              },
+              {
+                "time": 0.8667,
+                "name": "sc001_00014"
+              },
+              {
+                "time": 0.9333,
+                "name": "sc001_00015"
+              },
+              {
+                "time": 1,
+                "name": "sc001_00016"
+              },
+              {
+                "time": 1.0667,
+                "name": "sc001_00017"
+              },
+              {
+                "time": 1.1333,
+                "name": "sc001_00018"
+              },
+              {
+                "time": 1.2,
+                "name": "sc001_00019"
+              },
+              {
+                "time": 1.2667,
+                "name": "sc001_00020"
+              },
+              {
+                "time": 1.3333,
+                "name": "sc001_00021"
+              },
+              {
+                "time": 1.4,
+                "name": "sc001_00022"
+              },
+              {
+                "time": 1.4667,
+                "name": "sc001_00023"
+              },
+              {
+                "time": 1.5333,
+                "name": "sc001_00024"
+              },
+              {
+                "time": 1.6,
+                "name": "sc001_00025"
+              },
+              {
+                "time": 1.6667,
+                "name": "sc001_00026"
+              },
+              {
+                "time": 1.7333,
+                "name": null
+              }
+            ]
+          },
+          "sc002_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              },
+              {
+                "time": 1.7333,
+                "name": null
+              }
+            ]
+          }
+        }
+      },
+      "effect_fly": {
+        "slots": {
+          "sc001_00001": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": null
+              }
+            ]
+          },
+          "sc002_00000": {
+            "attachment": [
+              {
+                "time": 0,
+                "name": "sc002_00000"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "textures": [
+    {
+      "__uuid__": "c050ab71-7e35-4880-8e6b-6d411bda86a3@6c48a",
+      "__expectedType__": "cc.Texture2D"
+    }
+  ],
+  "textureNames": [
+    "hero_skill_mage_effect.png"
+  ],
+  "scale": 1,
+  "_atlasText": "\nhero_skill_mage_effect.png\nsize: 1024,1024\nformat: RGBA8888\nfilter: Linear,Linear\nrepeat: none\nsc001_00001\n  rotate: false\n  xy: 758, 828\n  size: 124, 144\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00002\n  rotate: false\n  xy: 2, 812\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00003\n  rotate: false\n  xy: 2, 650\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00004\n  rotate: false\n  xy: 128, 812\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00005\n  rotate: false\n  xy: 632, 814\n  size: 124, 158\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00006\n  rotate: false\n  xy: 380, 332\n  size: 124, 155\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00007\n  rotate: false\n  xy: 254, 167\n  size: 123, 157\n  orig: 200, 213\n  offset: 38, 40\n  index: -1\nsc001_00008\n  rotate: false\n  xy: 128, 4\n  size: 124, 158\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00009\n  rotate: false\n  xy: 380, 489\n  size: 124, 159\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00010\n  rotate: false\n  xy: 2, 488\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00011\n  rotate: false\n  xy: 128, 650\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00012\n  rotate: false\n  xy: 254, 812\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00013\n  rotate: false\n  xy: 2, 326\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00014\n  rotate: false\n  xy: 128, 488\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00015\n  rotate: false\n  xy: 254, 650\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00016\n  rotate: false\n  xy: 380, 812\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00017\n  rotate: false\n  xy: 506, 650\n  size: 123, 160\n  orig: 200, 213\n  offset: 38, 40\n  index: -1\nsc001_00018\n  rotate: false\n  xy: 2, 164\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00019\n  rotate: false\n  xy: 128, 326\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00020\n  rotate: false\n  xy: 254, 488\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00021\n  rotate: false\n  xy: 380, 650\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00022\n  rotate: false\n  xy: 506, 812\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00023\n  rotate: false\n  xy: 2, 2\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00024\n  rotate: false\n  xy: 128, 164\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00025\n  rotate: false\n  xy: 254, 326\n  size: 124, 160\n  orig: 200, 213\n  offset: 37, 40\n  index: -1\nsc001_00026\n  rotate: false\n  xy: 506, 498\n  size: 118, 150\n  orig: 200, 213\n  offset: 40, 42\n  index: -1\nsc002_00000\n  rotate: true\n  xy: 254, 19\n  size: 146, 55\n  orig: 200, 200\n  offset: 36, 76\n  index: -1\n"
+}

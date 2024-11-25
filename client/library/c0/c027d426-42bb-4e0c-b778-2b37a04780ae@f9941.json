@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "weapon_3401",
+    "atlas": "",
+    "rect": {
+      "x": 12,
+      "y": 7,
+      "width": 79,
+      "height": 90
+    },
+    "offset": {
+      "x": 1.5,
+      "y": -2
+    },
+    "originalSize": {
+      "width": 100,
+      "height": 100
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -39.5,
+        -45,
+        0,
+        39.5,
+        -45,
+        0,
+        -39.5,
+        45,
+        0,
+        39.5,
+        45,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        12,
+        93,
+        91,
+        93,
+        12,
+        3,
+        91,
+        3
+      ],
+      "nuv": [
+        0.12,
+        0.03,
+        0.91,
+        0.03,
+        0.12,
+        0.93,
+        0.91,
+        0.93
+      ],
+      "minPos": {
+        "x": -39.5,
+        "y": -45,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 39.5,
+        "y": 45,
+        "z": 0
+      }
+    },
+    "texture": "c027d426-42bb-4e0c-b778-2b37a04780ae@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "power1",
+    "atlas": "",
+    "rect": {
+      "x": 44,
+      "y": 36,
+      "width": 74,
+      "height": 90
+    },
+    "offset": {
+      "x": 1,
+      "y": -1
+    },
+    "originalSize": {
+      "width": 160,
+      "height": 160
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -37,
+        -45,
+        0,
+        37,
+        -45,
+        0,
+        -37,
+        45,
+        0,
+        37,
+        45,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        44,
+        124,
+        118,
+        124,
+        44,
+        34,
+        118,
+        34
+      ],
+      "nuv": [
+        0.275,
+        0.2125,
+        0.7375,
+        0.2125,
+        0.275,
+        0.775,
+        0.7375,
+        0.775
+      ],
+      "minPos": {
+        "x": -37,
+        "y": -45,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 37,
+        "y": 45,
+        "z": 0
+      }
+    },
+    "texture": "ae5b5977-5556-43b4-9f96-d548f7688460@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

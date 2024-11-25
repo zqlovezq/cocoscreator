@@ -1,0 +1,1 @@
+{"version":3,"sources":["file:///C:/chickenStarClient/client/assets/scripts/logic/fight/base/frame/IFrame.ts"],"names":[],"mappings":";;;;;;;;;;;;;AACA","sourcesContent":["\n/** 帧同步 */\nexport interface IFrame{\n    updateFrame(dt:number):void\n    insertFrame():void\n    removeFrame():void\n    lateUpdateFrame():void\n    \n}"]}

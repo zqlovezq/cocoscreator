@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.26",
+  "importer": "image",
+  "imported": true,
+  "uuid": "84a531ef-3bb9-42a7-a081-d0a674041332",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "84a531ef-3bb9-42a7-a081-d0a674041332@6c48a",
+      "displayName": "equip43_gloves",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "84a531ef-3bb9-42a7-a081-d0a674041332",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "84a531ef-3bb9-42a7-a081-d0a674041332@f9941",
+      "displayName": "equip43_gloves",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -0.5,
+        "offsetY": 0.5,
+        "trimX": 5,
+        "trimY": 6,
+        "width": 89,
+        "height": 87,
+        "rawWidth": 100,
+        "rawHeight": 100,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -44.5,
+            -43.5,
+            0,
+            44.5,
+            -43.5,
+            0,
+            -44.5,
+            43.5,
+            0,
+            44.5,
+            43.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            5,
+            94,
+            94,
+            94,
+            5,
+            7,
+            94,
+            7
+          ],
+          "nuv": [
+            0.05,
+            0.07,
+            0.94,
+            0.07,
+            0.05,
+            0.94,
+            0.94,
+            0.94
+          ],
+          "minPos": [
+            -44.5,
+            -43.5,
+            0
+          ],
+          "maxPos": [
+            44.5,
+            43.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "84a531ef-3bb9-42a7-a081-d0a674041332@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+    "redirect": "84a531ef-3bb9-42a7-a081-d0a674041332@f9941"
+  }
+}

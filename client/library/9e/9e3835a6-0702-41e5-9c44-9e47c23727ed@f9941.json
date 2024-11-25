@@ -1,0 +1,90 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "damagerank",
+    "atlas": "",
+    "rect": {
+      "x": 1,
+      "y": 0,
+      "width": 40,
+      "height": 40
+    },
+    "offset": {
+      "x": 0.5,
+      "y": 0
+    },
+    "originalSize": {
+      "width": 41,
+      "height": 40
+    },
+    "rotated": false,
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "vertices": {
+      "rawPosition": [
+        -20,
+        -20,
+        0,
+        20,
+        -20,
+        0,
+        -20,
+        20,
+        0,
+        20,
+        20,
+        0
+      ],
+      "indexes": [
+        0,
+        1,
+        2,
+        2,
+        1,
+        3
+      ],
+      "uv": [
+        1,
+        40,
+        41,
+        40,
+        1,
+        0,
+        41,
+        0
+      ],
+      "nuv": [
+        0.024390243902439025,
+        0,
+        1,
+        0,
+        0.024390243902439025,
+        1,
+        1,
+        1
+      ],
+      "minPos": {
+        "x": -20,
+        "y": -20,
+        "z": 0
+      },
+      "maxPos": {
+        "x": 20,
+        "y": 20,
+        "z": 0
+      }
+    },
+    "texture": "9e3835a6-0702-41e5-9c44-9e47c23727ed@6c48a",
+    "packable": true,
+    "pixelsToUnit": 100,
+    "pivot": {
+      "x": 0.5,
+      "y": 0.5
+    },
+    "meshType": 0
+  }
+}

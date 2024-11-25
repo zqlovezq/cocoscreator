@@ -1,0 +1,120 @@
+{
+  "__version__": "1.0.1",
+  "builder": {
+    "common": {
+      "buildPath": "project://build",
+      "outputName": "android",
+      "mainBundleCompressionType": "merge_dep",
+      "platform": "android",
+      "startScene": "943b1e50-339d-41b3-9e94-5011fd0401df",
+      "scenes": [
+        {
+          "url": "db://assets/scene/FightScene.scene",
+          "uuid": "08d4fc1c-65b4-4acd-bff8-24573bae172e"
+        },
+        {
+          "url": "db://assets/scene/LoadingScene.scene",
+          "uuid": "2a04cda0-712e-400a-b0ec-7eb4157911c4"
+        },
+        {
+          "url": "db://assets/scene/LoginScene.scene",
+          "uuid": "eb30a797-c327-475d-af8e-2ff4359966d3"
+        },
+        {
+          "url": "db://assets/scene/MainScene.scene",
+          "uuid": "81e9b7fd-daa9-4352-8bea-ab6c272891c0"
+        },
+        {
+          "url": "db://assets/scene/UpdateScene.scene",
+          "uuid": "943b1e50-339d-41b3-9e94-5011fd0401df"
+        },
+        {
+          "url": "db://assets/gameRes/demo/scene.scene",
+          "uuid": "c7be2da7-0ca7-49f7-887b-25d3a4242663",
+          "bundle": "db://assets/gameRes"
+        },
+        {
+          "url": "db://assets/scene/FightScene1.scene",
+          "uuid": "fdd7ac06-daa0-4a28-b620-c8913ec8dbd1"
+        }
+      ]
+    },
+    "options": {
+      "android": {
+        "packageName": "com.azhe.tests",
+        "resizeableActivity": true,
+        "maxAspectRatio": "2.4",
+        "orientation": {
+          "portrait": true,
+          "upsideDown": false,
+          "landscapeRight": false,
+          "landscapeLeft": false
+        },
+        "apiLevel": 29,
+        "appABIs": [
+          "arm64-v8a",
+          "armeabi-v7a"
+        ],
+        "useDebugKeystore": true,
+        "keystorePath": "",
+        "keystorePassword": "",
+        "keystoreAlias": "",
+        "keystoreAliasPassword": "",
+        "appBundle": false,
+        "androidInstant": false,
+        "inputSDK": false,
+        "remoteUrl": "",
+        "sdkPath": "",
+        "ndkPath": "",
+        "javaHome": "",
+        "javaPath": "",
+        "renderBackEnd": {
+          "vulkan": false,
+          "gles3": true,
+          "gles2": true
+        },
+        "swappy": false,
+        "__version__": "1.0.1"
+      }
+    },
+    "taskOptionsMap": {
+      "1709705175423": {
+        "packageName": "com.azhe.tests",
+        "resizeableActivity": true,
+        "maxAspectRatio": "2.4",
+        "orientation": {
+          "portrait": true,
+          "upsideDown": false,
+          "landscapeRight": false,
+          "landscapeLeft": false
+        },
+        "apiLevel": 29,
+        "appABIs": [
+          "arm64-v8a",
+          "armeabi-v7a"
+        ],
+        "useDebugKeystore": true,
+        "keystorePath": "",
+        "keystorePassword": "",
+        "keystoreAlias": "",
+        "keystoreAliasPassword": "",
+        "appBundle": false,
+        "androidInstant": false,
+        "inputSDK": false,
+        "remoteUrl": "",
+        "sdkPath": "",
+        "ndkPath": "",
+        "javaHome": "",
+        "javaPath": "",
+        "renderBackEnd": {
+          "vulkan": false,
+          "gles3": true,
+          "gles2": true
+        },
+        "swappy": false,
+        "__version__": "1.0.1"
+      }
+    },
+    "__version__": "1.3.7"
+  }
+}
